@@ -7,6 +7,15 @@ export = (app: Application) => {
   // Your code here
   app.log('Yay, the app was loaded!')
 
+  app.on(`*`, async context => {
+    context.log({event: context.event, action: context.payload.action})
+  })
+
+  app.on('push', async context => {
+    context.log("received 'push' event")
+    context.log({myEvent: context.event, myAction: context.payload.action})
+  })
+
   // For more information on building apps:
   // https://probot.github.io/docs/
 
