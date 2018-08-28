@@ -4,6 +4,16 @@ import { Application } from 'probot'
 Application.toString()
 
 export = (app: Application) => {
+  function accumulateFiles(accumulated: string[], current: string[]): string[] {
+    return [...accumulated, ...current];
+  }
+  function getFiles(pushPayload: any): string[] {
+    const commits: any[] = pushPayload.commits;
+    const addedFiles = commits.map(commit => commit.added).reduce(accumulateFiles);
+    const modifiedFiles = commits.map(commit => commit.modified).reduce(accumulateFiles);
+    return [...addedFiles, ...modifiedFiles];
+  }
+
   // Your code here
   app.log('Yay, the app was loaded!')
 
@@ -13,6 +23,8 @@ export = (app: Application) => {
 
   app.on('push', async context => {
     context.log(JSON.stringify(context, null, 2))
+    const files = getFiles(context.payload);
+    context.log(files);
   })
 
   // For more information on building apps:
