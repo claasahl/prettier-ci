@@ -1,5 +1,8 @@
 import { Application } from 'probot'
 
+// FIXME this just to keep "eslint-plugin-typescript" from complaining about unused references
+Application.toString()
+
 export = (app: Application) => {
   // Your code here
   app.log('Yay, the app was loaded!')
