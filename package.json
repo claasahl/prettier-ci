@@ -21,10 +21,14 @@
     "test:watch": "jest --watch --notify --notifyMode=change --coverage"
   },
   "dependencies": {
+    "atob": "^2.1.2",
+    "btoa": "^1.2.1",
     "prettier": "^1.14.2",
     "probot": "^7.0.0"
   },
   "devDependencies": {
+    "@types/atob": "^2.1.1",
+    "@types/btoa": "^1.2.0",
     "@types/jest": "^23.1.5",
     "@types/node": "^10.5.2",
     "@types/prettier": "^1.13.2",
