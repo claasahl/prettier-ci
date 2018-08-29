@@ -12,8 +12,7 @@ export = (app: Application) => {
   })
 
   app.on('push', async context => {
-    context.log("received 'push' event")
-    context.log({myEvent: context.event, myAction: context.payload.action})
+    context.log(JSON.stringify(context, null, 2))
   })
 
   // For more information on building apps:
