@@ -5,7 +5,7 @@ import atob from 'atob';
 import btoa from 'btoa';
 
 // FIXME this just to keep "eslint-plugin-typescript" from complaining about unused references
-Application.toString()
+Application.toString();
 
 export = (app: Application) => {
   function accumulateFiles(accumulated: string[], current: string[]): string[] {
@@ -13,20 +13,24 @@ export = (app: Application) => {
   }
   function getFiles(pushPayload: any): string[] {
     const commits: any[] = pushPayload.commits;
-    const addedFiles = commits.map(commit => commit.added).reduce(accumulateFiles);
-    const modifiedFiles = commits.map(commit => commit.modified).reduce(accumulateFiles);
+    const addedFiles = commits
+      .map(commit => commit.added)
+      .reduce(accumulateFiles);
+    const modifiedFiles = commits
+      .map(commit => commit.modified)
+      .reduce(accumulateFiles);
     return [...addedFiles, ...modifiedFiles];
   }
 
   // Your code here
-  app.log('Yay, the app was loaded!')
+  app.log("Yay, the app was loaded!");
 
   app.on(`*`, async context => {
-    context.log({event: context.event, action: context.payload.action})
-  })
+    context.log({ event: context.event, action: context.payload.action });
+  });
 
-  app.on('push', async context => {
-    context.log(JSON.stringify(context, null, 2))
+  app.on("push", async context => {
+    context.log(JSON.stringify(context, null, 2));
     const files = getFiles(context.payload);
     context.log(files);
 
@@ -66,4 +70,4 @@ export = (app: Application) => {
 
   // To get your app running against GitHub, see:
   // https://probot.github.io/docs/development/
-}
+};
