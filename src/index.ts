@@ -1,5 +1,5 @@
-import { Application } from 'probot'
-import { ReposGetContentParams, Response, ReposUpdateFileParams } from '@octokit/rest';
+import { Application, Context } from 'probot'
+import { ReposGetContentParams, Response, ReposUpdateFileParams, GitdataGetReferenceParams, GitdataCreateReferenceParams, GitdataUpdateReferenceParams } from '@octokit/rest';
 import * as prettier from "prettier";
 import atob from 'atob';
 import btoa from 'btoa';
@@ -21,6 +21,41 @@ export = (app: Application) => {
       .reduce(accumulateFiles);
     return [...addedFiles, ...modifiedFiles];
   }
+  async function createOrGetPrettierReference(context: Context): Promise<string> {
+    const owner = context.payload.repository.owner.name;
+    const repo = context.payload.repository.name;
+    const baseRef = context.payload.ref;
+    const sha = context.payload.after;
+
+    const ref: string = baseRef + "-prettier";
+    const getReferenceParams: GitdataGetReferenceParams = {owner, repo, ref};
+    const response = await context.github.gitdata.getReference(getReferenceParams);
+    if(response.status === 200) {
+      context.log("branch already existed", ref);
+      return ref;
+    } else {
+      const createReferenceParams: GitdataCreateReferenceParams = {owner, repo, ref, sha};
+      const response = await context.github.gitdata.createReference(createReferenceParams);
+      if(response.status === 200) {
+        context.log("branch created", ref);
+        return ref;
+      }
+    }
+    context.log("branch did not exist, nor could it be created", ref);
+    return Promise.reject();
+  }
+  async function updatePrettierReference(context: Context, ref: string): Promise<boolean> {
+    const owner = context.payload.repository.owner.name;
+    const repo = context.payload.repository.name;
+    const sha = context.payload.after;
+
+    const updateRefParams: GitdataUpdateReferenceParams = {owner, repo, ref, sha, force: true};
+    const response = await context.github.gitdata.updateReference(updateRefParams);
+    return response.status === 200;
+  }
+  function isPrettierReference(ref: string): boolean {
+    return ref.endsWith("-prettier");
+  }
 
   // Your code here
   app.log("Yay, the app was loaded!");
@@ -30,13 +65,30 @@ export = (app: Application) => {
   });
 
   app.on("push", async context => {
-    context.log(JSON.stringify(context, null, 2));
+    // this event handler is only concerned with keeping "prettier" references up-to-date
+    if(isPrettierReference(context.payload.ref)) {
+      return;
+    }
+
+    const prettierRef = await createOrGetPrettierReference(context);
+    const updatedPrettierRef = await updatePrettierReference(context, prettierRef);
+    context.log("updated prettier reference", prettierRef, updatedPrettierRef);
+
+    // TODO consider adding check on commit that lists files which are not formatted with "prettier"
+  })
+
+  app.on("push", async context => {
+    // this event handler is only concerned with formatting files in "prettier"
+    if(!isPrettierReference(context.payload.ref)) {
+      return;
+    }
     const files = getFiles(context.payload);
     context.log(files);
 
     const owner = context.payload.repository.owner.name;
     const repo = context.payload.repository.name;
     const ref = context.payload.ref;
+    const sha = context.payload.after;
     for(const path of files) {
       const params: ReposGetContentParams = {ref, path, owner, repo};
       context.log("Inspecting file", params);
@@ -45,23 +97,22 @@ export = (app: Application) => {
       const contentResponse: Response<any> = await context.github.repos.getContent(params);
       if(contentResponse.status === 200 && contentResponse.data.encoding === "base64") {
         context.log("Retrieved file", params);
-      const content = atob(contentResponse.data.content);
+        const content = atob(contentResponse.data.content);
 
-      if(!prettier.check(content, options)) {
-        context.log("Found formatting issues in file", params);
-        
-        const formatted: string = prettier.format(content, options);
-        const message = "a sprinkle eye candy";
-        const sha = contentResponse.data.sha;
-        const bla: ReposUpdateFileParams = {content: btoa(formatted), owner, repo, path, message, branch: ref, sha};
-        const updateResponse = await context.github.repos.updateFile(bla);
-        context.log(updateResponse)
+        if(!prettier.check(content, options)) {
+          context.log("Found formatting issues in file", params);
+          
+          const formatted: string = prettier.format(content, options);
+          const message = "a sprinkle eye candy";
+          const bla: ReposUpdateFileParams = {content: btoa(formatted), owner, repo, path, message, branch: ref, sha};
+          const updateResponse = await context.github.repos.updateFile(bla);
+          context.log(updateResponse)
+        } else {
+          context.log("No formatting issues in file", params);
+        }
       } else {
-        context.log("No formatting issues in file", params);
+        context.log("Failed to retrieve file or encoding is not base64", params, contentResponse);
       }
-    } else {
-      context.log("Failed to retrieve file or encoding is not base64", params, contentResponse);
-    }
     }
   })
 
