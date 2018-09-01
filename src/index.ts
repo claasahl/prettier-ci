@@ -1,5 +1,5 @@
 import { Application, Context } from 'probot'
-import { ReposGetContentParams, Response, ReposUpdateFileParams, GitdataGetReferenceParams, GitdataCreateReferenceParams, GitdataUpdateReferenceParams, ChecksCreateParams, ChecksUpdateParams, ReposGetCommitParams } from '@octokit/rest';
+import { ReposGetContentParams, Response, ReposUpdateFileParams, GitdataGetReferenceParams, GitdataCreateReferenceParams, GitdataUpdateReferenceParams, ChecksCreateParams, ChecksUpdateParams, ReposGetCommitParams, GetCommitResponseFilesItem } from '@octokit/rest';
 import * as prettier from "prettier";
 import atob from 'atob';
 import btoa from 'btoa';
@@ -111,7 +111,7 @@ export = (app: Application) => {
     }
   })
 
-  app.on("check_suite", check_suite);
+  app.on("check_suite.requested", check_suite);
 
   // For more information on building apps:
   // https://probot.github.io/docs/
@@ -149,7 +149,7 @@ async function check_suite(context: Context): Promise<void> {
     }
     const reposGetCommitResponse = await context.github.repos.getCommit(reposGetCommitParams);
 
-    let files: string[] = [];
+    let files: GetCommitResponseFilesItem[] = [];
     if(reposGetCommitResponse.data.files) {
     for(const file of reposGetCommitResponse.data.files) {
         const params: ReposGetContentParams = {
@@ -167,7 +167,7 @@ async function check_suite(context: Context): Promise<void> {
 
           if(!prettier.check(content, options)) {
             context.log("Found formatting issues in file", params);
-            files.push(file.filename);
+            files.push(file);
           } else {
             context.log("No formatting issues in file", params);
           }
@@ -181,8 +181,8 @@ async function check_suite(context: Context): Promise<void> {
   let text: string | undefined = undefined;
   if(files.length > 0) {
     text = "Here is a list of files which be *prettier*.\r\n"
-    files.sort().forEach(filename => {
-      text += `* ${filename}\r\n`
+    files.sort().forEach(file => {
+      text += `* [${file.filename}](${file.blob_url})\r\n`
     })
   }
     const checksUpdateParams: ChecksUpdateParams = {
