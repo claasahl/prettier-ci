@@ -1,58 +1,180 @@
 {
-  "name": "push",
-  "id": "edb462fa-aae8-11e8-8bac-351e8672fc62",
+  "event": "push",
   "payload": {
     "ref": "refs/heads/develop",
-    "before": "62945e64594c5cc7a04a820d99cbf8c73294f5ff",
-    "after": "96274c526fca26065613af66066479663eb0e897",
+    "before": "fad5b3a8a9602fd31279d8c707e5a0de3c4cd640",
+    "after": "39a53e909e101414ee8880321bf0079e4dd7d767",
     "created": false,
     "deleted": false,
     "forced": false,
     "base_ref": null,
-    "compare": "https://github.com/claasahl/prettiest-bot/compare/62945e64594c...96274c526fca",
+    "compare": "https://github.com/claasahl/prettiest-bot/compare/fad5b3a8a960...39a53e909e10",
     "commits": [
       {
-        "id": "96274c526fca26065613af66066479663eb0e897",
-        "tree_id": "600824de8dffbcac0fdb25980bd4963b686bdefd",
+        "id": "5ac146a609fd301737fe198e017c7842eb7a04ce",
+        "tree_id": "98a7cc7c80e13313e02bc412338f10ba33f0120b",
         "distinct": true,
-        "message": "print complete context object for \"push\" events",
-        "timestamp": "2018-08-28T19:35:10+02:00",
-        "url": "https://github.com/claasahl/prettiest-bot/commit/96274c526fca26065613af66066479663eb0e897",
+        "message": "installed probot@7.1.0",
+        "timestamp": "2018-09-01T11:40:58+02:00",
+        "url": "https://github.com/claasahl/prettiest-bot/commit/5ac146a609fd301737fe198e017c7842eb7a04ce",
         "author": {
           "name": "Claas Ahlrichs",
-          "email": "claasahl@*********",
+          "email": "claasahl@******",
           "username": "claasahl"
         },
         "committer": {
           "name": "Claas Ahlrichs",
-          "email": "claasahl@*********",
+          "email": "claasahl@******",
           "username": "claasahl"
         },
         "added": [],
         "removed": [],
-        "modified": ["src/index.ts"]
+        "modified": [
+          "package.json"
+        ]
+      },
+      {
+        "id": "eaee56feaa0d0b5de98b0734675ea835f46c406a",
+        "tree_id": "a3faf07a6a7f9cca15407256452ebe996faa437e",
+        "distinct": true,
+        "message": "create, update and complete check_run",
+        "timestamp": "2018-09-01T12:37:22+02:00",
+        "url": "https://github.com/claasahl/prettiest-bot/commit/eaee56feaa0d0b5de98b0734675ea835f46c406a",
+        "author": {
+          "name": "Claas Ahlrichs",
+          "email": "claasahl@******",
+          "username": "claasahl"
+        },
+        "committer": {
+          "name": "Claas Ahlrichs",
+          "email": "claasahl@******",
+          "username": "claasahl"
+        },
+        "added": [],
+        "removed": [],
+        "modified": [
+          "src/index.ts"
+        ]
+      },
+      {
+        "id": "bebd9b40ac5fb6bdd29befcf0462a616674341c4",
+        "tree_id": "090a0c177f0f610d025e07fca84a56927db35295",
+        "distinct": true,
+        "message": "added check_run.json",
+        "timestamp": "2018-09-01T13:26:53+02:00",
+        "url": "https://github.com/claasahl/prettiest-bot/commit/bebd9b40ac5fb6bdd29befcf0462a616674341c4",
+        "author": {
+          "name": "Claas Ahlrichs",
+          "email": "claasahl@******",
+          "username": "claasahl"
+        },
+        "committer": {
+          "name": "Claas Ahlrichs",
+          "email": "claasahl@******",
+          "username": "claasahl"
+        },
+        "added": [
+          "test/events/check_run.json"
+        ],
+        "removed": [],
+        "modified": []
+      },
+      {
+        "id": "475529f4e394133a499c54af2dccc9e898f7551c",
+        "tree_id": "8082884ab8b80b0dc7b930b65af94872e7f03ce4",
+        "distinct": true,
+        "message": "run check on specified commit",
+        "timestamp": "2018-09-01T13:27:34+02:00",
+        "url": "https://github.com/claasahl/prettiest-bot/commit/475529f4e394133a499c54af2dccc9e898f7551c",
+        "author": {
+          "name": "Claas Ahlrichs",
+          "email": "claasahl@******",
+          "username": "claasahl"
+        },
+        "committer": {
+          "name": "Claas Ahlrichs",
+          "email": "claasahl@******",
+          "username": "claasahl"
+        },
+        "added": [],
+        "removed": [],
+        "modified": [
+          "src/index.ts"
+        ]
+      },
+      {
+        "id": "1c8b70533118d26fd60880b580e4b603683df0c9",
+        "tree_id": "0c97f654c9c39e3029424981b22a549781579c5d",
+        "distinct": true,
+        "message": "included links to unformatted files",
+        "timestamp": "2018-09-01T13:43:05+02:00",
+        "url": "https://github.com/claasahl/prettiest-bot/commit/1c8b70533118d26fd60880b580e4b603683df0c9",
+        "author": {
+          "name": "Claas Ahlrichs",
+          "email": "claasahl@******",
+          "username": "claasahl"
+        },
+        "committer": {
+          "name": "Claas Ahlrichs",
+          "email": "claasahl@******",
+          "username": "claasahl"
+        },
+        "added": [],
+        "removed": [],
+        "modified": [
+          "src/index.ts"
+        ]
+      },
+      {
+        "id": "39a53e909e101414ee8880321bf0079e4dd7d767",
+        "tree_id": "47ba5a8795bf1abd9fa5f079bf9f85ca7ce3a124",
+        "distinct": true,
+        "message": "extracted module for validating \"prettiness\"",
+        "timestamp": "2018-09-01T18:23:18+02:00",
+        "url": "https://github.com/claasahl/prettiest-bot/commit/39a53e909e101414ee8880321bf0079e4dd7d767",
+        "author": {
+          "name": "Claas Ahlrichs",
+          "email": "claasahl@******",
+          "username": "claasahl"
+        },
+        "committer": {
+          "name": "Claas Ahlrichs",
+          "email": "claasahl@******",
+          "username": "claasahl"
+        },
+        "added": [
+          "src/check.ts"
+        ],
+        "removed": [],
+        "modified": [
+          "src/index.ts"
+        ]
       }
     ],
     "head_commit": {
-      "id": "96274c526fca26065613af66066479663eb0e897",
-      "tree_id": "600824de8dffbcac0fdb25980bd4963b686bdefd",
+      "id": "39a53e909e101414ee8880321bf0079e4dd7d767",
+      "tree_id": "47ba5a8795bf1abd9fa5f079bf9f85ca7ce3a124",
       "distinct": true,
-      "message": "print complete context object for \"push\" events",
-      "timestamp": "2018-08-28T19:35:10+02:00",
-      "url": "https://github.com/claasahl/prettiest-bot/commit/96274c526fca26065613af66066479663eb0e897",
+      "message": "extracted module for validating \"prettiness\"",
+      "timestamp": "2018-09-01T18:23:18+02:00",
+      "url": "https://github.com/claasahl/prettiest-bot/commit/39a53e909e101414ee8880321bf0079e4dd7d767",
       "author": {
         "name": "Claas Ahlrichs",
-        "email": "claasahl@*********",
+        "email": "claasahl@******",
         "username": "claasahl"
       },
       "committer": {
         "name": "Claas Ahlrichs",
-        "email": "claasahl@*********",
+        "email": "claasahl@******",
         "username": "claasahl"
       },
-      "added": [],
+      "added": [
+        "src/check.ts"
+      ],
       "removed": [],
-      "modified": ["src/index.ts"]
+      "modified": [
+        "src/index.ts"
+      ]
     },
     "repository": {
       "id": 146478761,
@@ -124,13 +246,13 @@
       "deployments_url": "https://api.github.com/repos/claasahl/prettiest-bot/deployments",
       "created_at": 1535475205,
       "updated_at": "2018-08-28T17:18:55Z",
-      "pushed_at": 1535477802,
+      "pushed_at": 1535820719,
       "git_url": "git://github.com/claasahl/prettiest-bot.git",
       "ssh_url": "git@github.com:claasahl/prettiest-bot.git",
       "clone_url": "https://github.com/claasahl/prettiest-bot.git",
       "svn_url": "https://github.com/claasahl/prettiest-bot",
       "homepage": null,
-      "size": 0,
+      "size": 29,
       "stargazers_count": 0,
       "watchers_count": 0,
       "language": "TypeScript",
@@ -184,25 +306,5 @@
     "installation": {
       "id": 309410
     }
-  },
-  "github": {
-    "activity": {},
-    "apps": {},
-    "authorization": {},
-    "checks": {},
-    "enterprise": {},
-    "gists": {},
-    "gitdata": {},
-    "integrations": {},
-    "issues": {},
-    "migrations": {},
-    "misc": {},
-    "orgs": {},
-    "projects": {},
-    "pullRequests": {},
-    "reactions": {},
-    "repos": {},
-    "search": {},
-    "users": {}
   }
 }
