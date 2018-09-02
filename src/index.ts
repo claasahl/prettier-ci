@@ -1,5 +1,5 @@
 import { Application, Context } from 'probot'
-import { ReposGetContentParams, Response, ReposUpdateFileParams, GitdataGetReferenceParams, GitdataCreateReferenceParams, GitdataUpdateReferenceParams, ChecksCreateParams, ChecksUpdateParams, ReposGetCommitParams } from '@octokit/rest';
+import { ReposGetContentParams, Response, ReposUpdateFileParams, GitdataGetReferenceParams, GitdataCreateReferenceParams, GitdataUpdateReferenceParams, ChecksCreateParams, ChecksUpdateParams, ReposCompareCommitsParams } from '@octokit/rest';
 import * as prettier from "prettier";
 import atob from 'atob';
 import btoa from 'btoa';
@@ -29,7 +29,7 @@ export = (app: Application) => {
     const baseRef = context.payload.ref;
     const sha = context.payload.after;
 
-    const ref: string = baseRef + "-prettier";
+    const ref: string = "prettier/" + baseRef;
     const getReferenceParams: GitdataGetReferenceParams = {owner, repo, ref};
     const response = await context.github.gitdata.getReference(getReferenceParams).catch(reason => ({status: 500}));
     if(response.status === 200) {
@@ -56,7 +56,7 @@ export = (app: Application) => {
     return response.status === 200;
   }
   function isPrettierReference(ref: string): boolean {
-    return ref.endsWith("-prettier");
+    return ref.startsWith("prettier/");
   }
 
   // Your code here
@@ -147,20 +147,17 @@ async function check_suite(context: Context): Promise<void> {
     const checksCreateResponse = await context.github.checks.create(checksCreateParams);
     context.log(JSON.stringify(checksCreateResponse, null, 2))
 
-    const reposGetCommitParams: ReposGetCommitParams = {
-      owner,
-      repo,
-      sha,
-    }
-    const reposGetCommitResponse = await context.github.repos.getCommit(reposGetCommitParams);
+    const reposCompareCommitsParams: ReposCompareCommitsParams = {owner, repo, base: context.payload.check_suite.before, head: context.payload.check_suite.after};
+    const reposCompareCommitsResponse = await context.github.repos.compareCommits(reposCompareCommitsParams);
 
-    if(reposGetCommitResponse.data.files) {
+    
+    if(reposCompareCommitsResponse.data.files) {
       const results = await checkFiles({
         context,
         owner,
       repo,
       sha,
-      files: reposGetCommitResponse.data.files.map(file => file.filename)
+      files: reposCompareCommitsResponse.data.files.filter((file: any) => file.status != "deleted").map((file: any) => file.filename)
       })
 
       const failedResults = results.results.filter(result => !result.passed);
