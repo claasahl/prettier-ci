@@ -24,7 +24,7 @@
     "atob": "^2.1.2",
     "btoa": "^1.2.1",
     "prettier": "^1.14.2",
-    "probot": "^7.0.0"
+    "probot": "^7.1.0"
   },
   "devDependencies": {
     "@types/atob": "^2.1.1",
