@@ -5,8 +5,18 @@ import { checkFiles } from './check';
 import * as check_run from "./events/check_run";
 import * as check_suite from "./events/check_suite";
 
+import * as Rx from "rxjs";
+
 // FIXME this just to keep "eslint-plugin-typescript" from complaining about unused references
 Application.toString();
+
+Rx.of(10, 20, 30)
+.subscribe(
+  next => console.log('next:', next),
+  err => console.log('error:', err),
+  () => console.log('the end'),
+);
+
 
 export = (app: Application) => {
   // Your code here
