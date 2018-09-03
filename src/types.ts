@@ -4,7 +4,7 @@ import * as gh from "@octokit/rest";
 
 type Overwrite<T1, T2> = Pick<T1, Exclude<keyof T1, keyof T2>> & T2;
 
-interface Common {
+export interface Common {
     github: GitHubAPI,
     log: LoggerWithTarget,
 }
