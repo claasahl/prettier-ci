@@ -1,5 +1,5 @@
 import { Application, Context } from 'probot'
-import { ReposGetContentParams, Response, ReposUpdateFileParams, GitdataGetReferenceParams, GitdataCreateReferenceParams, GitdataUpdateReferenceParams } from '@octokit/rest';
+import { ReposGetContentParams, Response, ReposUpdateFileParams, GitdataGetReferenceParams, GitdataCreateReferenceParams, GitdataUpdateReferenceParams, ChecksCreateParams, ChecksUpdateParams } from '@octokit/rest';
 import * as prettier from "prettier";
 import atob from 'atob';
 import btoa from 'btoa';
@@ -111,6 +111,7 @@ export = (app: Application) => {
     }
   })
 
+  app.on("check_suite", check_suite);
 
   // For more information on building apps:
   // https://probot.github.io/docs/
@@ -118,3 +119,41 @@ export = (app: Application) => {
   // To get your app running against GitHub, see:
   // https://probot.github.io/docs/development/
 };
+
+function repoOwner(context: Context): string {
+  const {name, login} = context.payload.repository.owner;
+  return name || login;
+}
+function repoName(context: Context): string {
+  return context.payload.repository.name;
+}
+
+async function check_suite(context: Context): Promise<void> {
+  const action: string = context.payload.action;
+  if (action.match("(re)?requested")) {
+    const checksCreateParams: ChecksCreateParams = { 
+      owner: repoOwner(context),
+       repo: repoName(context),
+        name: "prettier",
+        head_sha: context.payload.check_suite.head_sha,
+         status: "in_progress" };
+         context.log(JSON.stringify(checksCreateParams, null, 2))
+         // TODO error handling
+    const checksCreateResponse = await context.github.checks.create(checksCreateParams);
+    context.log(JSON.stringify(checksCreateResponse, null, 2))
+
+    const checksUpdateParams: ChecksUpdateParams = {
+      owner: repoOwner(context),
+      repo: repoName(context),
+      check_run_id: checksCreateResponse.data.id as string,
+       name: "prettier",
+       status: "completed",
+       conclusion: "success",
+       completed_at: new Date().toISOString()
+    }
+    context.log(JSON.stringify(checksUpdateParams, null, 2))
+    // TODO error handling
+    const checksUpdateResponse = await context.github.checks.update(checksUpdateParams);
+    context.log(JSON.stringify(checksUpdateResponse, null, 2))
+  }
+}
