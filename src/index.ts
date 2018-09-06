@@ -1,5 +1,5 @@
 import { Application, Context } from 'probot'
-import { ReposGetContentParams, Response, ReposUpdateFileParams, GitdataGetReferenceParams, GitdataCreateReferenceParams, GitdataUpdateReferenceParams, ChecksCreateParams, ChecksUpdateParams } from '@octokit/rest';
+import { ReposGetContentParams, Response, ReposUpdateFileParams, GitdataGetReferenceParams, GitdataCreateReferenceParams, GitdataUpdateReferenceParams, ChecksCreateParams, ChecksUpdateParams, ReposGetCommitParams } from '@octokit/rest';
 import * as prettier from "prettier";
 import atob from 'atob';
 import btoa from 'btoa';
@@ -142,14 +142,62 @@ async function check_suite(context: Context): Promise<void> {
     const checksCreateResponse = await context.github.checks.create(checksCreateParams);
     context.log(JSON.stringify(checksCreateResponse, null, 2))
 
+    const reposGetCommitParams: ReposGetCommitParams = {
+      owner: repoOwner(context),
+      repo: repoName(context),
+      sha: context.payload.check_suite.head_sha,
+    }
+    const reposGetCommitResponse = await context.github.repos.getCommit(reposGetCommitParams);
+
+    let files: string[] = [];
+    if(reposGetCommitResponse.data.files) {
+    for(const file of reposGetCommitResponse.data.files) {
+        const params: ReposGetContentParams = {
+          owner: repoOwner(context),
+      repo: repoName(context),
+      path: file.filename,
+          ref: reposGetCommitResponse.data.sha};
+        context.log("Inspecting file", params);
+        const options = {filepath: file.filename};
+        
+        const contentResponse: Response<any> = await context.github.repos.getContent(params);
+        if(contentResponse.data.encoding === "base64") {
+          context.log("Retrieved file", params);
+          const content = atob(contentResponse.data.content);
+
+          if(!prettier.check(content, options)) {
+            context.log("Found formatting issues in file", params);
+            files.push(file.filename);
+          } else {
+            context.log("No formatting issues in file", params);
+          }
+        } else {
+          context.log("Failed to retrieve file or encoding is not base64", params, contentResponse);
+        }
+    }
+  }
+
+  const summary = files.length === 0 ? "Pretty. Keep up the **good work**." : `Found ${files.length} files which could be *prettier*`;
+  let text: string | undefined = undefined;
+  if(files.length > 0) {
+    text = "Here is a list of files which be *prettier*.\r\n"
+    files.sort().forEach(filename => {
+      text += `* ${filename}\r\n`
+    })
+  }
     const checksUpdateParams: ChecksUpdateParams = {
       owner: repoOwner(context),
       repo: repoName(context),
       check_run_id: checksCreateResponse.data.id as string,
        name: "prettier",
        status: "completed",
-       conclusion: "success",
-       completed_at: new Date().toISOString()
+       conclusion: files.length === 0 ? "success" : "failure",
+       completed_at: new Date().toISOString(),
+       output: {
+         title: "Prettier",
+         summary,
+         text
+       }
     }
     context.log(JSON.stringify(checksUpdateParams, null, 2))
     // TODO error handling
