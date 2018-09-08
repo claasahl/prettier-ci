@@ -2,6 +2,7 @@ import * as Rx from 'rxjs'
 import { filter } from 'rxjs/operators'
 import { ProbotEvent } from './types'
 
+export const CHECKS_NAME = "Prettier"
 export const USER_NAME = process.env.name || 'prettier'
 export const USER_TYPE = 'bot'
 
