@@ -1,13 +1,16 @@
 import { GitHubAPI } from 'probot/lib/github'
 import { LoggerWithTarget } from 'probot/lib/wrap-logger'
 import * as gh from '@octokit/rest'
+import { Context } from 'probot';
 
-type Overwrite < T1 , T2 > = Pick<T1, Exclude<keyof T1, keyof T2>> & T2
+export type Overwrite < T1 , T2 > = Pick<T1, Exclude<keyof T1, keyof T2>> & T2
 
 export interface Common {
     github: GitHubAPI,
     log: LoggerWithTarget,
 }
+
+export interface Projection<T> {(context: Context): T }
 
 export type ChecksCreateParams = Common & Overwrite<gh.ChecksCreateParams, { name?: string, status?: 'queued' | 'in_progress' | 'completed' }>
 

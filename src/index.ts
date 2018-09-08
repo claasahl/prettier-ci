@@ -3,7 +3,7 @@ import * as check_run from './events/check_run'
 import * as check_suite from './events/check_suite'
 
 import * as Rx from 'rxjs'
-import {flatMap, tap, share} from 'rxjs/operators'
+import {flatMap, tap, share, retry, map} from 'rxjs/operators'
 import { ofEvent } from './utils'
 
 
@@ -20,6 +20,7 @@ export = (app: Application) => {
       event.pipe(ofEvent('check_suite.requested'), flatMap(check_suite.requested)),
       event.pipe(ofEvent('check_run.rerequested'), flatMap(check_run.rerequested)),
       event.pipe(ofEvent('check_run.created'), flatMap(check_run.created)))
+      .pipe(retry(2), map(() => undefined))
       .toPromise()
   })
 
