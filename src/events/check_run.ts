@@ -3,7 +3,6 @@ import * as checks from '../actions/checks'
 import * as repos from '../actions/repos'
 import * as prettier from '../actions/prettier'
 import { ChecksUpdateParamsOutput } from '@octokit/rest'
-import { ChecksCreateParams } from '../types'
 
 export async function created (context: Context): Promise<void> {
   const status = context.payload.check_run.status
@@ -23,14 +22,6 @@ export async function rerequested (context: Context): Promise<void> {
   const repo = context.payload.repository.name
   const head_sha = context.payload.check_run.head_sha
   await checks.create({ github, log, owner, repo, head_sha })
-}
-
-export async function rerequested2 (context: Context): Promise<ChecksCreateParams> {
-  const { github, log } = context
-  const owner = context.payload.repository.owner.login
-  const repo = context.payload.repository.name
-  const head_sha = context.payload.check_run.head_sha
-  return { github, log, owner, repo, head_sha }
 }
 
 interface FileCheck {
