@@ -6,8 +6,6 @@ import * as Rx from 'rxjs'
 import {flatMap, tap, share} from 'rxjs/operators'
 import { ofEvent } from './utils'
 
-// FIXME this just to keep "eslint-plugin-typescript" from complaining about unused references
-Application.toString()
 
 export = (app: Application) => {
   // Your code here
