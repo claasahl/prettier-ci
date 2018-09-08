@@ -1,8 +1,9 @@
 import { Application, Context } from 'probot'
-import { ReposGetContentParams, Response, ReposUpdateFileParams, GitdataGetReferenceParams, GitdataCreateReferenceParams, GitdataUpdateReferenceParams, ChecksCreateParams, ChecksUpdateParams, ReposGetCommitParams, GetCommitResponseFilesItem } from '@octokit/rest';
+import { ReposGetContentParams, Response, ReposUpdateFileParams, GitdataGetReferenceParams, GitdataCreateReferenceParams, GitdataUpdateReferenceParams, ChecksCreateParams, ChecksUpdateParams, ReposGetCommitParams } from '@octokit/rest';
 import * as prettier from "prettier";
 import atob from 'atob';
 import btoa from 'btoa';
+import { checkFiles } from './check';
 
 // FIXME this just to keep "eslint-plugin-typescript" from complaining about unused references
 Application.toString();
@@ -131,11 +132,15 @@ function repoName(context: Context): string {
 async function check_suite(context: Context): Promise<void> {
   const action: string = context.payload.action;
   if (action.match("(re)?requested")) {
+    const owner = repoOwner(context);
+    const repo = repoName(context);
+    const sha = context.payload.check_suite.head_sha;
+
     const checksCreateParams: ChecksCreateParams = { 
-      owner: repoOwner(context),
-       repo: repoName(context),
+      owner,
+       repo,
         name: "prettier",
-        head_sha: context.payload.check_suite.head_sha,
+        head_sha: sha,
          status: "in_progress" };
          context.log(JSON.stringify(checksCreateParams, null, 2))
          // TODO error handling
@@ -143,55 +148,38 @@ async function check_suite(context: Context): Promise<void> {
     context.log(JSON.stringify(checksCreateResponse, null, 2))
 
     const reposGetCommitParams: ReposGetCommitParams = {
-      owner: repoOwner(context),
-      repo: repoName(context),
-      sha: context.payload.check_suite.head_sha,
+      owner,
+      repo,
+      sha,
     }
     const reposGetCommitResponse = await context.github.repos.getCommit(reposGetCommitParams);
 
-    let files: GetCommitResponseFilesItem[] = [];
     if(reposGetCommitResponse.data.files) {
-    for(const file of reposGetCommitResponse.data.files) {
-        const params: ReposGetContentParams = {
-          owner: repoOwner(context),
-      repo: repoName(context),
-      path: file.filename,
-          ref: reposGetCommitResponse.data.sha};
-        context.log("Inspecting file", params);
-        const options = {filepath: file.filename};
-        
-        const contentResponse: Response<any> = await context.github.repos.getContent(params);
-        if(contentResponse.data.encoding === "base64") {
-          context.log("Retrieved file", params);
-          const content = atob(contentResponse.data.content);
+      const results = await checkFiles({
+        context,
+        owner,
+      repo,
+      sha,
+      files: reposGetCommitResponse.data.files.map(file => file.filename)
+      })
 
-          if(!prettier.check(content, options)) {
-            context.log("Found formatting issues in file", params);
-            files.push(file);
-          } else {
-            context.log("No formatting issues in file", params);
-          }
-        } else {
-          context.log("Failed to retrieve file or encoding is not base64", params, contentResponse);
-        }
-    }
-  }
-
-  const summary = files.length === 0 ? "Pretty. Keep up the **good work**." : `Found ${files.length} files which could be *prettier*`;
+      const failedResults = results.results.filter(result => !result.passed);
+  const summary = results.passed ? "Pretty. Keep up the **good work**." : `Found ${failedResults.length} files which could be *prettier*`;
   let text: string | undefined = undefined;
-  if(files.length > 0) {
+  if(!results.passed) {
     text = "Here is a list of files which be *prettier*.\r\n"
-    files.sort().forEach(file => {
-      text += `* [${file.filename}](${file.blob_url})\r\n`
+    failedResults.forEach(result => {
+      // TODO possibly create an issue if error != NOT_FORMATTED_WITH_PRETTIER
+      text += `* [${result.file}](https://github.com/${owner}/${repo}/blob/${sha}/${result.file})\r\n`
     })
   }
     const checksUpdateParams: ChecksUpdateParams = {
-      owner: repoOwner(context),
-      repo: repoName(context),
+      owner,
+      repo,
       check_run_id: checksCreateResponse.data.id as string,
        name: "prettier",
        status: "completed",
-       conclusion: files.length === 0 ? "success" : "failure",
+       conclusion: results.passed ? "success" : "failure",
        completed_at: new Date().toISOString(),
        output: {
          title: "Prettier",
@@ -203,5 +191,8 @@ async function check_suite(context: Context): Promise<void> {
     // TODO error handling
     const checksUpdateResponse = await context.github.checks.update(checksUpdateParams);
     context.log(JSON.stringify(checksUpdateResponse, null, 2))
+  } else {
+    context.log("commit did not reference any files")
   }
+}
 }
