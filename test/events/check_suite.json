@@ -3,15 +3,15 @@
     "payload": {
         "action": "requested",
         "check_suite": {
-            "id": 12069068,
-            "node_id": "MDEwOkNoZWNrU3VpdGUxMjA2OTA2OA==",
+            "id": 12082232,
+            "node_id": "MDEwOkNoZWNrU3VpdGUxMjA4MjIzMg==",
             "head_branch": "develop",
-            "head_sha": "20c8104fa3949d2a9845e60a697ab71a4232eb68",
+            "head_sha": "39a53e909e101414ee8880321bf0079e4dd7d767",
             "status": "queued",
             "conclusion": null,
-            "url": "https://api.github.com/repos/claasahl/prettiest-bot/check-suites/12069068",
-            "before": "4dd74053865488ce5adf23eeb582594baefaf0d2",
-            "after": "20c8104fa3949d2a9845e60a697ab71a4232eb68",
+            "url": "https://api.github.com/repos/claasahl/prettiest-bot/check-suites/12082232",
+            "before": "fad5b3a8a9602fd31279d8c707e5a0de3c4cd640",
+            "after": "39a53e909e101414ee8880321bf0079e4dd7d767",
             "pull_requests": [],
             "app": {
                 "id": 16733,
@@ -43,22 +43,22 @@
                 "created_at": "2018-08-28T06:33:00Z",
                 "updated_at": "2018-08-31T08:57:39Z"
             },
-            "created_at": "2018-09-01T09:29:51Z",
-            "updated_at": "2018-09-01T09:29:51Z",
+            "created_at": "2018-09-01T16:52:00Z",
+            "updated_at": "2018-09-01T16:52:00Z",
             "latest_check_runs_count": 0,
-            "check_runs_url": "https://api.github.com/repos/claasahl/prettiest-bot/check-suites/12069068/check-runs",
+            "check_runs_url": "https://api.github.com/repos/claasahl/prettiest-bot/check-suites/12082232/check-runs",
             "head_commit": {
-                "id": "20c8104fa3949d2a9845e60a697ab71a4232eb68",
-                "tree_id": "6698e04652a04a723dd45fbddd5357ebd5f266d6",
-                "message": "test commit",
-                "timestamp": "2018-09-01T09:29:31Z",
+                "id": "39a53e909e101414ee8880321bf0079e4dd7d767",
+                "tree_id": "47ba5a8795bf1abd9fa5f079bf9f85ca7ce3a124",
+                "message": "extracted module for validating \"prettiness\"",
+                "timestamp": "2018-09-01T16:23:18Z",
                 "author": {
                     "name": "Claas Ahlrichs",
-                    "email": "claasahl@*********"
+                    "email": "claasahl@******"
                 },
                 "committer": {
                     "name": "Claas Ahlrichs",
-                    "email": "claasahl@*********"
+                    "email": "claasahl@******"
                 }
             }
         },
@@ -130,13 +130,13 @@
             "deployments_url": "https://api.github.com/repos/claasahl/prettiest-bot/deployments",
             "created_at": "2018-08-28T16:53:25Z",
             "updated_at": "2018-08-28T17:18:55Z",
-            "pushed_at": "2018-09-01T09:29:51Z",
+            "pushed_at": "2018-09-01T16:51:59Z",
             "git_url": "git://github.com/claasahl/prettiest-bot.git",
             "ssh_url": "git@github.com:claasahl/prettiest-bot.git",
             "clone_url": "https://github.com/claasahl/prettiest-bot.git",
             "svn_url": "https://github.com/claasahl/prettiest-bot",
             "homepage": null,
-            "size": 25,
+            "size": 29,
             "stargazers_count": 0,
             "watchers_count": 0,
             "language": "TypeScript",
