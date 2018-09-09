@@ -1,14 +1,12 @@
-import * as rx from "rxjs";
 import * as gh from "@octokit/rest";
-import { rxChecks} from "../reactivex/rxGithub"
+import { promiseChecks} from "../reactivex/rxGithub"
 import { Context } from 'probot'
 
 import { CHECKS_NAME } from '../utils';
-import { map } from 'rxjs/operators';
 
-export function requested (context: Context): rx.Observable<Context> {
-  return rxChecks.create(context, requested2ChecksCreateParams)
-  .pipe(map(r => r.context))
+export async function requested (context: Context): Promise<Context> {
+  await promiseChecks.create(context, requested2ChecksCreateParams)
+  return context
 }
 
 function requested2ChecksCreateParams(context: Context): gh.ChecksCreateParams {
