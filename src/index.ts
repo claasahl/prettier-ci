@@ -18,8 +18,9 @@ export = (app: Application) => {
       //event.pipe(ofEvent("push")),
       event.pipe(ofEvent('check_suite.requested'), flatMap(check_suite.requested)),
       event.pipe(ofEvent('check_run.rerequested'), flatMap(check_run.rerequested)),
-      event.pipe(ofEvent('check_run.created'), flatMap(check_run.created)))
-      .pipe(retry(2), map(() => undefined))
+      event.pipe(ofEvent('check_run.created'), flatMap(check_run.created)),
+      event.pipe(ofEvent('check_run.requested_action'), flatMap(check_run.requested_action)))
+      .pipe(retry(2), map(() => undefined), tap(undefined, e => console.log(e)))
       .toPromise()
   })
 
