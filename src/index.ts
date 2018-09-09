@@ -17,6 +17,7 @@ export = (app: Application) => {
     return rx.race(
       //event.pipe(ofEvent("push")),
       event.pipe(ofEvent('check_suite.requested'), flatMap(check_suite.requested)),
+      event.pipe(ofEvent('check_suite.rerequested'), flatMap(check_suite.requested)),
       event.pipe(ofEvent('check_run.rerequested'), flatMap(check_run.rerequested)),
       event.pipe(ofEvent('check_run.created'), flatMap(check_run.created)),
       event.pipe(ofEvent('check_run.requested_action'), flatMap(check_run.requested_action)))
