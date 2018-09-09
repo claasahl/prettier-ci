@@ -1,0 +1,134 @@
+{
+  "data": {
+    "id": 16356042,
+    "node_id": "MDg6Q2hlY2tSdW4xNjM1NjA0Mg==",
+    "head_sha": "6fec18a8c4b55740890b2e0cd66d33f759a94f18",
+    "external_id": "",
+    "url": "https://api.github.com/repos/claasahl/prettiest-bot/check-runs/16356042",
+    "html_url": "https://github.com/claasahl/prettiest-bot/runs/16356042",
+    "details_url": "https://github.com/claasahl/prettiest-bot",
+    "status": "queued",
+    "conclusion": null,
+    "started_at": "2018-09-09T16:27:43Z",
+    "completed_at": null,
+    "output": {
+      "title": null,
+      "summary": null,
+      "text": null,
+      "annotations_count": 0,
+      "annotations_url": "https://api.github.com/repos/claasahl/prettiest-bot/check-runs/16356042/annotations"
+    },
+    "name": "Prettier",
+    "check_suite": {
+      "id": 13052295
+    },
+    "app": {
+      "id": 16733,
+      "node_id": "MDM6QXBwMTY3MzM=",
+      "owner": {
+        "login": "claasahl",
+        "id": 8401267,
+        "node_id": "MDQ6VXNlcjg0MDEyNjc=",
+        "avatar_url": "https://avatars2.githubusercontent.com/u/8401267?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/claasahl",
+        "html_url": "https://github.com/claasahl",
+        "followers_url": "https://api.github.com/users/claasahl/followers",
+        "following_url": "https://api.github.com/users/claasahl/following{/other_user}",
+        "gists_url": "https://api.github.com/users/claasahl/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/claasahl/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/claasahl/subscriptions",
+        "organizations_url": "https://api.github.com/users/claasahl/orgs",
+        "repos_url": "https://api.github.com/users/claasahl/repos",
+        "events_url": "https://api.github.com/users/claasahl/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/claasahl/received_events",
+        "type": "User",
+        "site_admin": false
+      },
+      "name": "prettiest-bot",
+      "description": "",
+      "external_url": "https://github.com/claasahl/prettiest-bot",
+      "html_url": "https://github.com/apps/prettiest-bot",
+      "created_at": "2018-08-28T06:33:00Z",
+      "updated_at": "2018-08-31T08:57:39Z"
+    },
+    "pull_requests": [
+      {
+        "url": "https://api.github.com/repos/claasahl/prettiest-bot/pulls/3",
+        "id": 214152953,
+        "number": 3,
+        "head": {
+          "ref": "prettier/develop",
+          "sha": "6fec18a8c4b55740890b2e0cd66d33f759a94f18",
+          "repo": {
+            "id": 146478761,
+            "url": "https://api.github.com/repos/claasahl/prettiest-bot",
+            "name": "prettiest-bot"
+          }
+        },
+        "base": {
+          "ref": "develop",
+          "sha": "bb4d2ed9702c4c4340db50f74fc451657fe48e57",
+          "repo": {
+            "id": 146478761,
+            "url": "https://api.github.com/repos/claasahl/prettiest-bot",
+            "name": "prettiest-bot"
+          }
+        }
+      }
+    ]
+  },
+  "status": 201,
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "ETag, Link, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval",
+    "cache-control": "private, max-age=60, s-maxage=60",
+    "connection": "close",
+    "content-length": "2321",
+    "content-security-policy": "default-src 'none'",
+    "content-type": "application/json; charset=utf-8",
+    "date": "Sun, 09 Sep 2018 16:27:43 GMT",
+    "etag": "\"60f2772a64f3fd3ff4e5689c6c5277f3\"",
+    "location": "https://api.github.com/repos/claasahl/prettiest-bot/check-runs/16356042",
+    "referrer-policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+    "server": "GitHub.com",
+    "status": "201 Created",
+    "strict-transport-security": "max-age=31536000; includeSubdomains; preload",
+    "vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "deny",
+    "x-github-media-type": "github.antiope-preview; format=json, github.machine-man-preview; format=json",
+    "x-github-request-id": "38AE:64B1:8DF9D8:1444D95:5B9549FF",
+    "x-ratelimit-limit": "5000",
+    "x-ratelimit-remaining": "4854",
+    "x-ratelimit-reset": "1536512432",
+    "x-runtime-rack": "0.104406",
+    "x-xss-protection": "1; mode=block"
+  },
+  "meta": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "ETag, Link, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval",
+    "cache-control": "private, max-age=60, s-maxage=60",
+    "connection": "close",
+    "content-length": "2321",
+    "content-security-policy": "default-src 'none'",
+    "content-type": "application/json; charset=utf-8",
+    "date": "Sun, 09 Sep 2018 16:27:43 GMT",
+    "etag": "\"60f2772a64f3fd3ff4e5689c6c5277f3\"",
+    "location": "https://api.github.com/repos/claasahl/prettiest-bot/check-runs/16356042",
+    "referrer-policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
+    "server": "GitHub.com",
+    "status": "201 Created",
+    "strict-transport-security": "max-age=31536000; includeSubdomains; preload",
+    "vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "deny",
+    "x-github-media-type": "github.antiope-preview; format=json, github.machine-man-preview; format=json",
+    "x-github-request-id": "38AE:64B1:8DF9D8:1444D95:5B9549FF",
+    "x-ratelimit-limit": "5000",
+    "x-ratelimit-remaining": "4854",
+    "x-ratelimit-reset": "1536512432",
+    "x-runtime-rack": "0.104406",
+    "x-xss-protection": "1; mode=block"
+  }
+}
