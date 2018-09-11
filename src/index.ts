@@ -2,6 +2,8 @@ import { test, getPrettierPullRequests } from './pull_requests';
 import { Application, Context } from 'probot'
 import { ChecksCreateParams, ChecksUpdateParams, ReposCompareCommitsParams } from '@octokit/rest';
 import { checkFiles } from './check';
+import * as check_run from "./events/check_run";
+import * as check_suite from "./events/check_suite";
 
 // FIXME this just to keep "eslint-plugin-typescript" from complaining about unused references
 Application.toString();
@@ -14,8 +16,12 @@ export = (app: Application) => {
     context.log({ event: context.event, action: context.payload.action });
   });
   
-  app.on("push", push)
-  app.on("check_suite.requested", check_suite__requested);
+  app.on("push_____", push)
+  app.on("check_suite.requested_____", check_suite__requested);
+
+  app.on("check_suite.requested", check_suite.requested);
+  app.on("check_run.created", check_run.created);
+  app.on("check_run.rerequested", check_run.rerequested);
 
   // For more information on building apps:
   // https://probot.github.io/docs/
