@@ -4,9 +4,8 @@ import { Context } from 'probot'
 
 import { CHECKS_NAME } from '../utils';
 
-export async function requested (context: Context): Promise<Context> {
+export async function requested (context: Context): Promise<void> {
   await checks.create(context, requested2ChecksCreateParams)
-  return context
 }
 
 function requested2ChecksCreateParams(context: Context): gh.ChecksCreateParams {

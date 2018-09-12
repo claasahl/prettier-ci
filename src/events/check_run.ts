@@ -8,7 +8,7 @@ import { Projection, Overwrite } from '../types';
 import btoa from "btoa";
 import atob from "atob";
 
-export async function created(context: Context): Promise<Context> {
+export async function created(context: Context): Promise<void> {
   await markCheckAsInProgress(context);
   const {files} = await fetchModifiedFiles(context);
   const results: {file: string, passed: boolean}[] = [];
@@ -19,7 +19,6 @@ export async function created(context: Context): Promise<Context> {
   }
   const report = asReport(results)
   await markCheckAsCompleted({context, report})
-  return context
 }
 
 function created2ChecksUpdateParams(params: Partial<gh.ChecksUpdateParams>): Projection<gh.ChecksUpdateParams> {
@@ -85,9 +84,8 @@ async function markCheckAsCompleted(data: {context: Context, report: Partial<gh.
 }
 
 
-export async function rerequested(context: Context): Promise<Context> {
+export async function rerequested(context: Context): Promise<void> {
    await checks.create(context, rerequested2ChecksCreateParams)
-   return context
 }
 
 function rerequested2ChecksCreateParams(context: Context): gh.ChecksCreateParams {
@@ -125,10 +123,10 @@ function asReport(results: FileCheck[]): Partial<gh.ChecksUpdateParams> {
 }
 
 
-export async function requested_action(context: Context): Promise<Context> {
+export async function requested_action(context: Context): Promise<void> {
   const {identifier} = context.payload.requested_action;
   if(identifier === "fix") {
-    return requested_action_fix(context)
+    await requested_action_fix(context)
   } else {
     throw new Error("unsupported action requested '"+identifier+"'")
   }
