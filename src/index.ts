@@ -2,10 +2,12 @@ import { test, getPrettierPullRequests } from './pull_requests';
 import { Application, Context } from 'probot'
 import { ChecksCreateParams, ChecksUpdateParams, ReposCompareCommitsParams } from '@octokit/rest';
 import { checkFiles } from './check';
+import * as checks from "./actions/checks";
 import * as check_run from "./events/check_run";
 import * as check_suite from "./events/check_suite";
 
 import * as Rx from "rxjs";
+import {map, flatMap, retry} from "rxjs/operators"
 
 // FIXME this just to keep "eslint-plugin-typescript" from complaining about unused references
 Application.toString();
@@ -20,16 +22,24 @@ export = (app: Application) => {
   
   app.on("push_____", push)
   app.on("check_suite.requested_____", check_suite__requested);
-  Rx.fromEvent(app.events, "push").subscribe(
+  Rx.fromEvent<Context>(app.events, "push").subscribe(
+    next => next.log('next:', next),
+    err => app.log('error:', err),
+    () => console.log('the end'),
+  );
+  
+  const checkSuiteRequested = Rx.fromEvent<Context>(app.events, "check_suite.requested").pipe(flatMap(check_suite.requested2));
+  const checkRunRerequested = Rx.fromEvent<Context>(app.events, "check_run.rerequested").pipe(flatMap(check_run.rerequested2));
+  Rx.merge(checkSuiteRequested, checkRunRerequested)
+  .pipe(map(checks.create))
+  .pipe(retry(2))
+  .pipe(flatMap(i => i))
+  .subscribe(
     next => console.log('next:', next),
     err => console.log('error:', err),
     () => console.log('the end'),
   );
-  
-
-  app.on("check_suite.requested", check_suite.requested);
   app.on("check_run.created", check_run.created);
-  app.on("check_run.rerequested", check_run.rerequested);
 
   // For more information on building apps:
   // https://probot.github.io/docs/
