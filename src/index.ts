@@ -20,7 +20,7 @@ export = (app: Application) => {
   
   app.on("push_____", push)
   app.on("check_suite.requested_____", check_suite__requested);
-  Rx.fromEventPattern((handler: any) => app.on("push", handler)).subscribe(
+  Rx.fromEvent(app.events, "push").subscribe(
     next => console.log('next:', next),
     err => console.log('error:', err),
     () => console.log('the end'),
