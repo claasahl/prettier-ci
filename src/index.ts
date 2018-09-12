@@ -22,10 +22,12 @@ export = (app: Application) => {
   
   app.on("push_____", push)
   app.on("check_suite.requested_____", check_suite__requested);
-  Rx.fromEvent<Context>(app.events, "push").subscribe(
-    next => next.log('next:', next),
+  const pushEvents: Rx.Subject<Context> = Rx.BehaviorSubject.create();
+  app.on("push", async context => pushEvents.next(context))
+  pushEvents.asObservable().subscribe(
+    next => app.log('next:', next),
     err => app.log('error:', err),
-    () => console.log('the end'),
+    () => app.log('the end'),
   );
   
   const checkSuiteRequested = Rx.fromEvent<Context>(app.events, "check_suite.requested").pipe(flatMap(check_suite.requested2));
