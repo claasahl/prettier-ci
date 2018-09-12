@@ -10,14 +10,6 @@ import * as Rx from "rxjs";
 // FIXME this just to keep "eslint-plugin-typescript" from complaining about unused references
 Application.toString();
 
-Rx.of(10, 20, 30)
-.subscribe(
-  next => console.log('next:', next),
-  err => console.log('error:', err),
-  () => console.log('the end'),
-);
-
-
 export = (app: Application) => {
   // Your code here
   app.log("Yay, the app was loaded!");
@@ -28,6 +20,12 @@ export = (app: Application) => {
   
   app.on("push_____", push)
   app.on("check_suite.requested_____", check_suite__requested);
+  Rx.fromEventPattern((handler: any) => app.on("push", handler)).subscribe(
+    next => console.log('next:', next),
+    err => console.log('error:', err),
+    () => console.log('the end'),
+  );
+  
 
   app.on("check_suite.requested", check_suite.requested);
   app.on("check_run.created", check_run.created);
