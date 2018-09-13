@@ -2,12 +2,12 @@ import { test, getPrettierPullRequests } from './pull_requests';
 import { Application, Context } from 'probot'
 import { ChecksCreateParams, ChecksUpdateParams, ReposCompareCommitsParams } from '@octokit/rest';
 import { checkFiles } from './check';
-import * as checks from "./actions/checks";
 import * as check_run from "./events/check_run";
 import * as check_suite from "./events/check_suite";
 
 import * as Rx from "rxjs";
-import {map, flatMap, retry} from "rxjs/operators"
+import {flatMap, tap, share} from "rxjs/operators"
+import { ofEvent } from './utils';
 
 // FIXME this just to keep "eslint-plugin-typescript" from complaining about unused references
 Application.toString();
@@ -17,7 +17,15 @@ export = (app: Application) => {
   app.log("Yay, the app was loaded!");
 
   app.on(`*`, async context => {
-    context.log({ event: context.event, action: context.payload.action });
+    const event = Rx.of(context).pipe(
+      share(),
+      tap(context => context.log({ event: context.event, action: context.payload.action })));
+    return Rx.race(
+      //event.pipe(ofEvent("push")),
+      event.pipe(ofEvent("check_suite.requested"), flatMap(check_suite.requested)),
+      event.pipe(ofEvent("check_run.rerequested"), flatMap(check_run.rerequested)),
+      event.pipe(ofEvent("check_run.created"), flatMap(check_run.created)))
+      .toPromise();
   });
   
   app.on("push_____", push)
@@ -28,18 +36,18 @@ export = (app: Application) => {
     () => app.log('the end'),
   );
   
-  const checkSuiteRequested = Rx.fromEvent<Context>(app.events, "check_suite.requested").pipe(flatMap(check_suite.requested2));
-  const checkRunRerequested = Rx.fromEvent<Context>(app.events, "check_run.rerequested").pipe(flatMap(check_run.rerequested2));
-  Rx.merge(checkSuiteRequested, checkRunRerequested)
-  .pipe(map(checks.create))
-  .pipe(retry(2))
-  .pipe(flatMap(i => i))
-  .subscribe(
-    next => console.log('next:', next),
-    err => console.log('error:', err),
-    () => console.log('the end'),
-  );
-  app.on("check_run.created", check_run.created);
+  // const checkSuiteRequested = Rx.fromEvent<Context>(app.events, "check_suite.requested").pipe(flatMap(check_suite.requested2));
+  // const checkRunRerequested = Rx.fromEvent<Context>(app.events, "check_run.rerequested").pipe(flatMap(check_run.rerequested2));
+  // Rx.merge(checkSuiteRequested, checkRunRerequested)
+  // .pipe(map(checks.create))
+  // .pipe(retry(2))
+  // .pipe(flatMap(i => i))
+  // .subscribe(
+  //   next => console.log('next:', next),
+  //   err => console.log('error:', err),
+  //   () => console.log('the end'),
+  // );
+  // app.on("check_run.created", check_run.created);
 
   // For more information on building apps:
   // https://probot.github.io/docs/
