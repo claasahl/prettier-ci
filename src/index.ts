@@ -22,10 +22,8 @@ export = (app: Application) => {
   
   app.on("push_____", push)
   app.on("check_suite.requested_____", check_suite__requested);
-  const pushEvents: Rx.Subject<Context> = Rx.BehaviorSubject.create();
-  app.on("push", async context => pushEvents.next(context))
-  pushEvents.asObservable().subscribe(
-    next => app.log('next:', next),
+  Rx.fromEventPattern<Context>((handler: any) => app.on("push", handler)).subscribe(
+    next => next.log('next:', next),
     err => app.log('error:', err),
     () => app.log('the end'),
   );
