@@ -39,3 +39,10 @@ export interface ReposGetContentResult {
     params: ReposGetContentParams,
     content?: string
 }
+
+export interface ProbotEvent {
+    event: string;
+    payload: {
+        action?: string
+    }
+}
