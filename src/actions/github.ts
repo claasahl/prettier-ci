@@ -27,6 +27,8 @@ export namespace checks {
 export namespace pullRequests {
     export async function create(context: Context, project: Projection<gh.PullRequestsCreateParams>) {
         const params = project(context)
+        console.log(context.github)
+        console.log(params)
         const response = await context.github.pullRequests.create(params)
         return {context, response}
     }
