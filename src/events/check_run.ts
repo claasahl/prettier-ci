@@ -10,12 +10,12 @@ import atob from "atob";
 
 export async function created(context: Context): Promise<void> {
   await markCheckAsInProgress(context);
-  const {files} = await fetchModifiedFiles(context);
+  const {files, ref} = await fetchModifiedFiles(context);
   const results: {file: string, passed: boolean}[] = [];
   for(const file of files) {
-    const {content} = await fetchContent({context, file: file.filename, sha: file.sha})
-    const {passed} = await checkContent({context, file: file.filename, content})
-    results.push({file: file.filename, passed})
+    const {content} = await fetchContent({context, file, sha: ref})
+    const {passed} = await checkContent({context, file, content})
+    results.push({file, passed})
   }
   const report = asReport(results)
   await markCheckAsCompleted({context, report})
@@ -51,10 +51,11 @@ async function markCheckAsInProgress(context: Context): Promise<Context> {
   return result.context
 }
 
-async function fetchModifiedFiles(context: Context): Promise<{context: Context, files: {filename: string, sha: string}[]}> {
+async function fetchModifiedFiles(context: Context): Promise<{context: Context, files: string[], ref: string}> {
   const commits = await repos.compareCommits(context, created2ReposCompareCommitsParams)
-  const files:{filename: string, sha: string}[] = commits.response.data.files.filter((file: any) => file.status !== "deleted").map((file: any) => ({filename: file.filename, sha: file.sha}))
-  return {context, files}
+  const {head} = created2ReposCompareCommitsParams(context)
+  const files: string[] = commits.response.data.files.filter((file: any) => file.status !== "deleted").map((file: any) => file.filename)
+  return {context, files, ref: head}
 }
 
 async function fetchContent(data: {context: Context, file: string, sha: string}): Promise<{context: Context, file: string, content: string, sha: string}> {
@@ -138,13 +139,13 @@ async function requested_action_fix(context: Context): Promise<Context> {
   const {files} = await fetchModifiedFiles(context);
   const results: {file: string, passed: boolean}[] = [];
   for(const file of files) {
-    const {content, sha} = await fetchContent({context, file: file.filename, sha: file.sha})
-    const {passed} = await checkContent({context, file: file.filename, content})
+    const {content, sha} = await fetchContent({context, file, sha: branch})
+    const {passed} = await checkContent({context, file, content})
     if(!passed) {
-      const formatted = await formatContent({context, file: file.filename, content})
-      await repos.updateFile(context, fix2ReposUpdateFileParams({path: file.filename, content: btoa(formatted.content), branch, sha}))
+      const formatted = await formatContent({context, file, content})
+      await repos.updateFile(context, fix2ReposUpdateFileParams({path: file, content: btoa(formatted.content), branch, sha}))
     }
-    results.push({file: file.filename, passed})
+    results.push({file, passed})
   }
   const body = asPullRequestBody(context, results)
   await pullRequests.create(context, fix2PullRequestsCreateParams({head: branch, body, maintainer_can_modify: true}))
