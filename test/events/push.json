@@ -29,9 +29,7 @@
         },
         "added": [],
         "removed": [],
-        "modified": [
-          "package.json"
-        ]
+        "modified": ["package.json"]
       },
       {
         "id": "eaee56feaa0d0b5de98b0734675ea835f46c406a",
@@ -52,9 +50,7 @@
         },
         "added": [],
         "removed": [],
-        "modified": [
-          "src/index.ts"
-        ]
+        "modified": ["src/index.ts"]
       },
       {
         "id": "bebd9b40ac5fb6bdd29befcf0462a616674341c4",
@@ -73,9 +69,7 @@
           "email": "claasahl@******",
           "username": "claasahl"
         },
-        "added": [
-          "test/events/check_run.json"
-        ],
+        "added": ["test/events/check_run.json"],
         "removed": [],
         "modified": []
       },
@@ -98,9 +92,7 @@
         },
         "added": [],
         "removed": [],
-        "modified": [
-          "src/index.ts"
-        ]
+        "modified": ["src/index.ts"]
       },
       {
         "id": "1c8b70533118d26fd60880b580e4b603683df0c9",
@@ -121,9 +113,7 @@
         },
         "added": [],
         "removed": [],
-        "modified": [
-          "src/index.ts"
-        ]
+        "modified": ["src/index.ts"]
       },
       {
         "id": "39a53e909e101414ee8880321bf0079e4dd7d767",
@@ -142,13 +132,9 @@
           "email": "claasahl@******",
           "username": "claasahl"
         },
-        "added": [
-          "src/check.ts"
-        ],
+        "added": ["src/check.ts"],
         "removed": [],
-        "modified": [
-          "src/index.ts"
-        ]
+        "modified": ["src/index.ts"]
       }
     ],
     "head_commit": {
@@ -168,13 +154,9 @@
         "email": "claasahl@******",
         "username": "claasahl"
       },
-      "added": [
-        "src/check.ts"
-      ],
+      "added": ["src/check.ts"],
       "removed": [],
-      "modified": [
-        "src/index.ts"
-      ]
+      "modified": ["src/index.ts"]
     },
     "repository": {
       "id": 146478761,
