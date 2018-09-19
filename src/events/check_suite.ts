@@ -1,11 +1,11 @@
 import * as gh from "@octokit/rest";
-import { promiseChecks} from "../reactivex/rxGithub"
+import { checks} from "../reactivex/rxGithub"
 import { Context } from 'probot'
 
 import { CHECKS_NAME } from '../utils';
 
 export async function requested (context: Context): Promise<Context> {
-  await promiseChecks.create(context, requested2ChecksCreateParams)
+  await checks.create(context, requested2ChecksCreateParams)
   return context
 }
 

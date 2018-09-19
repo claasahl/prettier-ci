@@ -1,5 +1,5 @@
 import * as gh from "@octokit/rest";
-import { promiseChecks, promiseRepos } from "../reactivex/rxGithub"
+import { checks, repos } from "../reactivex/rxGithub"
 import { Context } from 'probot'
 import * as prettier from "prettier"
 
@@ -47,18 +47,18 @@ function created2ReposGetContent(params: Overwrite<Partial<gh.ReposGetContentPar
 }
 
 async function markCheckAsInProgress(context: Context): Promise<Context> {
-  const result = await promiseChecks.update(context, created2ChecksUpdateParams({status: "in_progress"}));
+  const result = await checks.update(context, created2ChecksUpdateParams({status: "in_progress"}));
   return result.context
 }
 
 async function fetchModifiedFiles(context: Context): Promise<{context: Context, files: string[]}> {
-  const commits = await promiseRepos.compareCommits(context, created2ReposCompareCommitsParams)
+  const commits = await repos.compareCommits(context, created2ReposCompareCommitsParams)
   const files: string[] = commits.response.data.files.filter((file: any) => file.status !== "deleted").map((file: any) => file.filename)
   return {context, files}
 }
 
 async function fetchContent(data: {context: Context, file: string}): Promise<{context: Context, file: string, content: string}> {
-  const result = await promiseRepos.getContent(data.context, created2ReposGetContent({path: data.file}))
+  const result = await repos.getContent(data.context, created2ReposGetContent({path: data.file}))
   if(result.response.data.encoding === 'base64') {
     const content = btoa(result.response.data);
     return {context: result.context, file: data.file, content}
@@ -74,13 +74,13 @@ async function checkContent(data: {context: Context, file: string, content: stri
 
 async function markCheckAsCompleted(data: {context: Context, report: Partial<gh.ChecksUpdateParams>}): Promise<Context> {
   const completed_at = new Date().toISOString()
-  const result = await promiseChecks.update(data.context, created2ChecksUpdateParams({...data.report, status: "completed", completed_at}))
+  const result = await checks.update(data.context, created2ChecksUpdateParams({...data.report, status: "completed", completed_at}))
   return result.context
 }
 
 
 export async function rerequested(context: Context): Promise<Context> {
-   await promiseChecks.create(context, rerequested2ChecksCreateParams)
+   await checks.create(context, rerequested2ChecksCreateParams)
    return context
 }
 
@@ -108,5 +108,5 @@ function asReport(results: FileCheck[]): Partial<gh.ChecksUpdateParams> {
       text += `* ${result.file}\r\n`
     })
   }
-  return {output: { title: 'Prettier', summary, text }, conclusion: passed ? "success" : "failure"}
+  return {output: { title: 'Prettier', summary, text }, conclusion: passed ? "success" : "failure", actions}
 }
