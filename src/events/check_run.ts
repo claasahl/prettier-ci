@@ -26,8 +26,8 @@ function created2ChecksUpdateParams(params: Partial<gh.ChecksUpdateParams>): Pro
   return (context) => {
     const owner = context.payload.repository.owner.login
     const repo = context.payload.repository.name
-    const check_run_id = context.payload.check_run.id
-    return { ...params, owner, repo, name: CHECKS_NAME, check_run_id }
+    const check_run_id = `${context.payload.check_run.id}`
+    return { ...params, owner, repo, check_run_id }
   }
 }
 

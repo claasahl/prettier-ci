@@ -2,10 +2,14 @@
 // import index from '../src/index'
 import { Application } from 'probot'
 import myProbotApp from '../src/index'
+import * as gh from "@octokit/rest";
 
-import pushEvent from './events/push.json'
+import checkSuiteRequestedEvent from "./events/check_suite/requested.json"
+import checkSuiteRerequestedEvent from "./events/check_suite/rerequested.json"
+import checkRunRerequestedEvent from "./events/check_run/rerequested.json"
+import { CHECKS_NAME } from '../src/utils';
 
-describe('My Probot app', () => {
+describe('tests conditions for triggering a file-analysis', () => {
   let app, github
 
   beforeEach(() => {
@@ -14,26 +18,35 @@ describe('My Probot app', () => {
     app.load(myProbotApp)
     // This is an easy way to mock out the GitHub API
     github = {
-      issues: {
-        createComment: jest.fn().mockReturnValue(Promise.resolve({}))
+      checks: {
+        create: jest.fn().mockReturnValue(Promise.resolve({})),
+        update: jest.fn().mockReturnValue(Promise.resolve({}))
       }
     }
     // Passes the mocked out GitHub API into out app instance
     app.auth = () => Promise.resolve(github)
   })
 
-  test('creates a comment when an issue is opened', async () => {
-    // Simulates delivery of an issues.opened webhook
-    await app.receive(pushEvent)
+  test('creates check when check_suite is requested', async () => {
+    await app.receive(checkSuiteRequestedEvent)
 
-    // This test passes if the code in your index.js file calls `context.github.issues.createComment`
-    expect(github.issues.createComment).toHaveBeenCalled()
+    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettiest-bot", name: CHECKS_NAME, head_sha: "39a53e909e101414ee8880321bf0079e4dd7d767" };
+    expect(github.checks.create).toHaveBeenCalledWith(params)
   })
-})
 
-test('that we can run tests', () => {
-  // your real tests go here
-  expect(1 + 2 + 3).toBe(6)
+  test('creates check when check_suite is rerequested', async () => {
+    await app.receive(checkSuiteRerequestedEvent)
+
+    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettiest-bot", name: CHECKS_NAME, head_sha: "bb4d2ed9702c4c4340db50f74fc451657fe48e57" };
+    expect(github.checks.create).toHaveBeenCalledWith(params)
+  })
+
+  test('creates check when check_run is rerequested', async () => {
+    await app.receive(checkRunRerequestedEvent)
+
+    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettiest-bot", name: CHECKS_NAME, head_sha: "fad5b3a8a9602fd31279d8c707e5a0de3c4cd640" };
+    expect(github.checks.create).toHaveBeenCalledWith(params)
+  })
 })
 
 // For more information about using TypeScript in your tests, Jest recommends:
