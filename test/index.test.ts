@@ -93,6 +93,9 @@ describe('tests for file-analysis', () => {
   test('retrieves contents for version that was present when check_run is created', async () => {
     await app.receive(checkRunCreatedEvent)
 
+    // TODO app.receive already completes when the event has been received, but not when then event has been processed
+    await new Promise(resolve => setTimeout(resolve, 2000))
+
     const params: gh.ReposGetContentParams = { owner: "claasahl", repo: "prettiest-bot", path: "test/utils.test.ts", ref: "7d6e8ee3e4c26b6d5d305fa3fe985ddf7c0f87ea"};
     expect(github.repos.getContent).toHaveBeenCalledWith(params)
   })
