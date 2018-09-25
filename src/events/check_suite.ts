@@ -1,5 +1,5 @@
 import * as gh from "@octokit/rest";
-import { checks} from "../reactivex/rxGithub"
+import { checks} from "../actions/github"
 import { Context } from 'probot'
 
 import { CHECKS_NAME } from '../utils';
