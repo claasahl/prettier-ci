@@ -13,9 +13,9 @@ export async function created(context: Context): Promise<void> {
   const {files} = await fetchModifiedFiles(context);
   const results: {file: string, passed: boolean}[] = [];
   for(const file of files) {
-    const {content} = await fetchContent({context, file})
-    const {passed} = await checkContent({context, file, content})
-    results.push({file, passed})
+    const {content} = await fetchContent({context, file: file.filename, sha: file.sha})
+    const {passed} = await checkContent({context, file: file.filename, content})
+    results.push({file: file.filename, passed})
   }
   const report = asReport(results)
   await markCheckAsCompleted({context, report})
@@ -42,7 +42,7 @@ function created2ReposGetContent(params: Overwrite<Partial<gh.ReposGetContentPar
     const owner = context.payload.repository.owner.login
     const repo = context.payload.repository.name
     const { head_branch } = context.payload.check_run.check_suite
-    return { ...params, owner, repo, ref: head_branch }
+    return { owner, repo, ref: head_branch, ...params }
   }
 }
 
@@ -51,14 +51,14 @@ async function markCheckAsInProgress(context: Context): Promise<Context> {
   return result.context
 }
 
-async function fetchModifiedFiles(context: Context): Promise<{context: Context, files: string[]}> {
+async function fetchModifiedFiles(context: Context): Promise<{context: Context, files: {filename: string, sha: string}[]}> {
   const commits = await repos.compareCommits(context, created2ReposCompareCommitsParams)
-  const files: string[] = commits.response.data.files.filter((file: any) => file.status !== "deleted").map((file: any) => file.filename)
+  const files:{filename: string, sha: string}[] = commits.response.data.files.filter((file: any) => file.status !== "deleted").map((file: any) => ({filename: file.filename, sha: file.sha}))
   return {context, files}
 }
 
-async function fetchContent(data: {context: Context, file: string}): Promise<{context: Context, file: string, content: string, sha: string}> {
-  const result = await repos.getContent(data.context, created2ReposGetContent({path: data.file}))
+async function fetchContent(data: {context: Context, file: string, sha: string}): Promise<{context: Context, file: string, content: string, sha: string}> {
+  const result = await repos.getContent(data.context, created2ReposGetContent({path: data.file, ref: data.sha}))
   if(result.response.data.encoding === 'base64') {
     const content = atob(result.response.data.content);
     return {context: result.context, file: data.file, content, sha: result.response.data.sha}
@@ -138,13 +138,13 @@ async function requested_action_fix(context: Context): Promise<Context> {
   const {files} = await fetchModifiedFiles(context);
   const results: {file: string, passed: boolean}[] = [];
   for(const file of files) {
-    const {content, sha} = await fetchContent({context, file})
-    const {passed} = await checkContent({context, file, content})
+    const {content, sha} = await fetchContent({context, file: file.filename, sha: file.sha})
+    const {passed} = await checkContent({context, file: file.filename, content})
     if(!passed) {
-      const formatted = await formatContent({context, file, content})
-      await repos.updateFile(context, fix2ReposUpdateFileParams({path: file, content: btoa(formatted.content), branch, sha}))
+      const formatted = await formatContent({context, file: file.filename, content})
+      await repos.updateFile(context, fix2ReposUpdateFileParams({path: file.filename, content: btoa(formatted.content), branch, sha}))
     }
-    results.push({file, passed})
+    results.push({file: file.filename, passed})
   }
   const body = asPullRequestBody(context, results)
   await pullRequests.create(context, fix2PullRequestsCreateParams({head: branch, body, maintainer_can_modify: true}))
