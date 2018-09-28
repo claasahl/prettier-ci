@@ -96,7 +96,7 @@ describe('tests for file-analysis', () => {
     // TODO app.receive already completes when the event has been received, but not when then event has been processed
     await new Promise(resolve => setTimeout(resolve, 2000))
 
-    const params: gh.ReposGetContentParams = { owner: "claasahl", repo: "prettiest-bot", path: "test/utils.test.ts", ref: "7d6e8ee3e4c26b6d5d305fa3fe985ddf7c0f87ea"};
+    const params: gh.ReposGetContentParams = { owner: "claasahl", repo: "prettiest-bot", path: "test/utils.test.ts", ref: "52c67357a6b1858226c131d13d7d44e8303fd426"};
     expect(github.repos.getContent).toHaveBeenCalledWith(params)
   })
 })
