@@ -8,10 +8,13 @@ import { advanceBy, advanceTo } from 'jest-date-mock';
 import checkSuiteRequestedEvent from "./events/check_suite/requested.json"
 import checkSuiteRerequestedEvent from "./events/check_suite/rerequested.json"
 import checkRunRerequestedEvent from "./events/check_run/rerequested.json"
+import checkRunRequestedActionEvent from "./events/check_run/requested_action.json"
 import checkRunCreatedEvent from "./events/check_run/created.json"
 
 import reposCompareCommits_200 from "./responses/repos/compareCommits__200.json"
 import reposgetContent_200 from "./responses/repos/getContent__200.json"
+import gitdataCreateReference_201 from "./responses/gitdata/createReference__201.json"
+import pullRequestsCreate_201 from "./responses/pullRequests/create__201.json"
 
 import { CHECKS_NAME } from '../src/utils';
 
@@ -25,8 +28,8 @@ describe('tests conditions for triggering a file-analysis', () => {
     // This is an easy way to mock out the GitHub API
     github = {
       checks: {
-        create: jest.fn().mockReturnValue(Promise.resolve({})),
-        update: jest.fn().mockReturnValue(Promise.resolve({}))
+        create: jest.fn().mockResolvedValue({}),
+        update: jest.fn().mockResolvedValue({})
       }
     }
     // Passes the mocked out GitHub API into out app instance
@@ -55,7 +58,7 @@ describe('tests conditions for triggering a file-analysis', () => {
   })
 })
 
-describe('tests for file-analysis', () => {
+describe('tests for file-analysis (check_run)', () => {
   let app, github
 
   beforeEach(() => {
@@ -65,12 +68,12 @@ describe('tests for file-analysis', () => {
     // This is an easy way to mock out the GitHub API
     github = {
       checks: {
-        create: jest.fn().mockReturnValue(Promise.resolve({})),
-        update: jest.fn().mockReturnValue(Promise.resolve({}))
+        create: jest.fn().mockResolvedValue({}),
+        update: jest.fn().mockResolvedValue({})
       },
       repos: {
-        compareCommits: jest.fn().mockReturnValue(Promise.resolve(reposCompareCommits_200)),
-        getContent: jest.fn().mockReturnValue(Promise.resolve(reposgetContent_200))
+        compareCommits: jest.fn().mockResolvedValue(reposCompareCommits_200),
+        getContent: jest.fn().mockResolvedValue(reposgetContent_200)
       }
     }
     // Passes the mocked out GitHub API into out app instance
@@ -110,6 +113,38 @@ describe('tests for file-analysis', () => {
 
     const params: gh.ChecksUpdateParams = { owner: "claasahl", repo: "prettiest-bot", check_run_id: "15222485", status: "completed", conclusion: "success", output: {summary: "Pretty. Keep up the **good work**.", title: "Prettier", text: undefined}, actions: [], completed_at: new Date().toISOString()};
     expect(github.checks.update).toHaveBeenLastCalledWith(params)
+  })
+})
+
+describe("test for pull request (fix of errors in check_run)", () => {
+  let app, github
+
+  beforeEach(() => {
+    app = new Application()
+    // Initialize the app based on the code from index.js
+    app.load(myProbotApp)
+    // This is an easy way to mock out the GitHub API
+    github = {
+      repos: {
+        compareCommits: jest.fn().mockResolvedValue(reposCompareCommits_200),
+        getContent: jest.fn().mockResolvedValue(reposgetContent_200)
+      },
+      gitdata: {
+        createReference: jest.fn().mockResolvedValue(gitdataCreateReference_201)
+      },
+      pullRequests: {
+        create: jest.fn().mockResolvedValue(pullRequestsCreate_201)
+      }
+    }
+    // Passes the mocked out GitHub API into out app instance
+    app.auth = () => Promise.resolve(github)
+  })
+
+  test("'fix' action should create branch", async () => {
+    await app.receive(checkRunRequestedActionEvent)
+
+    const params: gh.GitdataCreateReferenceParams = {owner: "claasahl", repo: "prettiest-bot", ref: "refs/heads/prettier/develop", sha: "develop"}
+    expect(github.gitdata.createReference).toHaveBeenCalledWith(params)
   })
 })
 
