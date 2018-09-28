@@ -3,6 +3,7 @@
 import { Application } from 'probot'
 import myProbotApp from '../src/index'
 import * as gh from "@octokit/rest";
+import { advanceBy, advanceTo } from 'jest-date-mock';
 
 import checkSuiteRequestedEvent from "./events/check_suite/requested.json"
 import checkSuiteRerequestedEvent from "./events/check_suite/rerequested.json"
@@ -83,14 +84,14 @@ describe('tests for file-analysis', () => {
     expect(github.checks.update).toHaveBeenCalledWith(params)
   })
 
-  test('compares before/after commits when check_run is created', async () => {
+  test('compares before/after commits for check_run', async () => {
     await app.receive(checkRunCreatedEvent)
 
     const params: gh.ReposCompareCommitsParams = { owner: "claasahl", repo: "prettiest-bot", base: "923547128e3e9fe26c4192bb45fcf125dae92c4b", head: "52c67357a6b1858226c131d13d7d44e8303fd426"};
     expect(github.repos.compareCommits).toHaveBeenCalledWith(params)
   })
 
-  test('retrieves contents for version that was present when check_run is created', async () => {
+  test('retrieves contents for file-version for check_run', async () => {
     await app.receive(checkRunCreatedEvent)
 
     // TODO app.receive already completes when the event has been received, but not when then event has been processed
@@ -98,6 +99,17 @@ describe('tests for file-analysis', () => {
 
     const params: gh.ReposGetContentParams = { owner: "claasahl", repo: "prettiest-bot", path: "test/utils.test.ts", ref: "52c67357a6b1858226c131d13d7d44e8303fd426"};
     expect(github.repos.getContent).toHaveBeenCalledWith(params)
+  })
+
+  test('completes file-analysis with correct conclusion', async () => {
+    advanceTo(new Date(2018, 5, 27, 0, 0, 0));
+    await app.receive(checkRunCreatedEvent)
+
+    // TODO app.receive already completes when the event has been received, but not when then event has been processed
+    await new Promise(resolve => setTimeout(resolve, 2000))
+
+    const params: gh.ChecksUpdateParams = { owner: "claasahl", repo: "prettiest-bot", check_run_id: "15222485", status: "completed", conclusion: "success", output: {summary: "Pretty. Keep up the **good work**.", title: "Prettier", text: undefined}, actions: [], completed_at: new Date().toISOString()};
+    expect(github.checks.update).toHaveBeenLastCalledWith(params)
   })
 })
 
