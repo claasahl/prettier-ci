@@ -156,7 +156,7 @@ function fix2CreateReferenceParams(context: Context): gh.GitdataCreateReferenceP
   const owner = context.payload.repository.owner.login
   const repo = context.payload.repository.name
   const ref = REFERENCE_PREFIX + context.payload.check_run.check_suite.head_branch
-  const sha = context.payload.check_run.head_sha
+  const sha = context.payload.check_run.check_suite.head_branch
   return { owner, repo, ref, sha }
 }
 
@@ -181,7 +181,7 @@ function fix2PullRequestsCreateParams(params: Overwrite<Partial<gh.PullRequestsC
 
 function asPullRequestBody(context: Context, results: FileCheck[]): string {
   const failedResults = results.filter(result => !result.passed)
-  return `This [check run](${context.payload.check_run.html_url}) identified ${failedResults.length} files, which need formatting.
+  return `This [check run](${context.payload.check_run.html_url}) identified ${failedResults.length} ${failedResults.length == 1 ? "file" : "files"}, which ${failedResults.length == 1 ? "needs" : "need"} formatting.
 
-  @${context.payload.sender.login} requested these files to be fixed.`
+@${context.payload.sender.login} requested these files to be fixed.`
 }
