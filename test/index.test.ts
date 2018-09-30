@@ -217,24 +217,20 @@ describe("test for pull request (fix of errors in check_run)", () => {
 
   async function mockReposGetContentFormatted(params: gh.ReposGetContentParams) {
     const base = reposgetContent_200;
-    if(fs.existsSync(params.path)) {
-      const unformatted = fs.readFileSync(params.path).toString()
-      const formatted = prettier.format(unformatted, {filepath: params.path})
-      base.data.name = params.path
-      base.data.path = params.path
-      base.data.content = btoa(formatted)
-    }
+    const unformatted = fs.readFileSync(params.path).toString()
+    const formatted = prettier.format(unformatted, {filepath: params.path})
+    base.data.name = params.path
+    base.data.path = params.path
+    base.data.content = btoa(formatted)
     return base
   }
 
   async function mockReposGetContentUnformatted(params: gh.ReposGetContentParams) {
     const base = reposgetContent_200;
-    if(fs.existsSync(params.path)) {
-      const unformatted = fs.readFileSync(params.path).toString()
-      base.data.name = params.path
-      base.data.path = params.path
-      base.data.content = btoa(unformatted)
-    }
+    const unformatted = fs.readFileSync(params.path).toString()
+    base.data.name = params.path
+    base.data.path = params.path
+    base.data.content = btoa(unformatted)
     return base
   }
 })
