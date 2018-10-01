@@ -148,7 +148,9 @@ async function requested_action_fix(context: Context): Promise<Context> {
     results.push({file, passed})
   }
   const body = asPullRequestBody(context, results)
-  await pullRequests.create(context, fix2PullRequestsCreateParams({head: branch, body, maintainer_can_modify: true}))
+  const { response } = await pullRequests.create(context, fix2PullRequestsCreateParams({head: branch, body, maintainer_can_modify: true}))
+  pullRequests.merge(context, fix2PullRequestsMergeParams({number: response.data.number}))
+  // delete branch
   return context 
 }
 
@@ -156,7 +158,7 @@ function fix2CreateReferenceParams(context: Context): gh.GitdataCreateReferenceP
   const owner = context.payload.repository.owner.login
   const repo = context.payload.repository.name
   const ref = REFERENCE_PREFIX + context.payload.check_run.check_suite.head_branch
-  const sha = context.payload.check_run.check_suite.head_branch
+  const sha = context.payload.check_run.head_sha
   return { owner, repo, ref, sha }
 }
 
@@ -176,6 +178,14 @@ function fix2PullRequestsCreateParams(params: Overwrite<Partial<gh.PullRequestsC
     const base = context.payload.check_run.check_suite.head_branch
     const title = PULL_REQUEST_TITLE_PREFIX + base
     return { ...params, owner, repo, title, base }
+  }
+}
+
+function fix2PullRequestsMergeParams(params: Overwrite<Partial<gh.PullRequestsMergeParams>, {number: number}>): Projection<gh.PullRequestsMergeParams> {
+  return (context) => {
+    const owner = context.payload.repository.owner.login
+    const repo = context.payload.repository.name
+    return { owner, repo, ...params }
   }
 }
 

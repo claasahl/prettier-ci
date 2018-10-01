@@ -16,6 +16,7 @@ import reposgetContent_200 from "./responses/repos/getContent__200.json"
 import reposUpdateFile_200 from "./responses/repos/updateFile__200.json"
 import gitdataCreateReference_201 from "./responses/gitdata/createReference__201.json"
 import pullRequestsCreate_201 from "./responses/pullRequests/create__201.json"
+import pullRequestsMerge_200 from "./responses/pullRequests/merge__200.json"
 
 import { CHECKS_NAME } from '../src/utils';
 import template from './templates/pullRequest';
@@ -138,7 +139,8 @@ describe("test for pull request (fix of errors in check_run)", () => {
         createReference: jest.fn().mockResolvedValue(gitdataCreateReference_201)
       },
       pullRequests: {
-        create: jest.fn().mockResolvedValue(pullRequestsCreate_201)
+        create: jest.fn().mockResolvedValue(pullRequestsCreate_201),
+        merge: jest.fn().mockResolvedValue(pullRequestsMerge_200)
       }
     }
     // Passes the mocked out GitHub API into out app instance
@@ -148,7 +150,7 @@ describe("test for pull request (fix of errors in check_run)", () => {
   test("'fix' action should create branch", async () => {
     await app.receive(checkRunRequestedActionEvent)
 
-    const params: gh.GitdataCreateReferenceParams = {owner: "claasahl", repo: "prettiest-bot", ref: "refs/heads/prettier/develop", sha: "develop"}
+    const params: gh.GitdataCreateReferenceParams = {owner: "claasahl", repo: "prettiest-bot", ref: "refs/heads/prettier/develop", sha: "bb4d2ed9702c4c4340db50f74fc451657fe48e57"}
     expect(github.gitdata.createReference).toHaveBeenCalledWith(params)
   })
 
@@ -205,6 +207,15 @@ describe("test for pull request (fix of errors in check_run)", () => {
     content = btoa(prettier.format(fs.readFileSync("./test/templates/unformatted.json").toString(), {filepath: "./test/templates/unformatted.json"}))
     params = { owner: "claasahl", repo: "prettiest-bot", message: "formatted file: ./test/templates/unformatted.json", path: "./test/templates/unformatted.json", branch: "refs/heads/prettier/develop", sha: "7d6e8ee3e4c26b6d5d305fa3fe985ddf7c0f87ea", content};
     expect(github.repos.updateFile).toHaveBeenCalledWith(params)
+  })
+
+  test('automatically attempt to merge pull request', async () => {
+    github.repos.compareCommits = jest.fn().mockImplementation(mockReposCompareCommits("./test/templates/unformatted.ts", "./test/templates/unformatted.json"))
+    github.repos.getContent = jest.fn().mockImplementation(mockReposGetContentUnformatted)
+    await app.receive(checkRunRequestedActionEvent)
+
+    const params: gh.PullRequestsMergeParams = { owner: "claasahl", repo: "prettiest-bot", number: 3};
+    expect(github.pullRequests.merge).toHaveBeenCalledWith(params)
   })
 
   function mockReposCompareCommits(...files: string[]) {

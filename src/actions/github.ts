@@ -30,6 +30,11 @@ export namespace pullRequests {
         const response = await context.github.pullRequests.create(params)
         return {context, response}
     }
+    export async function merge(context: Context, project: Projection<gh.PullRequestsMergeParams>) {
+        const params = project(context)
+        const response = await context.github.pullRequests.merge(params)
+        return {context, response}
+    }
 }
 
 export namespace repos {
