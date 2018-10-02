@@ -1,30 +1,30 @@
 {
   "data": {
-    "url": "https://api.github.com/repos/claasahl/prettiest-bot/compare/9f31a8cd453827bea7a8b538f689ad216b1b250a...6fec18a8c4b55740890b2e0cd66d33f759a94f18",
-    "html_url": "https://github.com/claasahl/prettiest-bot/compare/9f31a8cd453827bea7a8b538f689ad216b1b250a...6fec18a8c4b55740890b2e0cd66d33f759a94f18",
-    "permalink_url": "https://github.com/claasahl/prettiest-bot/compare/claasahl:9f31a8c...claasahl:6fec18a",
-    "diff_url": "https://github.com/claasahl/prettiest-bot/compare/9f31a8cd453827bea7a8b538f689ad216b1b250a...6fec18a8c4b55740890b2e0cd66d33f759a94f18.diff",
-    "patch_url": "https://github.com/claasahl/prettiest-bot/compare/9f31a8cd453827bea7a8b538f689ad216b1b250a...6fec18a8c4b55740890b2e0cd66d33f759a94f18.patch",
+    "url": "https://api.github.com/repos/claasahl/prettier-ci/compare/9f31a8cd453827bea7a8b538f689ad216b1b250a...6fec18a8c4b55740890b2e0cd66d33f759a94f18",
+    "html_url": "https://github.com/claasahl/prettier-ci/compare/9f31a8cd453827bea7a8b538f689ad216b1b250a...6fec18a8c4b55740890b2e0cd66d33f759a94f18",
+    "permalink_url": "https://github.com/claasahl/prettier-ci/compare/claasahl:9f31a8c...claasahl:6fec18a",
+    "diff_url": "https://github.com/claasahl/prettier-ci/compare/9f31a8cd453827bea7a8b538f689ad216b1b250a...6fec18a8c4b55740890b2e0cd66d33f759a94f18.diff",
+    "patch_url": "https://github.com/claasahl/prettier-ci/compare/9f31a8cd453827bea7a8b538f689ad216b1b250a...6fec18a8c4b55740890b2e0cd66d33f759a94f18.patch",
     "base_commit": {
       "sha": "9f31a8cd453827bea7a8b538f689ad216b1b250a",
       "node_id": "MDY6Q29tbWl0MTQ2NDc4NzYxOjlmMzFhOGNkNDUzODI3YmVhN2E4YjUzOGY2ODlhZDIxNmIxYjI1MGE=",
       "commit": {
         "author": {
-          "name": "prettiest-bot[bot]",
-          "email": "prettiest-bot[bot]@users.noreply.github.com",
+          "name": "prettier-ci[bot]",
+          "email": "prettier-ci[bot]@users.noreply.github.com",
           "date": "2018-09-09T16:27:39Z"
         },
         "committer": {
-          "name": "prettiest-bot[bot]",
-          "email": "prettiest-bot[bot]@users.noreply.github.com",
+          "name": "prettier-ci[bot]",
+          "email": "prettier-ci[bot]@users.noreply.github.com",
           "date": "2018-09-09T16:27:39Z"
         },
         "message": "formatted file: test/index.test.ts",
         "tree": {
           "sha": "9c0194c3c005f62b830998707812294e83959ef8",
-          "url": "https://api.github.com/repos/claasahl/prettiest-bot/git/trees/9c0194c3c005f62b830998707812294e83959ef8"
+          "url": "https://api.github.com/repos/claasahl/prettier-ci/git/trees/9c0194c3c005f62b830998707812294e83959ef8"
         },
-        "url": "https://api.github.com/repos/claasahl/prettiest-bot/git/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a",
+        "url": "https://api.github.com/repos/claasahl/prettier-ci/git/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a",
         "comment_count": 0,
         "verification": {
           "verified": false,
@@ -33,54 +33,54 @@
           "payload": null
         }
       },
-      "url": "https://api.github.com/repos/claasahl/prettiest-bot/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a",
-      "html_url": "https://github.com/claasahl/prettiest-bot/commit/9f31a8cd453827bea7a8b538f689ad216b1b250a",
-      "comments_url": "https://api.github.com/repos/claasahl/prettiest-bot/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a/comments",
+      "url": "https://api.github.com/repos/claasahl/prettier-ci/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a",
+      "html_url": "https://github.com/claasahl/prettier-ci/commit/9f31a8cd453827bea7a8b538f689ad216b1b250a",
+      "comments_url": "https://api.github.com/repos/claasahl/prettier-ci/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a/comments",
       "author": {
-        "login": "prettiest-bot[bot]",
+        "login": "prettier-ci[bot]",
         "id": 42763831,
         "node_id": "MDM6Qm90NDI3NjM4MzE=",
         "avatar_url": "https://avatars2.githubusercontent.com/u/8401267?v=4",
         "gravatar_id": "",
-        "url": "https://api.github.com/users/prettiest-bot%5Bbot%5D",
-        "html_url": "https://github.com/apps/prettiest-bot",
-        "followers_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/followers",
-        "following_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/following{/other_user}",
-        "gists_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/gists{/gist_id}",
-        "starred_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/starred{/owner}{/repo}",
-        "subscriptions_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/subscriptions",
-        "organizations_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/orgs",
-        "repos_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/repos",
-        "events_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/events{/privacy}",
-        "received_events_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/received_events",
+        "url": "https://api.github.com/users/prettier-ci%5Bbot%5D",
+        "html_url": "https://github.com/apps/prettier-ci",
+        "followers_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/followers",
+        "following_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/following{/other_user}",
+        "gists_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/subscriptions",
+        "organizations_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/orgs",
+        "repos_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/repos",
+        "events_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/received_events",
         "type": "Bot",
         "site_admin": false
       },
       "committer": {
-        "login": "prettiest-bot[bot]",
+        "login": "prettier-ci[bot]",
         "id": 42763831,
         "node_id": "MDM6Qm90NDI3NjM4MzE=",
         "avatar_url": "https://avatars2.githubusercontent.com/u/8401267?v=4",
         "gravatar_id": "",
-        "url": "https://api.github.com/users/prettiest-bot%5Bbot%5D",
-        "html_url": "https://github.com/apps/prettiest-bot",
-        "followers_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/followers",
-        "following_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/following{/other_user}",
-        "gists_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/gists{/gist_id}",
-        "starred_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/starred{/owner}{/repo}",
-        "subscriptions_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/subscriptions",
-        "organizations_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/orgs",
-        "repos_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/repos",
-        "events_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/events{/privacy}",
-        "received_events_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/received_events",
+        "url": "https://api.github.com/users/prettier-ci%5Bbot%5D",
+        "html_url": "https://github.com/apps/prettier-ci",
+        "followers_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/followers",
+        "following_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/following{/other_user}",
+        "gists_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/subscriptions",
+        "organizations_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/orgs",
+        "repos_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/repos",
+        "events_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/received_events",
         "type": "Bot",
         "site_admin": false
       },
       "parents": [
         {
           "sha": "38cfd9ba5f8932b92b01b754c54c2fc6e48fd0af",
-          "url": "https://api.github.com/repos/claasahl/prettiest-bot/commits/38cfd9ba5f8932b92b01b754c54c2fc6e48fd0af",
-          "html_url": "https://github.com/claasahl/prettiest-bot/commit/38cfd9ba5f8932b92b01b754c54c2fc6e48fd0af"
+          "url": "https://api.github.com/repos/claasahl/prettier-ci/commits/38cfd9ba5f8932b92b01b754c54c2fc6e48fd0af",
+          "html_url": "https://github.com/claasahl/prettier-ci/commit/38cfd9ba5f8932b92b01b754c54c2fc6e48fd0af"
         }
       ]
     },
@@ -89,21 +89,21 @@
       "node_id": "MDY6Q29tbWl0MTQ2NDc4NzYxOjlmMzFhOGNkNDUzODI3YmVhN2E4YjUzOGY2ODlhZDIxNmIxYjI1MGE=",
       "commit": {
         "author": {
-          "name": "prettiest-bot[bot]",
-          "email": "prettiest-bot[bot]@users.noreply.github.com",
+          "name": "prettier-ci[bot]",
+          "email": "prettier-ci[bot]@users.noreply.github.com",
           "date": "2018-09-09T16:27:39Z"
         },
         "committer": {
-          "name": "prettiest-bot[bot]",
-          "email": "prettiest-bot[bot]@users.noreply.github.com",
+          "name": "prettier-ci[bot]",
+          "email": "prettier-ci[bot]@users.noreply.github.com",
           "date": "2018-09-09T16:27:39Z"
         },
         "message": "formatted file: test/index.test.ts",
         "tree": {
           "sha": "9c0194c3c005f62b830998707812294e83959ef8",
-          "url": "https://api.github.com/repos/claasahl/prettiest-bot/git/trees/9c0194c3c005f62b830998707812294e83959ef8"
+          "url": "https://api.github.com/repos/claasahl/prettier-ci/git/trees/9c0194c3c005f62b830998707812294e83959ef8"
         },
-        "url": "https://api.github.com/repos/claasahl/prettiest-bot/git/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a",
+        "url": "https://api.github.com/repos/claasahl/prettier-ci/git/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a",
         "comment_count": 0,
         "verification": {
           "verified": false,
@@ -112,54 +112,54 @@
           "payload": null
         }
       },
-      "url": "https://api.github.com/repos/claasahl/prettiest-bot/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a",
-      "html_url": "https://github.com/claasahl/prettiest-bot/commit/9f31a8cd453827bea7a8b538f689ad216b1b250a",
-      "comments_url": "https://api.github.com/repos/claasahl/prettiest-bot/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a/comments",
+      "url": "https://api.github.com/repos/claasahl/prettier-ci/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a",
+      "html_url": "https://github.com/claasahl/prettier-ci/commit/9f31a8cd453827bea7a8b538f689ad216b1b250a",
+      "comments_url": "https://api.github.com/repos/claasahl/prettier-ci/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a/comments",
       "author": {
-        "login": "prettiest-bot[bot]",
+        "login": "prettier-ci[bot]",
         "id": 42763831,
         "node_id": "MDM6Qm90NDI3NjM4MzE=",
         "avatar_url": "https://avatars2.githubusercontent.com/u/8401267?v=4",
         "gravatar_id": "",
-        "url": "https://api.github.com/users/prettiest-bot%5Bbot%5D",
-        "html_url": "https://github.com/apps/prettiest-bot",
-        "followers_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/followers",
-        "following_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/following{/other_user}",
-        "gists_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/gists{/gist_id}",
-        "starred_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/starred{/owner}{/repo}",
-        "subscriptions_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/subscriptions",
-        "organizations_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/orgs",
-        "repos_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/repos",
-        "events_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/events{/privacy}",
-        "received_events_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/received_events",
+        "url": "https://api.github.com/users/prettier-ci%5Bbot%5D",
+        "html_url": "https://github.com/apps/prettier-ci",
+        "followers_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/followers",
+        "following_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/following{/other_user}",
+        "gists_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/subscriptions",
+        "organizations_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/orgs",
+        "repos_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/repos",
+        "events_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/received_events",
         "type": "Bot",
         "site_admin": false
       },
       "committer": {
-        "login": "prettiest-bot[bot]",
+        "login": "prettier-ci[bot]",
         "id": 42763831,
         "node_id": "MDM6Qm90NDI3NjM4MzE=",
         "avatar_url": "https://avatars2.githubusercontent.com/u/8401267?v=4",
         "gravatar_id": "",
-        "url": "https://api.github.com/users/prettiest-bot%5Bbot%5D",
-        "html_url": "https://github.com/apps/prettiest-bot",
-        "followers_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/followers",
-        "following_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/following{/other_user}",
-        "gists_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/gists{/gist_id}",
-        "starred_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/starred{/owner}{/repo}",
-        "subscriptions_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/subscriptions",
-        "organizations_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/orgs",
-        "repos_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/repos",
-        "events_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/events{/privacy}",
-        "received_events_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/received_events",
+        "url": "https://api.github.com/users/prettier-ci%5Bbot%5D",
+        "html_url": "https://github.com/apps/prettier-ci",
+        "followers_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/followers",
+        "following_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/following{/other_user}",
+        "gists_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/subscriptions",
+        "organizations_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/orgs",
+        "repos_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/repos",
+        "events_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/received_events",
         "type": "Bot",
         "site_admin": false
       },
       "parents": [
         {
           "sha": "38cfd9ba5f8932b92b01b754c54c2fc6e48fd0af",
-          "url": "https://api.github.com/repos/claasahl/prettiest-bot/commits/38cfd9ba5f8932b92b01b754c54c2fc6e48fd0af",
-          "html_url": "https://github.com/claasahl/prettiest-bot/commit/38cfd9ba5f8932b92b01b754c54c2fc6e48fd0af"
+          "url": "https://api.github.com/repos/claasahl/prettier-ci/commits/38cfd9ba5f8932b92b01b754c54c2fc6e48fd0af",
+          "html_url": "https://github.com/claasahl/prettier-ci/commit/38cfd9ba5f8932b92b01b754c54c2fc6e48fd0af"
         }
       ]
     },
@@ -173,21 +173,21 @@
         "node_id": "MDY6Q29tbWl0MTQ2NDc4NzYxOjZmZWMxOGE4YzRiNTU3NDA4OTBiMmUwY2Q2NmQzM2Y3NTlhOTRmMTg=",
         "commit": {
           "author": {
-            "name": "prettiest-bot[bot]",
-            "email": "prettiest-bot[bot]@users.noreply.github.com",
+            "name": "prettier-ci[bot]",
+            "email": "prettier-ci[bot]@users.noreply.github.com",
             "date": "2018-09-09T16:27:42Z"
           },
           "committer": {
-            "name": "prettiest-bot[bot]",
-            "email": "prettiest-bot[bot]@users.noreply.github.com",
+            "name": "prettier-ci[bot]",
+            "email": "prettier-ci[bot]@users.noreply.github.com",
             "date": "2018-09-09T16:27:42Z"
           },
           "message": "formatted file: test/utils.test.ts",
           "tree": {
             "sha": "0213309cc9c9f1f57354aae0b7c8609f023ba19b",
-            "url": "https://api.github.com/repos/claasahl/prettiest-bot/git/trees/0213309cc9c9f1f57354aae0b7c8609f023ba19b"
+            "url": "https://api.github.com/repos/claasahl/prettier-ci/git/trees/0213309cc9c9f1f57354aae0b7c8609f023ba19b"
           },
-          "url": "https://api.github.com/repos/claasahl/prettiest-bot/git/commits/6fec18a8c4b55740890b2e0cd66d33f759a94f18",
+          "url": "https://api.github.com/repos/claasahl/prettier-ci/git/commits/6fec18a8c4b55740890b2e0cd66d33f759a94f18",
           "comment_count": 0,
           "verification": {
             "verified": false,
@@ -196,54 +196,54 @@
             "payload": null
           }
         },
-        "url": "https://api.github.com/repos/claasahl/prettiest-bot/commits/6fec18a8c4b55740890b2e0cd66d33f759a94f18",
-        "html_url": "https://github.com/claasahl/prettiest-bot/commit/6fec18a8c4b55740890b2e0cd66d33f759a94f18",
-        "comments_url": "https://api.github.com/repos/claasahl/prettiest-bot/commits/6fec18a8c4b55740890b2e0cd66d33f759a94f18/comments",
+        "url": "https://api.github.com/repos/claasahl/prettier-ci/commits/6fec18a8c4b55740890b2e0cd66d33f759a94f18",
+        "html_url": "https://github.com/claasahl/prettier-ci/commit/6fec18a8c4b55740890b2e0cd66d33f759a94f18",
+        "comments_url": "https://api.github.com/repos/claasahl/prettier-ci/commits/6fec18a8c4b55740890b2e0cd66d33f759a94f18/comments",
         "author": {
-          "login": "prettiest-bot[bot]",
+          "login": "prettier-ci[bot]",
           "id": 42763831,
           "node_id": "MDM6Qm90NDI3NjM4MzE=",
           "avatar_url": "https://avatars2.githubusercontent.com/u/8401267?v=4",
           "gravatar_id": "",
-          "url": "https://api.github.com/users/prettiest-bot%5Bbot%5D",
-          "html_url": "https://github.com/apps/prettiest-bot",
-          "followers_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/followers",
-          "following_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/following{/other_user}",
-          "gists_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/subscriptions",
-          "organizations_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/orgs",
-          "repos_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/repos",
-          "events_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/received_events",
+          "url": "https://api.github.com/users/prettier-ci%5Bbot%5D",
+          "html_url": "https://github.com/apps/prettier-ci",
+          "followers_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/followers",
+          "following_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/following{/other_user}",
+          "gists_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/subscriptions",
+          "organizations_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/orgs",
+          "repos_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/repos",
+          "events_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/received_events",
           "type": "Bot",
           "site_admin": false
         },
         "committer": {
-          "login": "prettiest-bot[bot]",
+          "login": "prettier-ci[bot]",
           "id": 42763831,
           "node_id": "MDM6Qm90NDI3NjM4MzE=",
           "avatar_url": "https://avatars2.githubusercontent.com/u/8401267?v=4",
           "gravatar_id": "",
-          "url": "https://api.github.com/users/prettiest-bot%5Bbot%5D",
-          "html_url": "https://github.com/apps/prettiest-bot",
-          "followers_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/followers",
-          "following_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/following{/other_user}",
-          "gists_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/gists{/gist_id}",
-          "starred_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/starred{/owner}{/repo}",
-          "subscriptions_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/subscriptions",
-          "organizations_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/orgs",
-          "repos_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/repos",
-          "events_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/events{/privacy}",
-          "received_events_url": "https://api.github.com/users/prettiest-bot%5Bbot%5D/received_events",
+          "url": "https://api.github.com/users/prettier-ci%5Bbot%5D",
+          "html_url": "https://github.com/apps/prettier-ci",
+          "followers_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/followers",
+          "following_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/following{/other_user}",
+          "gists_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/subscriptions",
+          "organizations_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/orgs",
+          "repos_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/repos",
+          "events_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/prettier-ci%5Bbot%5D/received_events",
           "type": "Bot",
           "site_admin": false
         },
         "parents": [
           {
             "sha": "9f31a8cd453827bea7a8b538f689ad216b1b250a",
-            "url": "https://api.github.com/repos/claasahl/prettiest-bot/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a",
-            "html_url": "https://github.com/claasahl/prettiest-bot/commit/9f31a8cd453827bea7a8b538f689ad216b1b250a"
+            "url": "https://api.github.com/repos/claasahl/prettier-ci/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a",
+            "html_url": "https://github.com/claasahl/prettier-ci/commit/9f31a8cd453827bea7a8b538f689ad216b1b250a"
           }
         ]
       }
@@ -256,9 +256,9 @@
         "additions": 43,
         "deletions": 31,
         "changes": 74,
-        "blob_url": "https://github.com/claasahl/prettiest-bot/blob/6fec18a8c4b55740890b2e0cd66d33f759a94f18/test/utils.test.ts",
-        "raw_url": "https://github.com/claasahl/prettiest-bot/raw/6fec18a8c4b55740890b2e0cd66d33f759a94f18/test/utils.test.ts",
-        "contents_url": "https://api.github.com/repos/claasahl/prettiest-bot/contents/test/utils.test.ts?ref=6fec18a8c4b55740890b2e0cd66d33f759a94f18",
+        "blob_url": "https://github.com/claasahl/prettier-ci/blob/6fec18a8c4b55740890b2e0cd66d33f759a94f18/test/utils.test.ts",
+        "raw_url": "https://github.com/claasahl/prettier-ci/raw/6fec18a8c4b55740890b2e0cd66d33f759a94f18/test/utils.test.ts",
+        "contents_url": "https://api.github.com/repos/claasahl/prettier-ci/contents/test/utils.test.ts?ref=6fec18a8c4b55740890b2e0cd66d33f759a94f18",
         "patch": "@@ -1,42 +1,54 @@\n // You can import your modules\n // import index from '../src/index'\n \n-import * as Rx from 'rxjs'\n-import { ofEvent, ofEventFilter } from '../src/utils'\n+import * as Rx from \"rxjs\";\n+import { ofEvent, ofEventFilter } from \"../src/utils\";\n \n-describe('ofEventFilter / ofEvent', () => {\n+describe(\"ofEventFilter / ofEvent\", () => {\n   test(\"that '*' matches any event\", async () => {\n-    expect(ofEventFilter('*')(fakeEvent('some event', 'some action'))).toBe(true)\n-    expect(ofEventFilter('*')(fakeEvent('some other event'))).toBe(true)\n-  })\n+    expect(ofEventFilter(\"*\")(fakeEvent(\"some event\", \"some action\"))).toBe(\n+      true\n+    );\n+    expect(ofEventFilter(\"*\")(fakeEvent(\"some other event\"))).toBe(true);\n+  });\n \n-  test('that event name matches', async () => {\n-    expect(ofEventFilter('push')(fakeEvent('push', 'some action'))).toBe(true)\n-    expect(ofEventFilter('push')(fakeEvent('push'))).toBe(true)\n-    expect(ofEventFilter('push')(fakeEvent('check_suite'))).toBe(false)\n-  })\n+  test(\"that event name matches\", async () => {\n+    expect(ofEventFilter(\"push\")(fakeEvent(\"push\", \"some action\"))).toBe(true);\n+    expect(ofEventFilter(\"push\")(fakeEvent(\"push\"))).toBe(true);\n+    expect(ofEventFilter(\"push\")(fakeEvent(\"check_suite\"))).toBe(false);\n+  });\n \n-  test('that event name and action match', async () => {\n-    expect(ofEventFilter('check_run.created')(fakeEvent('check_run', 'created'))).toBe(true)\n-    expect(ofEventFilter('check_run.created')(fakeEvent('check_run', 'rerequested'))).toBe(false)\n-    expect(ofEventFilter('check_run.created')(fakeEvent('check_run'))).toBe(false)\n-  })\n+  test(\"that event name and action match\", async () => {\n+    expect(\n+      ofEventFilter(\"check_run.created\")(fakeEvent(\"check_run\", \"created\"))\n+    ).toBe(true);\n+    expect(\n+      ofEventFilter(\"check_run.created\")(fakeEvent(\"check_run\", \"rerequested\"))\n+    ).toBe(false);\n+    expect(ofEventFilter(\"check_run.created\")(fakeEvent(\"check_run\"))).toBe(\n+      false\n+    );\n+  });\n \n-  test('that matched events are kept', async () => {\n-    const event1 = fakeEvent('push', 'action')\n-    const event2 = fakeEvent('another event')\n-    const result = await Rx.of(event1, event2).pipe(ofEvent('push')).toPromise()\n-    expect(result).toBe(event1)\n-  })\n+  test(\"that matched events are kept\", async () => {\n+    const event1 = fakeEvent(\"push\", \"action\");\n+    const event2 = fakeEvent(\"another event\");\n+    const result = await Rx.of(event1, event2)\n+      .pipe(ofEvent(\"push\"))\n+      .toPromise();\n+    expect(result).toBe(event1);\n+  });\n \n-  test('that unmatched events are dropped', async () => {\n-    const event1 = fakeEvent('event', 'action')\n-    const event2 = fakeEvent('another event')\n-    const result = await Rx.of(event1, event2).pipe(ofEvent('push')).toPromise()\n-    expect(result).toBe(undefined)\n-  })\n+  test(\"that unmatched events are dropped\", async () => {\n+    const event1 = fakeEvent(\"event\", \"action\");\n+    const event2 = fakeEvent(\"another event\");\n+    const result = await Rx.of(event1, event2)\n+      .pipe(ofEvent(\"push\"))\n+      .toPromise();\n+    expect(result).toBe(undefined);\n+  });\n \n-  function fakeEvent (name: string, action?: string) {\n-    return { event: name, payload: { action } }\n+  function fakeEvent(name: string, action?: string) {\n+    return { event: name, payload: { action } };\n   }\n-})\n+});"
       }
     ]

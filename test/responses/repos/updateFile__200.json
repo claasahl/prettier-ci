@@ -5,42 +5,42 @@
       "path": "test/utils.test.ts",
       "sha": "7d6e8ee3e4c26b6d5d305fa3fe985ddf7c0f87ea",
       "size": 1761,
-      "url": "https://api.github.com/repos/claasahl/prettiest-bot/contents/test/utils.test.ts?ref=refs/heads/prettier/develop",
-      "html_url": "https://github.com/claasahl/prettiest-bot/blob/refs/heads/prettier/develop/test/utils.test.ts",
-      "git_url": "https://api.github.com/repos/claasahl/prettiest-bot/git/blobs/7d6e8ee3e4c26b6d5d305fa3fe985ddf7c0f87ea",
-      "download_url": "https://raw.githubusercontent.com/claasahl/prettiest-bot/refs/heads/prettier/develop/test/utils.test.ts",
+      "url": "https://api.github.com/repos/claasahl/prettier-ci/contents/test/utils.test.ts?ref=refs/heads/prettier/develop",
+      "html_url": "https://github.com/claasahl/prettier-ci/blob/refs/heads/prettier/develop/test/utils.test.ts",
+      "git_url": "https://api.github.com/repos/claasahl/prettier-ci/git/blobs/7d6e8ee3e4c26b6d5d305fa3fe985ddf7c0f87ea",
+      "download_url": "https://raw.githubusercontent.com/claasahl/prettier-ci/refs/heads/prettier/develop/test/utils.test.ts",
       "type": "file",
       "_links": {
-        "self": "https://api.github.com/repos/claasahl/prettiest-bot/contents/test/utils.test.ts?ref=refs/heads/prettier/develop",
-        "git": "https://api.github.com/repos/claasahl/prettiest-bot/git/blobs/7d6e8ee3e4c26b6d5d305fa3fe985ddf7c0f87ea",
-        "html": "https://github.com/claasahl/prettiest-bot/blob/refs/heads/prettier/develop/test/utils.test.ts"
+        "self": "https://api.github.com/repos/claasahl/prettier-ci/contents/test/utils.test.ts?ref=refs/heads/prettier/develop",
+        "git": "https://api.github.com/repos/claasahl/prettier-ci/git/blobs/7d6e8ee3e4c26b6d5d305fa3fe985ddf7c0f87ea",
+        "html": "https://github.com/claasahl/prettier-ci/blob/refs/heads/prettier/develop/test/utils.test.ts"
       }
     },
     "commit": {
       "sha": "6fec18a8c4b55740890b2e0cd66d33f759a94f18",
       "node_id": "MDY6Q29tbWl0MTQ2NDc4NzYxOjZmZWMxOGE4YzRiNTU3NDA4OTBiMmUwY2Q2NmQzM2Y3NTlhOTRmMTg=",
-      "url": "https://api.github.com/repos/claasahl/prettiest-bot/git/commits/6fec18a8c4b55740890b2e0cd66d33f759a94f18",
-      "html_url": "https://github.com/claasahl/prettiest-bot/commit/6fec18a8c4b55740890b2e0cd66d33f759a94f18",
+      "url": "https://api.github.com/repos/claasahl/prettier-ci/git/commits/6fec18a8c4b55740890b2e0cd66d33f759a94f18",
+      "html_url": "https://github.com/claasahl/prettier-ci/commit/6fec18a8c4b55740890b2e0cd66d33f759a94f18",
       "author": {
-        "name": "prettiest-bot[bot]",
-        "email": "prettiest-bot[bot]@users.noreply.github.com",
+        "name": "prettier-ci[bot]",
+        "email": "prettier-ci[bot]@users.noreply.github.com",
         "date": "2018-09-09T16:27:42Z"
       },
       "committer": {
-        "name": "prettiest-bot[bot]",
-        "email": "prettiest-bot[bot]@users.noreply.github.com",
+        "name": "prettier-ci[bot]",
+        "email": "prettier-ci[bot]@users.noreply.github.com",
         "date": "2018-09-09T16:27:42Z"
       },
       "tree": {
         "sha": "0213309cc9c9f1f57354aae0b7c8609f023ba19b",
-        "url": "https://api.github.com/repos/claasahl/prettiest-bot/git/trees/0213309cc9c9f1f57354aae0b7c8609f023ba19b"
+        "url": "https://api.github.com/repos/claasahl/prettier-ci/git/trees/0213309cc9c9f1f57354aae0b7c8609f023ba19b"
       },
       "message": "formatted file: test/utils.test.ts",
       "parents": [
         {
           "sha": "9f31a8cd453827bea7a8b538f689ad216b1b250a",
-          "url": "https://api.github.com/repos/claasahl/prettiest-bot/git/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a",
-          "html_url": "https://github.com/claasahl/prettiest-bot/commit/9f31a8cd453827bea7a8b538f689ad216b1b250a"
+          "url": "https://api.github.com/repos/claasahl/prettier-ci/git/commits/9f31a8cd453827bea7a8b538f689ad216b1b250a",
+          "html_url": "https://github.com/claasahl/prettier-ci/commit/9f31a8cd453827bea7a8b538f689ad216b1b250a"
         }
       ],
       "verification": {

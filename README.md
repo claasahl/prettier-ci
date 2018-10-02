@@ -1,4 +1,4 @@
-# prettiest-bot
+# prettier-ci
 
 > A GitHub App built with [Probot](https://github.com/probot/probot) that A Probot app
 
@@ -17,7 +17,7 @@ npm start
 
 ## Contributing
 
-If you have suggestions for how prettiest-bot could be improved, or want to report a bug, open an issue! We'd love all and any contributions.
+If you have suggestions for how prettier-ci could be improved, or want to report a bug, open an issue! We'd love all and any contributions.
 
 For more, check out the [Contributing Guide](CONTRIBUTING.md).
 

@@ -4,9 +4,9 @@
     "node_id": "MDg6Q2hlY2tSdW4xNjM1NjA0Mg==",
     "head_sha": "6fec18a8c4b55740890b2e0cd66d33f759a94f18",
     "external_id": "",
-    "url": "https://api.github.com/repos/claasahl/prettiest-bot/check-runs/16356042",
-    "html_url": "https://github.com/claasahl/prettiest-bot/runs/16356042",
-    "details_url": "https://github.com/claasahl/prettiest-bot",
+    "url": "https://api.github.com/repos/claasahl/prettier-ci/check-runs/16356042",
+    "html_url": "https://github.com/claasahl/prettier-ci/runs/16356042",
+    "details_url": "https://github.com/claasahl/prettier-ci",
     "status": "completed",
     "conclusion": "success",
     "started_at": "2018-09-09T16:27:43Z",
@@ -16,7 +16,7 @@
       "summary": "Pretty. Keep up the **good work**.",
       "text": null,
       "annotations_count": 0,
-      "annotations_url": "https://api.github.com/repos/claasahl/prettiest-bot/check-runs/16356042/annotations"
+      "annotations_url": "https://api.github.com/repos/claasahl/prettier-ci/check-runs/16356042/annotations"
     },
     "name": "Prettier",
     "check_suite": {
@@ -45,16 +45,16 @@
         "type": "User",
         "site_admin": false
       },
-      "name": "prettiest-bot",
+      "name": "prettier-ci",
       "description": "",
-      "external_url": "https://github.com/claasahl/prettiest-bot",
-      "html_url": "https://github.com/apps/prettiest-bot",
+      "external_url": "https://github.com/claasahl/prettier-ci",
+      "html_url": "https://github.com/apps/prettier-ci",
       "created_at": "2018-08-28T06:33:00Z",
       "updated_at": "2018-08-31T08:57:39Z"
     },
     "pull_requests": [
       {
-        "url": "https://api.github.com/repos/claasahl/prettiest-bot/pulls/3",
+        "url": "https://api.github.com/repos/claasahl/prettier-ci/pulls/3",
         "id": 214152953,
         "number": 3,
         "head": {
@@ -62,8 +62,8 @@
           "sha": "6fec18a8c4b55740890b2e0cd66d33f759a94f18",
           "repo": {
             "id": 146478761,
-            "url": "https://api.github.com/repos/claasahl/prettiest-bot",
-            "name": "prettiest-bot"
+            "url": "https://api.github.com/repos/claasahl/prettier-ci",
+            "name": "prettier-ci"
           }
         },
         "base": {
@@ -71,8 +71,8 @@
           "sha": "bb4d2ed9702c4c4340db50f74fc451657fe48e57",
           "repo": {
             "id": 146478761,
-            "url": "https://api.github.com/repos/claasahl/prettiest-bot",
-            "name": "prettiest-bot"
+            "url": "https://api.github.com/repos/claasahl/prettier-ci",
+            "name": "prettier-ci"
           }
         }
       }

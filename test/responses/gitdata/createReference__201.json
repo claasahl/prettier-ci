@@ -2,11 +2,11 @@
   "data": {
     "ref": "refs/heads/prettier/develop",
     "node_id": "MDM6UmVmMTQ2NDc4NzYxOnByZXR0aWVyL2RldmVsb3A=",
-    "url": "https://api.github.com/repos/claasahl/prettiest-bot/git/refs/heads/prettier/develop",
+    "url": "https://api.github.com/repos/claasahl/prettier-ci/git/refs/heads/prettier/develop",
     "object": {
       "sha": "bb4d2ed9702c4c4340db50f74fc451657fe48e57",
       "type": "commit",
-      "url": "https://api.github.com/repos/claasahl/prettiest-bot/git/commits/bb4d2ed9702c4c4340db50f74fc451657fe48e57"
+      "url": "https://api.github.com/repos/claasahl/prettier-ci/git/commits/bb4d2ed9702c4c4340db50f74fc451657fe48e57"
     }
   },
   "status": 201,
@@ -20,7 +20,7 @@
     "content-type": "application/json; charset=utf-8",
     "date": "Sun, 09 Sep 2018 16:27:11 GMT",
     "etag": "\"1a569e10cb1d83544ea5a9fd802a6051\"",
-    "location": "https://api.github.com/repos/claasahl/prettiest-bot/git/refs/heads/prettier/develop",
+    "location": "https://api.github.com/repos/claasahl/prettier-ci/git/refs/heads/prettier/develop",
     "referrer-policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
     "server": "GitHub.com",
     "status": "201 Created",
@@ -46,7 +46,7 @@
     "content-type": "application/json; charset=utf-8",
     "date": "Sun, 09 Sep 2018 16:27:11 GMT",
     "etag": "\"1a569e10cb1d83544ea5a9fd802a6051\"",
-    "location": "https://api.github.com/repos/claasahl/prettiest-bot/git/refs/heads/prettier/develop",
+    "location": "https://api.github.com/repos/claasahl/prettier-ci/git/refs/heads/prettier/develop",
     "referrer-policy": "origin-when-cross-origin, strict-origin-when-cross-origin",
     "server": "GitHub.com",
     "status": "201 Created",

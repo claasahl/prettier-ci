@@ -1,12 +1,12 @@
 {
-  "name": "prettiest-bot",
+  "name": "prettier-ci",
   "version": "1.0.0",
   "description": "A Probot app",
   "author": "Claas Ahlrichs <claasahl@gmail.com>",
   "license": "ISC",
-  "repository": "https://github.com/claasahl/prettiest-bot.git",
-  "homepage": "https://github.com/claasahl/prettiest-bot",
-  "bugs": "https://github.com/claasahl/prettiest-bot/issues",
+  "repository": "https://github.com/claasahl/prettier-ci.git",
+  "homepage": "https://github.com/claasahl/prettier-ci",
+  "bugs": "https://github.com/claasahl/prettier-ci/issues",
   "keywords": [
     "probot",
     "github",
