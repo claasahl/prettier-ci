@@ -1,6 +1,6 @@
 // You can import your modules
 // import index from '../src/index'
-import { Application } from 'probot'
+import { Application, Context } from 'probot'
 import myProbotApp from '../src/index'
 import * as gh from "@octokit/rest";
 import { advanceTo } from 'jest-date-mock';
@@ -18,10 +18,10 @@ import gitdataCreateReference_201 from "./responses/gitdata/createReference__201
 import pullRequestsCreate_201 from "./responses/pullRequests/create__201.json"
 import pullRequestsMerge_200 from "./responses/pullRequests/merge__200.json"
 
-import { CHECKS_NAME } from '../src/utils';
 import template from './templates/pullRequest';
 import * as fs from 'fs';
 import * as prettier from "prettier"
+import { DEFAULT_CONFIG } from '../src/defaultConfig';
 
 describe('tests conditions for triggering a file-analysis', () => {
   let app, github
@@ -39,26 +39,28 @@ describe('tests conditions for triggering a file-analysis', () => {
     }
     // Passes the mocked out GitHub API into out app instance
     app.auth = () => Promise.resolve(github)
+    // Ensures that a valid configuration is available in our app instance
+    Context.prototype.config = jest.fn().mockResolvedValue(DEFAULT_CONFIG)
   })
 
   test('creates check when check_suite is requested', async () => {
     await app.receive(checkSuiteRequestedEvent)
 
-    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettier-ci", name: CHECKS_NAME, head_sha: "39a53e909e101414ee8880321bf0079e4dd7d767" };
+    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettier-ci", name: DEFAULT_CONFIG.CHECKS_NAME, head_sha: "39a53e909e101414ee8880321bf0079e4dd7d767" };
     expect(github.checks.create).toHaveBeenCalledWith(params)
   })
 
   test('creates check when check_suite is rerequested', async () => {
     await app.receive(checkSuiteRerequestedEvent)
 
-    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettier-ci", name: CHECKS_NAME, head_sha: "bb4d2ed9702c4c4340db50f74fc451657fe48e57" };
+    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettier-ci", name: DEFAULT_CONFIG.CHECKS_NAME, head_sha: "bb4d2ed9702c4c4340db50f74fc451657fe48e57" };
     expect(github.checks.create).toHaveBeenCalledWith(params)
   })
 
   test('creates check when check_run is rerequested', async () => {
     await app.receive(checkRunRerequestedEvent)
 
-    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettier-ci", name: CHECKS_NAME, head_sha: "fad5b3a8a9602fd31279d8c707e5a0de3c4cd640" };
+    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettier-ci", name: DEFAULT_CONFIG.CHECKS_NAME, head_sha: "fad5b3a8a9602fd31279d8c707e5a0de3c4cd640" };
     expect(github.checks.create).toHaveBeenCalledWith(params)
   })
 })

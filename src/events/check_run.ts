@@ -3,22 +3,21 @@ import { gitdata, checks, repos, pullRequests } from "../actions/github"
 import { Context } from 'probot'
 import * as prettier from "prettier"
 
-import { CHECKS_NAME, REFERENCE_PREFIX, COMMIT_MESSAGE_PREFIX, PULL_REQUEST_TITLE_PREFIX } from '../utils';
-import { Projection, Overwrite } from '../types';
+import { Projection, Overwrite, Config } from '../types';
 import btoa from "btoa";
 import atob from "atob";
 
-export async function created(context: Context): Promise<void> {
-  await markCheckAsInProgress(context);
-  const {files, ref} = await fetchModifiedFiles(context);
+export async function created(context: Context, config: Config): Promise<void> {
+  await markCheckAsInProgress(context, config);
+  const {files, ref} = await fetchModifiedFiles(context, config);
   const results: {file: string, passed: boolean}[] = [];
   for(const file of files) {
-    const {content} = await fetchContent({context, file, sha: ref})
-    const {passed} = await checkContent({context, file, content})
+    const {content} = await fetchContent({context, config, file, sha: ref})
+    const {passed} = await checkContent({context, config, file, content})
     results.push({file, passed})
   }
   const report = asReport(results)
-  await markCheckAsCompleted({context, report})
+  await markCheckAsCompleted({context, config, report})
 }
 
 function created2ChecksUpdateParams(params: Partial<gh.ChecksUpdateParams>): Projection<gh.ChecksUpdateParams> {
@@ -46,20 +45,20 @@ function created2ReposGetContent(params: Overwrite<Partial<gh.ReposGetContentPar
   }
 }
 
-async function markCheckAsInProgress(context: Context): Promise<Context> {
-  const result = await checks.update(context, created2ChecksUpdateParams({status: "in_progress"}));
+async function markCheckAsInProgress(context: Context, config: Config): Promise<Context> {
+  const result = await checks.update(context, config, created2ChecksUpdateParams({status: "in_progress"}));
   return result.context
 }
 
-async function fetchModifiedFiles(context: Context): Promise<{context: Context, files: string[], ref: string}> {
-  const commits = await repos.compareCommits(context, created2ReposCompareCommitsParams)
+async function fetchModifiedFiles(context: Context, config: Config): Promise<{context: Context, files: string[], ref: string}> {
+  const commits = await repos.compareCommits(context, config, created2ReposCompareCommitsParams)
   const {head} = created2ReposCompareCommitsParams(context)
   const files: string[] = commits.response.data.files.filter((file: any) => file.status !== "deleted").map((file: any) => file.filename)
   return {context, files, ref: head}
 }
 
-async function fetchContent(data: {context: Context, file: string, sha: string}): Promise<{context: Context, file: string, content: string, sha: string}> {
-  const result = await repos.getContent(data.context, created2ReposGetContent({path: data.file, ref: data.sha}))
+async function fetchContent(data: {context: Context, config: Config, file: string, sha: string}): Promise<{context: Context, file: string, content: string, sha: string}> {
+  const result = await repos.getContent(data.context, data.config, created2ReposGetContent({path: data.file, ref: data.sha}))
   if(result.response.data.encoding === 'base64') {
     const content = atob(result.response.data.content);
     return {context: result.context, file: data.file, content, sha: result.response.data.sha}
@@ -68,7 +67,7 @@ async function fetchContent(data: {context: Context, file: string, sha: string})
   }
 }
 
-async function checkContent(data: {context: Context, file: string, content: string}): Promise<{context: Context, file: string, passed: boolean}> {
+async function checkContent(data: {context: Context, config: Config, file: string, content: string}): Promise<{context: Context, file: string, passed: boolean}> {
   const passed = await prettier.check(data.content, {filepath: data.file})
   return {context: data.context, file: data.file, passed}
 }
@@ -78,22 +77,22 @@ async function formatContent(data: {context: Context, file: string, content: str
   return {context: data.context, file: data.file, content: formatted}
 }
 
-async function markCheckAsCompleted(data: {context: Context, report: Partial<gh.ChecksUpdateParams>}): Promise<Context> {
+async function markCheckAsCompleted(data: {context: Context, config: Config, report: Partial<gh.ChecksUpdateParams>}): Promise<Context> {
   const completed_at = new Date().toISOString()
-  const result = await checks.update(data.context, created2ChecksUpdateParams({...data.report, status: "completed", completed_at}))
+  const result = await checks.update(data.context, data.config, created2ChecksUpdateParams({...data.report, status: "completed", completed_at}))
   return result.context
 }
 
 
-export async function rerequested(context: Context): Promise<void> {
-   await checks.create(context, rerequested2ChecksCreateParams)
+export async function rerequested(context: Context, config: Config): Promise<void> {
+   await checks.create(context, config, rerequested2ChecksCreateParams)
 }
 
-function rerequested2ChecksCreateParams(context: Context): gh.ChecksCreateParams {
+function rerequested2ChecksCreateParams(context: Context, config: Config): gh.ChecksCreateParams {
   const owner = context.payload.repository.owner.login
   const repo = context.payload.repository.name
   const head_sha = context.payload.check_run.head_sha
-  return { owner, repo, name: CHECKS_NAME, head_sha }
+  return { owner, repo, name: config.CHECKS_NAME, head_sha }
 }
 
 interface FileCheck {
@@ -124,59 +123,59 @@ function asReport(results: FileCheck[]): Partial<gh.ChecksUpdateParams> {
 }
 
 
-export async function requested_action(context: Context): Promise<void> {
+export async function requested_action(context: Context, config: Config): Promise<void> {
   const {identifier} = context.payload.requested_action;
   if(identifier === "fix") {
-    await requested_action_fix(context)
+    await requested_action_fix(context, config)
   } else {
     throw new Error("unsupported action requested '"+identifier+"'")
   }
 }
 
-async function requested_action_fix(context: Context): Promise<Context> {
-  const createReference = await gitdata.createReference(context, fix2CreateReferenceParams)
+async function requested_action_fix(context: Context, config: Config): Promise<Context> {
+  const createReference = await gitdata.createReference(context, config, fix2CreateReferenceParams)
   const branch = createReference.response.data.ref
-  const {files} = await fetchModifiedFiles(context);
+  const {files} = await fetchModifiedFiles(context, config);
   const results: {file: string, passed: boolean}[] = [];
   for(const file of files) {
-    const {content, sha} = await fetchContent({context, file, sha: branch})
-    const {passed} = await checkContent({context, file, content})
+    const {content, sha} = await fetchContent({context, config, file, sha: branch})
+    const {passed} = await checkContent({context, config, file, content})
     if(!passed) {
       const formatted = await formatContent({context, file, content})
-      await repos.updateFile(context, fix2ReposUpdateFileParams({path: file, content: btoa(formatted.content), branch, sha}))
+      await repos.updateFile(context, config, fix2ReposUpdateFileParams({path: file, content: btoa(formatted.content), branch, sha}))
     }
     results.push({file, passed})
   }
   const body = asPullRequestBody(context, results)
-  const { response } = await pullRequests.create(context, fix2PullRequestsCreateParams({head: branch, body, maintainer_can_modify: true}))
-  pullRequests.merge(context, fix2PullRequestsMergeParams({number: response.data.number}))
+  const { response } = await pullRequests.create(context, config, fix2PullRequestsCreateParams({head: branch, body, maintainer_can_modify: true}))
+  pullRequests.merge(context, config, fix2PullRequestsMergeParams({number: response.data.number}))
   // delete branch
   return context 
 }
 
-function fix2CreateReferenceParams(context: Context): gh.GitdataCreateReferenceParams {
+function fix2CreateReferenceParams(context: Context, config: Config): gh.GitdataCreateReferenceParams {
   const owner = context.payload.repository.owner.login
   const repo = context.payload.repository.name
-  const ref = REFERENCE_PREFIX + context.payload.check_run.check_suite.head_branch
+  const ref = config.REFERENCE_PREFIX + context.payload.check_run.check_suite.head_branch
   const sha = context.payload.check_run.head_sha
   return { owner, repo, ref, sha }
 }
 
 function fix2ReposUpdateFileParams(params: Overwrite<Partial<gh.ReposUpdateFileParams>, {path: string, content: string, branch: string, sha: string}>): Projection<gh.ReposUpdateFileParams> {
-  return (context) => {
+  return (context, config) => {
     const owner = context.payload.repository.owner.login
     const repo = context.payload.repository.name
-    const message = COMMIT_MESSAGE_PREFIX + params.path
+    const message = config.COMMIT_MESSAGE_PREFIX + params.path
     return { ...params, owner, repo, message }
   }
 }
 
 function fix2PullRequestsCreateParams(params: Overwrite<Partial<gh.PullRequestsCreateParams>, {head: string, body: string}>): Projection<gh.PullRequestsCreateParams> {
-  return (context) => {
+  return (context, config) => {
     const owner = context.payload.repository.owner.login
     const repo = context.payload.repository.name
     const base = context.payload.check_run.check_suite.head_branch
-    const title = PULL_REQUEST_TITLE_PREFIX + base
+    const title = config.PULL_REQUEST_TITLE_PREFIX + base
     return { ...params, owner, repo, title, base }
   }
 }
