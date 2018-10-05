@@ -53,7 +53,7 @@ async function markCheckAsInProgress(context: Context, config: Config): Promise<
 async function fetchModifiedFiles(context: Context, config: Config): Promise<{context: Context, files: string[], ref: string}> {
   const commits = await repos.compareCommits(context, config, created2ReposCompareCommitsParams)
   const {head} = created2ReposCompareCommitsParams(context)
-  const files: string[] = commits.response.data.files.filter((file: any) => file.status !== "deleted").map((file: any) => file.filename)
+  const files: string[] = commits.response.data.files.filter((file: any) => file.status !== "removed").map((file: any) => file.filename)
   return {context, files, ref: head}
 }
 
