@@ -16,7 +16,7 @@ export async function created(context: Context, config: Config): Promise<void> {
     const {passed} = await checkContent({context, config, file, content})
     results.push({file, passed})
   }
-  const report = asReport(results)
+  const report = asReport(results, config)
   await markCheckAsCompleted({context, config, report})
 }
 
@@ -92,7 +92,7 @@ function rerequested2ChecksCreateParams(context: Context, config: Config): gh.Ch
   const owner = context.payload.repository.owner.login
   const repo = context.payload.repository.name
   const head_sha = context.payload.check_run.head_sha
-  return { owner, repo, name: config.CHECKS_NAME, head_sha }
+  return { owner, repo, name: config.checks.name, head_sha }
 }
 
 interface FileCheck {
@@ -101,7 +101,7 @@ interface FileCheck {
 }
 
 
-function asReport(results: FileCheck[]): Partial<gh.ChecksUpdateParams> {
+function asReport(results: FileCheck[], config: Config): Partial<gh.ChecksUpdateParams> {
   const failedResults = results.filter(result => !result.passed)
   const passed = failedResults.length === 0
   const summary = passed ? 'Pretty. Keep up the **good work**.' : `Found ${failedResults.length} files which could be *prettier*`
@@ -113,19 +113,15 @@ function asReport(results: FileCheck[]): Partial<gh.ChecksUpdateParams> {
       text += `* ${result.file}\r\n`
     })
 
-    actions.push({
-      label: "Fix",
-      description: "Make files *prettier*.",
-      identifier: "fix"
-    })
+    actions.push(config.checks.actions.fix)
   }
-  return {output: { title: 'Prettier', summary, text }, conclusion: passed ? "success" : "failure", actions}
+  return {output: { title: config.checks.output.title, summary, text }, conclusion: passed ? "success" : "failure", actions}
 }
 
 
 export async function requested_action(context: Context, config: Config): Promise<void> {
   const {identifier} = context.payload.requested_action;
-  if(identifier === "fix") {
+  if(identifier === config.checks.actions.fix.identifier) {
     await requested_action_fix(context, config)
   } else {
     throw new Error("unsupported action requested '"+identifier+"'")

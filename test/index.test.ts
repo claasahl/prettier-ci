@@ -46,21 +46,21 @@ describe('tests conditions for triggering a file-analysis', () => {
   test('creates check when check_suite is requested', async () => {
     await app.receive(checkSuiteRequestedEvent)
 
-    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettier-ci", name: DEFAULT_CONFIG.CHECKS_NAME, head_sha: "39a53e909e101414ee8880321bf0079e4dd7d767" };
+    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettier-ci", name: DEFAULT_CONFIG.checks.name, head_sha: "39a53e909e101414ee8880321bf0079e4dd7d767" };
     expect(github.checks.create).toHaveBeenCalledWith(params)
   })
 
   test('creates check when check_suite is rerequested', async () => {
     await app.receive(checkSuiteRerequestedEvent)
 
-    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettier-ci", name: DEFAULT_CONFIG.CHECKS_NAME, head_sha: "bb4d2ed9702c4c4340db50f74fc451657fe48e57" };
+    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettier-ci", name: DEFAULT_CONFIG.checks.name, head_sha: "bb4d2ed9702c4c4340db50f74fc451657fe48e57" };
     expect(github.checks.create).toHaveBeenCalledWith(params)
   })
 
   test('creates check when check_run is rerequested', async () => {
     await app.receive(checkRunRerequestedEvent)
 
-    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettier-ci", name: DEFAULT_CONFIG.CHECKS_NAME, head_sha: "fad5b3a8a9602fd31279d8c707e5a0de3c4cd640" };
+    const params: gh.ChecksCreateParams = { owner: "claasahl", repo: "prettier-ci", name: DEFAULT_CONFIG.checks.name, head_sha: "fad5b3a8a9602fd31279d8c707e5a0de3c4cd640" };
     expect(github.checks.create).toHaveBeenCalledWith(params)
   })
 })
@@ -121,7 +121,7 @@ describe('tests for file-analysis (check_run)', () => {
     // TODO app.receive already completes when the event has been received, but not when then event has been processed
     await new Promise(resolve => setTimeout(resolve, 2000))
 
-    const params: gh.ChecksUpdateParams = { owner: "claasahl", repo: "prettier-ci", check_run_id: "15222485", status: "completed", conclusion: "success", output: {summary: "Pretty. Keep up the **good work**.", title: "Prettier", text: undefined}, actions: [], completed_at: new Date().toISOString()};
+    const params: gh.ChecksUpdateParams = { owner: "claasahl", repo: "prettier-ci", check_run_id: "15222485", status: "completed", conclusion: "success", output: {summary: "Pretty. Keep up the **good work**.", title: DEFAULT_CONFIG.checks.output.title, text: undefined}, actions: [], completed_at: new Date().toISOString()};
     expect(github.checks.update).toHaveBeenLastCalledWith(params)
   })
 })

@@ -6,10 +6,22 @@ import { Context } from 'probot';
 export type Overwrite < T1 , T2 > = Pick<T1, Exclude<keyof T1, keyof T2>> & T2
 
 export interface Config {
-    CHECKS_NAME: string;
     REFERENCE_PREFIX: string;
     COMMIT_MESSAGE_PREFIX: string;
     PULL_REQUEST_TITLE_PREFIX: string;
+    checks: {
+        name: string,
+        output: {
+            title: string,
+        }
+        actions: {
+            fix: {
+                identifier: string,
+                label: string,
+                description: string,
+            }
+        }
+    }
 }
 
 export interface Common {
