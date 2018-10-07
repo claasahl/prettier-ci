@@ -13,6 +13,7 @@ export interface Config {
         name: string,
         output: {
             title: string,
+            summary: string
         }
         actions: {
             fix: {

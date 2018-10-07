@@ -8,6 +8,7 @@ export const DEFAULT_CONFIG: Config = {
         name: "Prettier-CI",
         output: {
             title: "Prettier-CI",
+            summary: summary()
         },
         actions: {
             fix: {
@@ -17,4 +18,13 @@ export const DEFAULT_CONFIG: Config = {
             }
         }
     }
+}
+
+function summary(): string {
+    return `
+if passed
+  | Pretty. Keep up the **good work**.
+else
+  | Found #{failedResults.length} files which could be *prettier*
+`;
 }

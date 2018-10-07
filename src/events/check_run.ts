@@ -6,6 +6,7 @@ import * as prettier from "prettier"
 import { Projection, Overwrite, Config } from '../types';
 import btoa from "btoa";
 import atob from "atob";
+import * as pug from "pug"
 
 export async function created(context: Context, config: Config): Promise<void> {
   await markCheckAsInProgress(context, config);
@@ -104,7 +105,7 @@ interface FileCheck {
 function asReport(results: FileCheck[], config: Config): Partial<gh.ChecksUpdateParams> {
   const failedResults = results.filter(result => !result.passed)
   const passed = failedResults.length === 0
-  const summary = passed ? 'Pretty. Keep up the **good work**.' : `Found ${failedResults.length} files which could be *prettier*`
+  const summary = pug.render(config.checks.output.summary, {results, failedResults, passed, config})
   let text: string | undefined
   let actions: gh.ChecksUpdateParamsActions[] = []
   if (!passed) {
