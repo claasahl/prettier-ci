@@ -34,6 +34,8 @@ export const DEFAULT_CONFIG: Config = {
 
 function pugSummary(): string {
     return `
+- const failedResults = results.filter(result => !result.passed)
+- const passed = failedResults.length === 0
 if passed
   | Pretty. Keep up the **good work**.
 else
@@ -42,6 +44,8 @@ else
 
 function pugText(): string {
     return `
+- const failedResults = results.filter(result => !result.passed)
+- const passed = failedResults.length === 0
 unless passed
   | Here is a list of files which be *prettier*.
   each result in failedResults
@@ -49,28 +53,27 @@ unless passed
 }
 
 function pugActionNotSupported(): string {
-    return `| unsupported action requested '#{context.payload.requested_action.identifier}'`
+    return `| unsupported action requested '#{event.requested_action.identifier}'`
 }
 
 function pugEncodingNotSupported(): string {
-    `unsupported encoding '"+result.response.data.encoding+"' for file '"+data.file+"'`
-    return `| unsupported action requested '#{context.payload.requested_action.identifier}'`
+    return `unsupported encoding '#{encoding}' for file '#{file}'`
 }
 
 function pugBranch(): string {
-    return `| refs/heads/prettier/#{context.payload.check_run.check_suite.head_branch}`;
+    return `| refs/heads/prettier/#{event.check_run.check_suite.head_branch}`;
 }
 
 function pugTitle(): string {
-    return `| Prettified branch: '#{context.payload.check_run.check_suite.head_branch}'`
+    return `| Prettified branch: '#{event.check_run.check_suite.head_branch}'`
 }
 
 function pugBody(): string {
     return `
 - const failedResults = results.filter(result => !result.passed)
-| This [check run](#{context.payload.check_run.html_url}) identified #{failedResults.length} #{failedResults.length == 1 ? "file" : "files"}, which #{failedResults.length == 1 ? "needs" : "need"} formatting.
+| This [check run](#{event.check_run.html_url}) identified #{failedResults.length} #{failedResults.length == 1 ? "file" : "files"}, which #{failedResults.length == 1 ? "needs" : "need"} formatting.
 |
-| @#{context.payload.sender.login} requested these files to be fixed.`
+| @#{event.sender.login} requested these files to be fixed.`
 }
 
 function pugCommitMessage(): string {

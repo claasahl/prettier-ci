@@ -60,12 +60,13 @@ async function fetchModifiedFiles(context: Context, config: Config): Promise<{co
 
 async function fetchContent(data: {context: Context, config: Config, file: string, sha: string}): Promise<{context: Context, file: string, content: string, sha: string}> {
   const result = await repos.getContent(data.context, data.config, created2ReposGetContent({path: data.file, ref: data.sha}))
-  if(result.response.data.encoding === 'base64') {
+  const {encoding} = result.response.data
+  if(encoding === 'base64') {
     const content = atob(result.response.data.content);
     return {context: result.context, file: data.file, content, sha: result.response.data.sha}
   } else {
     const {context, file, sha} = data
-    throw new Error(pug.render(data.config.errors.repos.encoding_not_supported, {context, file, sha}))
+    throw new Error(pug.render(data.config.errors.repos.encoding_not_supported, {event: context.payload, encoding, file, sha}))
   }
 }
 
@@ -106,8 +107,8 @@ interface FileCheck {
 function asReport(results: FileCheck[], config: Config): Partial<gh.ChecksUpdateParams> {
   const failedResults = results.filter(result => !result.passed)
   const passed = failedResults.length === 0
-  const summary = pug.render(config.checks.output.summary, {results, failedResults, passed, config})
-  const text = pug.render(config.checks.output.text, {results, failedResults, passed, config})
+  const summary = pug.render(config.checks.output.summary, {results})
+  const text = pug.render(config.checks.output.text, {results})
   let actions: gh.ChecksUpdateParamsActions[] = []
   if (!passed) {
     actions.push(config.checks.actions.fix)
@@ -121,7 +122,7 @@ export async function requested_action(context: Context, config: Config): Promis
   if(identifier === config.checks.actions.fix.identifier) {
     await requested_action_fix(context, config)
   } else {
-    throw new Error(pug.render(config.errors.checks.action_not_supported, {context}))
+    throw new Error(pug.render(config.errors.checks.action_not_supported, {event: context.payload}))
   }
 }
 
@@ -139,7 +140,7 @@ async function requested_action_fix(context: Context, config: Config): Promise<C
     }
     results.push({file, passed})
   }
-  const body = pug.render(config.pullRequests.body, {context, results})
+  const body = pug.render(config.pullRequests.body, {event: context.payload, results})
   const { response } = await pullRequests.create(context, config, fix2PullRequestsCreateParams({head: branch, body, maintainer_can_modify: true}))
   pullRequests.merge(context, config, fix2PullRequestsMergeParams({number: response.data.number}))
   // delete branch
@@ -149,7 +150,7 @@ async function requested_action_fix(context: Context, config: Config): Promise<C
 function fix2CreateReferenceParams(context: Context, config: Config): gh.GitdataCreateReferenceParams {
   const owner = context.payload.repository.owner.login
   const repo = context.payload.repository.name
-  const ref = pug.render(config.pullRequests.branch, {context})
+  const ref = pug.render(config.pullRequests.branch, {event: context.payload})
   const sha = context.payload.check_run.head_sha
   return { owner, repo, ref, sha }
 }
@@ -158,7 +159,7 @@ function fix2ReposUpdateFileParams(params: Overwrite<Partial<gh.ReposUpdateFileP
   return (context, config) => {
     const owner = context.payload.repository.owner.login
     const repo = context.payload.repository.name
-    const message = pug.render(config.commitMessage, {context, params})
+    const message = pug.render(config.commitMessage, {event: context.payload, params})
     return { ...params, owner, repo, message }
   }
 }
@@ -168,7 +169,7 @@ function fix2PullRequestsCreateParams(params: Overwrite<Partial<gh.PullRequestsC
     const owner = context.payload.repository.owner.login
     const repo = context.payload.repository.name
     const base = context.payload.check_run.check_suite.head_branch
-    const title = pug.render(config.pullRequests.title, {context})
+    const title = pug.render(config.pullRequests.title, {event: context.payload})
     return { ...params, owner, repo, title, base }
   }
 }
