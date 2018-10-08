@@ -121,7 +121,7 @@ describe('tests for file-analysis (check_run)', () => {
     // TODO app.receive already completes when the event has been received, but not when then event has been processed
     await new Promise(resolve => setTimeout(resolve, 2000))
 
-    const params: gh.ChecksUpdateParams = { owner: "claasahl", repo: "prettier-ci", check_run_id: "15222485", status: "completed", conclusion: "success", output: {summary: "Pretty. Keep up the **good work**.", title: DEFAULT_CONFIG.checks.output.title, text: undefined}, actions: [], completed_at: new Date().toISOString()};
+    const params: gh.ChecksUpdateParams = { owner: "claasahl", repo: "prettier-ci", check_run_id: "15222485", status: "completed", conclusion: "success", output: {summary: "Pretty. Keep up the **good work**.", title: DEFAULT_CONFIG.checks.output.title, text: ""}, actions: [], completed_at: new Date().toISOString()};
     expect(github.checks.update).toHaveBeenLastCalledWith(params)
   })
 })

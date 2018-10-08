@@ -64,7 +64,8 @@ async function fetchContent(data: {context: Context, config: Config, file: strin
     const content = atob(result.response.data.content);
     return {context: result.context, file: data.file, content, sha: result.response.data.sha}
   } else {
-    throw new Error("unsupported encoding '"+result.response.data.encoding+"' for file '"+data.file+"'")
+    const {context, file, sha} = data
+    throw new Error(pug.render(data.config.errors.repos.encoding_not_supported, {context, file, sha}))
   }
 }
 
@@ -106,14 +107,9 @@ function asReport(results: FileCheck[], config: Config): Partial<gh.ChecksUpdate
   const failedResults = results.filter(result => !result.passed)
   const passed = failedResults.length === 0
   const summary = pug.render(config.checks.output.summary, {results, failedResults, passed, config})
-  let text: string | undefined
+  const text = pug.render(config.checks.output.text, {results, failedResults, passed, config})
   let actions: gh.ChecksUpdateParamsActions[] = []
   if (!passed) {
-    text = 'Here is a list of files which be *prettier*.\r\n'
-    failedResults.forEach(result => {
-      text += `* ${result.file}\r\n`
-    })
-
     actions.push(config.checks.actions.fix)
   }
   return {output: { title: config.checks.output.title, summary, text }, conclusion: passed ? "success" : "failure", actions}
@@ -125,7 +121,7 @@ export async function requested_action(context: Context, config: Config): Promis
   if(identifier === config.checks.actions.fix.identifier) {
     await requested_action_fix(context, config)
   } else {
-    throw new Error("unsupported action requested '"+identifier+"'")
+    throw new Error(pug.render(config.errors.checks.action_not_supported, {context}))
   }
 }
 
@@ -143,7 +139,7 @@ async function requested_action_fix(context: Context, config: Config): Promise<C
     }
     results.push({file, passed})
   }
-  const body = asPullRequestBody(context, results)
+  const body = pug.render(config.pullRequests.body, {context, results})
   const { response } = await pullRequests.create(context, config, fix2PullRequestsCreateParams({head: branch, body, maintainer_can_modify: true}))
   pullRequests.merge(context, config, fix2PullRequestsMergeParams({number: response.data.number}))
   // delete branch
@@ -172,7 +168,7 @@ function fix2PullRequestsCreateParams(params: Overwrite<Partial<gh.PullRequestsC
     const owner = context.payload.repository.owner.login
     const repo = context.payload.repository.name
     const base = context.payload.check_run.check_suite.head_branch
-    const title = config.PULL_REQUEST_TITLE_PREFIX + base
+    const title = config.pullRequests.title + base
     return { ...params, owner, repo, title, base }
   }
 }
@@ -183,11 +179,4 @@ function fix2PullRequestsMergeParams(params: Overwrite<Partial<gh.PullRequestsMe
     const repo = context.payload.repository.name
     return { owner, repo, ...params }
   }
-}
-
-function asPullRequestBody(context: Context, results: FileCheck[]): string {
-  const failedResults = results.filter(result => !result.passed)
-  return `This [check run](${context.payload.check_run.html_url}) identified ${failedResults.length} ${failedResults.length == 1 ? "file" : "files"}, which ${failedResults.length == 1 ? "needs" : "need"} formatting.
-
-@${context.payload.sender.login} requested these files to be fixed.`
 }

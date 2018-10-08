@@ -8,12 +8,12 @@ export type Overwrite < T1 , T2 > = Pick<T1, Exclude<keyof T1, keyof T2>> & T2
 export interface Config {
     REFERENCE_PREFIX: string;
     COMMIT_MESSAGE_PREFIX: string;
-    PULL_REQUEST_TITLE_PREFIX: string;
     checks: {
         name: string,
         output: {
             title: string,
-            summary: string
+            summary: string,
+            text: string
         }
         actions: {
             fix: {
@@ -21,6 +21,18 @@ export interface Config {
                 label: string,
                 description: string,
             }
+        }
+    },
+    pullRequests: {
+        title: string,
+        body: string
+    },
+    errors: {
+        checks: {
+            action_not_supported: string
+        },
+        repos: {
+            encoding_not_supported: string
         }
     }
 }
