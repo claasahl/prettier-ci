@@ -19,7 +19,8 @@ export const DEFAULT_CONFIG: Config = {
     pullRequests: {
         branch: pugBranch(),
         title: pugTitle(),
-        body: pugBody()
+        body: pugBody(),
+        maintainer_can_modify: true
     },
     commitMessage: pugCommitMessage(),
     errors: {

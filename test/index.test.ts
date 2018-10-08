@@ -178,7 +178,7 @@ describe("test for pull request (fix of errors in check_run)", () => {
     await app.receive(checkRunRequestedActionEvent)
 
     const body = template("https://github.com/claasahl/prettier-ci/runs/16344324", 1, "claasahl")
-    const params: gh.PullRequestsCreateParams = { owner: "claasahl", repo: "prettier-ci", base: "develop", head: "refs/heads/prettier/develop", title: "Prettified branch: 'develop'", maintainer_can_modify: true, body};
+    const params: gh.PullRequestsCreateParams = { owner: "claasahl", repo: "prettier-ci", base: "develop", head: "refs/heads/prettier/develop", title: "Prettified branch: 'develop'", maintainer_can_modify: DEFAULT_CONFIG.pullRequests.maintainer_can_modify, body};
     expect(github.pullRequests.create).toHaveBeenCalledWith(params)
   })
 
@@ -188,7 +188,7 @@ describe("test for pull request (fix of errors in check_run)", () => {
     await app.receive(checkRunRequestedActionEvent)
 
     const body = template("https://github.com/claasahl/prettier-ci/runs/16344324", 2, "claasahl")
-    const params: gh.PullRequestsCreateParams = { owner: "claasahl", repo: "prettier-ci", base: "develop", head: "refs/heads/prettier/develop", title: "Prettified branch: 'develop'", maintainer_can_modify: true, body};
+    const params: gh.PullRequestsCreateParams = { owner: "claasahl", repo: "prettier-ci", base: "develop", head: "refs/heads/prettier/develop", title: "Prettified branch: 'develop'", maintainer_can_modify: DEFAULT_CONFIG.pullRequests.maintainer_can_modify, body};
     expect(github.pullRequests.create).toHaveBeenCalledWith(params)
   })
 
@@ -196,7 +196,7 @@ describe("test for pull request (fix of errors in check_run)", () => {
     await app.receive(checkRunRequestedActionEvent)
 
     const body = template("https://github.com/claasahl/prettier-ci/runs/16344324", 0, "claasahl")
-    const params: gh.PullRequestsCreateParams = { owner: "claasahl", repo: "prettier-ci", base: "develop", head: "refs/heads/prettier/develop", title: "Prettified branch: 'develop'", maintainer_can_modify: true, body};
+    const params: gh.PullRequestsCreateParams = { owner: "claasahl", repo: "prettier-ci", base: "develop", head: "refs/heads/prettier/develop", title: "Prettified branch: 'develop'", maintainer_can_modify: DEFAULT_CONFIG.pullRequests.maintainer_can_modify, body};
     expect(github.pullRequests.create).toHaveBeenCalledWith(params)
   })
 

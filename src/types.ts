@@ -24,7 +24,8 @@ export interface Config {
     pullRequests: {
         branch: string,
         title: string,
-        body: string
+        body: string,
+        maintainer_can_modify: boolean
     },
     commitMessage: string,
     errors: {
