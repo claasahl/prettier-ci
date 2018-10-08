@@ -6,8 +6,6 @@ import { Context } from 'probot';
 export type Overwrite < T1 , T2 > = Pick<T1, Exclude<keyof T1, keyof T2>> & T2
 
 export interface Config {
-    REFERENCE_PREFIX: string;
-    COMMIT_MESSAGE_PREFIX: string;
     checks: {
         name: string,
         output: {
@@ -24,9 +22,11 @@ export interface Config {
         }
     },
     pullRequests: {
+        branch: string,
         title: string,
         body: string
     },
+    commitMessage: string,
     errors: {
         checks: {
             action_not_supported: string

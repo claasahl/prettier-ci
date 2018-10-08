@@ -149,7 +149,7 @@ async function requested_action_fix(context: Context, config: Config): Promise<C
 function fix2CreateReferenceParams(context: Context, config: Config): gh.GitdataCreateReferenceParams {
   const owner = context.payload.repository.owner.login
   const repo = context.payload.repository.name
-  const ref = config.REFERENCE_PREFIX + context.payload.check_run.check_suite.head_branch
+  const ref = pug.render(config.pullRequests.branch, {context})
   const sha = context.payload.check_run.head_sha
   return { owner, repo, ref, sha }
 }
@@ -158,7 +158,7 @@ function fix2ReposUpdateFileParams(params: Overwrite<Partial<gh.ReposUpdateFileP
   return (context, config) => {
     const owner = context.payload.repository.owner.login
     const repo = context.payload.repository.name
-    const message = config.COMMIT_MESSAGE_PREFIX + params.path
+    const message = pug.render(config.commitMessage, {context, params})
     return { ...params, owner, repo, message }
   }
 }
@@ -168,7 +168,7 @@ function fix2PullRequestsCreateParams(params: Overwrite<Partial<gh.PullRequestsC
     const owner = context.payload.repository.owner.login
     const repo = context.payload.repository.name
     const base = context.payload.check_run.check_suite.head_branch
-    const title = config.pullRequests.title + base
+    const title = pug.render(config.pullRequests.title, {context})
     return { ...params, owner, repo, title, base }
   }
 }

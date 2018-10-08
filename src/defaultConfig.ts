@@ -1,8 +1,6 @@
 import { Config } from "./types";
 
 export const DEFAULT_CONFIG: Config = {
-    REFERENCE_PREFIX: "refs/heads/prettier/",
-    COMMIT_MESSAGE_PREFIX: "formatted file: ",
     checks: {
         name: "Prettier-CI",
         output: {
@@ -19,9 +17,11 @@ export const DEFAULT_CONFIG: Config = {
         }
     },
     pullRequests: {
-        title: "Prettified branch: ",
+        branch: pugBranch(),
+        title: pugTitle(),
         body: pugBody()
     },
+    commitMessage: pugCommitMessage(),
     errors: {
         checks: {
             action_not_supported: pugActionNotSupported()
@@ -57,10 +57,22 @@ function pugEncodingNotSupported(): string {
     return `| unsupported action requested '#{context.payload.requested_action.identifier}'`
 }
 
+function pugBranch(): string {
+    return `| refs/heads/prettier/#{context.payload.check_run.check_suite.head_branch}`;
+}
+
+function pugTitle(): string {
+    return `| Prettified branch: '#{context.payload.check_run.check_suite.head_branch}'`
+}
+
 function pugBody(): string {
     return `
 - const failedResults = results.filter(result => !result.passed)
 | This [check run](#{context.payload.check_run.html_url}) identified #{failedResults.length} #{failedResults.length == 1 ? "file" : "files"}, which #{failedResults.length == 1 ? "needs" : "need"} formatting.
 |
 | @#{context.payload.sender.login} requested these files to be fixed.`
+}
+
+function pugCommitMessage(): string {
+    return `| formatted file: #{params.path}`;
 }
