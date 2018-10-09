@@ -50,6 +50,7 @@ function pugText(): string {
 unless passed
   | Here is a list of files which be *prettier*.
   each result in failedResults
+    |
     | * #{result.file}`
 }
 

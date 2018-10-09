@@ -114,7 +114,7 @@ describe('tests for file-analysis (check_run)', () => {
     expect(github.repos.getContent).not.toHaveBeenCalledWith(params)
   })
 
-  test('completes file-analysis with correct conclusion', async () => {
+  test('completes file-analysis with correct conclusion (success)', async () => {
     advanceTo(new Date(2018, 5, 27, 0, 0, 0));
     await app.receive(checkRunCreatedEvent)
 
@@ -122,6 +122,22 @@ describe('tests for file-analysis (check_run)', () => {
     await new Promise(resolve => setTimeout(resolve, 2000))
 
     const params: gh.ChecksUpdateParams = { owner: "claasahl", repo: "prettier-ci", check_run_id: "15222485", status: "completed", conclusion: "success", output: {summary: "Pretty. Keep up the **good work**.", title: DEFAULT_CONFIG.checks.output.title, text: ""}, actions: [], completed_at: new Date().toISOString()};
+    expect(github.checks.update).toHaveBeenLastCalledWith(params)
+  })
+
+  test('completes file-analysis with correct conclusion (failure)', async () => {
+    github.repos.compareCommits = jest.fn().mockImplementation(mockReposCompareCommits("./test/templates/unformatted.ts", "./test/templates/unformatted.json"))
+    github.repos.getContent = jest.fn().mockImplementation(mockReposGetContentUnformatted)
+    advanceTo(new Date(2018, 5, 27, 0, 0, 0));
+    await app.receive(checkRunCreatedEvent)
+
+    // TODO app.receive already completes when the event has been received, but not when then event has been processed
+    await new Promise(resolve => setTimeout(resolve, 2000))
+
+    const text = `Here is a list of files which be *prettier*.
+* ./test/templates/unformatted.ts
+* ./test/templates/unformatted.json`
+    const params: gh.ChecksUpdateParams = { owner: "claasahl", repo: "prettier-ci", check_run_id: "15222485", status: "completed", conclusion: "failure", output: {summary: "Found 2 files which could be *prettier*", title: DEFAULT_CONFIG.checks.output.title, text}, actions: [{identifier: "fix", label: "Fix", description: "Make files *prettier*."}], completed_at: new Date().toISOString()};
     expect(github.checks.update).toHaveBeenLastCalledWith(params)
   })
 })
@@ -222,34 +238,34 @@ describe("test for pull request (fix of errors in check_run)", () => {
     const params: gh.PullRequestsMergeParams = { owner: "claasahl", repo: "prettier-ci", number: 3};
     expect(github.pullRequests.merge).toHaveBeenCalledWith(params)
   })
-
-  function mockReposCompareCommits(...files: string[]) {
-    return async () => {
-      const base = reposCompareCommits_200;
-      base.data.files = files.map(file => ({filename: file, status: "modified"}))
-      return base
-    }
-  }
-
-  async function mockReposGetContentFormatted(params: gh.ReposGetContentParams) {
-    const base = reposgetContent_200;
-    const unformatted = fs.readFileSync(params.path).toString()
-    const formatted = prettier.format(unformatted, {filepath: params.path})
-    base.data.name = params.path
-    base.data.path = params.path
-    base.data.content = btoa(formatted)
-    return base
-  }
-
-  async function mockReposGetContentUnformatted(params: gh.ReposGetContentParams) {
-    const base = reposgetContent_200;
-    const unformatted = fs.readFileSync(params.path).toString()
-    base.data.name = params.path
-    base.data.path = params.path
-    base.data.content = btoa(unformatted)
-    return base
-  }
 })
+
+function mockReposCompareCommits(...files: string[]) {
+  return async () => {
+    const base = reposCompareCommits_200;
+    base.data.files = files.map(file => ({filename: file, status: "modified"}))
+    return base
+  }
+}
+
+async function mockReposGetContentFormatted(params: gh.ReposGetContentParams) {
+  const base = reposgetContent_200;
+  const unformatted = fs.readFileSync(params.path).toString()
+  const formatted = prettier.format(unformatted, {filepath: params.path})
+  base.data.name = params.path
+  base.data.path = params.path
+  base.data.content = btoa(formatted)
+  return base
+}
+
+async function mockReposGetContentUnformatted(params: gh.ReposGetContentParams) {
+  const base = reposgetContent_200;
+  const unformatted = fs.readFileSync(params.path).toString()
+  base.data.name = params.path
+  base.data.path = params.path
+  base.data.content = btoa(unformatted)
+  return base
+}
 
 // For more information about using TypeScript in your tests, Jest recommends:
 // https://github.com/kulshekhar/ts-jest
