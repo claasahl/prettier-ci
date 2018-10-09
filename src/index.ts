@@ -4,6 +4,12 @@ import * as check_suite from './events/check_suite'
 import { Config } from './types';
 import { DEFAULT_CONFIG } from './defaultConfig';
 
+import * as jsonwebtoken from "jsonwebtoken"
+import {findPrivateKey} from "probot/lib/private-key"
+import * as fs from "fs"
+import * as git from "isomorphic-git"
+import { deepStrictEqual } from 'assert';
+
 function withConfig(callback: (context: Context, config: Config) => Promise<void>): (context: Context) => Promise<void> {
   return async context => {
     const config = await context.config("prettier-ci.yml", DEFAULT_CONFIG);
@@ -17,6 +23,39 @@ export = (app: Application) => {
 
   app.on(`*`, async context => {
     context.log({ event: context.event, action: context.payload.action })
+  })
+  
+  app.on("check_suite.completed", async context => {
+    var options = {
+      id: process.env.APP_ID,
+      cert: findPrivateKey()
+    }
+    var payload = {
+      exp: Math.floor(Date.now() / 1000) + 60,
+      iat: Math.floor(Date.now() / 1000),
+      iss: options.id // GitHub App ID
+    };
+    const jwt = jsonwebtoken.sign(payload, options.cert, { algorithm: 'RS256' })
+    context.github.authenticate({type: "app", token: jwt})
+    const response = await context.github.apps.createInstallationToken({installation_id: context.payload.installation.id})
+    context.log(response)
+    const {token} = response.data
+    git.plugins.set('fs', fs)
+
+    const owner = context.payload.repository.owner.login
+    const repo = context.payload.repository.name
+    const url = `https://x-access-token:${token}@github.com/${owner}/${repo}.git`
+    const dir = `../repos/${owner}/${repo}`
+    if(!fs.existsSync("./repos")) {
+      fs.mkdirSync("./repos")
+    }
+    if(!fs.existsSync(`./repos/${owner}`)) {
+      fs.mkdirSync(`./repos/${owner}`)
+    }
+    if(!fs.existsSync(`./repos/${owner}/${repo}`)) {
+      fs.mkdirSync(`./repos/${owner}/${repo}`)
+    }
+    git.clone({url, dir})
   })
 
   app.on("check_suite.requested", withConfig(check_suite.requested))
