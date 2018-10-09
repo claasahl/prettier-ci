@@ -8,7 +8,7 @@ import * as jsonwebtoken from "jsonwebtoken"
 import {findPrivateKey} from "probot/lib/private-key"
 import * as fs from "fs"
 import * as git from "isomorphic-git"
-import { deepStrictEqual } from 'assert';
+import * as prettier from "prettier"
 
 function withConfig(callback: (context: Context, config: Config) => Promise<void>): (context: Context) => Promise<void> {
   return async context => {
@@ -54,8 +54,31 @@ export = (app: Application) => {
     }
     if(!fs.existsSync(`./repos/${owner}/${repo}`)) {
       fs.mkdirSync(`./repos/${owner}/${repo}`)
+      await git.clone({url, dir, ref: "develop"})
+    } else {
+      await git.checkout({dir, ref: "develop"})
+      //await git.checkout({dir, ref: "9b22733cacbde8c00a5136059a70630b214a12df"})
     }
-    git.clone({url, dir})
+
+    const info = prettier.getSupportInfo();
+    const extensions = info.languages.map(language => language.extensions).reduce((acc, val) => acc.concat(val), [])
+    
+    const encoding = "utf8"
+    const files = fs.readdirSync(dir, {encoding})
+    for(const file of files) {
+      const lstat = fs.lstatSync(file);
+      if(lstat.isFile()) {
+        if(extensions.filter(extensions => file.endsWith(extensions)).length > 0) {
+          const passed = prettier.check(fs.readFileSync(file, {encoding}), {filepath: file})
+          console.log(file, passed)
+        } else {
+          console.log(file, "not supported")
+        }
+      } else if(lstat.isDirectory()) {
+        // TODO recursion
+        console.log(file, "directory")
+      }
+    }
   })
 
   app.on("check_suite.requested", withConfig(check_suite.requested))
