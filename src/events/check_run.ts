@@ -9,10 +9,14 @@ import atob from "atob";
 import * as pug from "pug"
 
 export async function created(context: Context, config: Config): Promise<void> {
+  const info = prettier.getSupportInfo();
+  const extensions = info.languages.map(language => language.extensions).reduce((acc, val) => acc.concat(val), [])
+
   await markCheckAsInProgress(context, config);
   const {files, ref} = await fetchModifiedFiles(context, config);
+  const filteredFiles = files.filter(file => extensions.filter(extensions => file.endsWith(extensions)).length > 0)
   const results: {file: string, passed: boolean}[] = [];
-  for(const file of files) {
+  for(const file of filteredFiles) {
     const {content} = await fetchContent({context, config, file, sha: ref})
     const {passed} = await checkContent({context, config, file, content})
     results.push({file, passed})
@@ -127,11 +131,15 @@ export async function requested_action(context: Context, config: Config): Promis
 }
 
 async function requested_action_fix(context: Context, config: Config): Promise<Context> {
+  const info = prettier.getSupportInfo();
+  const extensions = info.languages.map(language => language.extensions).reduce((acc, val) => acc.concat(val), [])
+
   const createReference = await gitdata.createReference(context, config, fix2CreateReferenceParams)
   const branch = createReference.response.data.ref
   const {files} = await fetchModifiedFiles(context, config);
+  const filteredFiles = files.filter(file => extensions.filter(extensions => file.endsWith(extensions)).length > 0)
   const results: {file: string, passed: boolean}[] = [];
-  for(const file of files) {
+  for(const file of filteredFiles) {
     const {content, sha} = await fetchContent({context, config, file, sha: branch})
     const {passed} = await checkContent({context, config, file, content})
     if(!passed) {
@@ -142,7 +150,7 @@ async function requested_action_fix(context: Context, config: Config): Promise<C
   }
   const body = pug.render(config.pullRequests.body, {event: context.payload, results})
   const { response } = await pullRequests.create(context, config, fix2PullRequestsCreateParams({head: branch, body, maintainer_can_modify: true}))
-  pullRequests.merge(context, config, fix2PullRequestsMergeParams({number: response.data.number}))
+  pullRequests.merge(context, config, fix2PullRequestsMergeParams({number: response.data.number as number}))
   // delete branch
   return context 
 }
