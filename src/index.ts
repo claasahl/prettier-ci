@@ -53,6 +53,7 @@ export = (app: Application) => {
     if (!fs.existsSync(dir)) {
       await git.clone({ url, dir, ref: "develop" });
     } else {
+      await git.fetch({dir})
       await git.checkout({ dir, ref: "remotes/origin/develop" });
       await git.deleteBranch({ dir, ref: "develop" });
       await git.checkout({ dir, ref: "develop" });
