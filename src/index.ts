@@ -48,18 +48,17 @@ export = (app: Application) => {
 
     const owner = context.payload.repository.owner.login;
     const repo = context.payload.repository.name;
-    const url = `https://x-access-token:${token}@github.com/${owner}/${repo}.git`;
+    const url = `https://github.com/${owner}/${repo}.git`;
     const dir = `../repos/${owner}/${repo}`;
     if (!fs.existsSync(dir)) {
-      await git.clone({ url, dir, ref: "develop" });
+      await git.clone({ url, dir, ref: "develop", username: "x-access-token", password: token });
     } else {
-      await git.fetch({dir})
+      await git.fetch({dir, username: "x-access-token", password: token });
       await git.checkout({ dir, ref: "remotes/origin/develop" });
-      await git.deleteBranch({ dir, ref: "develop" });
-      await git.checkout({ dir, ref: "develop" });
+      await git.deleteBranch({dir, ref: "develop"})
+      await git.checkout({dir, ref: "develop"})
       //await git.checkout({dir, ref: "9b22733cacbde8c00a5136059a70630b214a12df"})
     }
-
     const info = prettier.getSupportInfo();
     const extensions = info.languages
       .map(language => language.extensions)
@@ -114,7 +113,7 @@ export = (app: Application) => {
         email: "no@ema.il"
       };
       const message = "formatted sources";
-      git.commit({ dir, author, message });
+      await git.commit({ dir, author, message });
     } else {
       console.log("no changes. nice!");
     }
