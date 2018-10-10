@@ -1,6 +1,7 @@
-import { Config } from "./types";
+import { Config, Mode } from "./types";
 
 export const DEFAULT_CONFIG: Config = {
+    mode: Mode.auto,
     checks: {
         name: "Prettier-CI",
         output: {
