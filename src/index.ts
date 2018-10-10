@@ -29,57 +29,95 @@ export = (app: Application) => {
     var options = {
       id: process.env.APP_ID,
       cert: findPrivateKey()
-    }
+    };
     var payload = {
       exp: Math.floor(Date.now() / 1000) + 60,
       iat: Math.floor(Date.now() / 1000),
       iss: options.id // GitHub App ID
     };
-    const jwt = jsonwebtoken.sign(payload, options.cert, { algorithm: 'RS256' })
-    context.github.authenticate({type: "app", token: jwt})
-    const response = await context.github.apps.createInstallationToken({installation_id: context.payload.installation.id})
-    context.log(response)
-    const {token} = response.data
-    git.plugins.set('fs', fs)
+    const jwt = jsonwebtoken.sign(payload, options.cert, {
+      algorithm: "RS256"
+    });
+    context.github.authenticate({ type: "app", token: jwt });
+    const response = await context.github.apps.createInstallationToken({
+      installation_id: context.payload.installation.id
+    });
+    context.log(response);
+    const { token } = response.data;
+    git.plugins.set("fs", fs);
 
-    const owner = context.payload.repository.owner.login
-    const repo = context.payload.repository.name
-    const url = `https://x-access-token:${token}@github.com/${owner}/${repo}.git`
-    const dir = `../repos/${owner}/${repo}`
-    if(!fs.existsSync("./repos")) {
-      fs.mkdirSync("./repos")
-    }
-    if(!fs.existsSync(`./repos/${owner}`)) {
-      fs.mkdirSync(`./repos/${owner}`)
-    }
-    if(!fs.existsSync(`./repos/${owner}/${repo}`)) {
-      fs.mkdirSync(`./repos/${owner}/${repo}`)
-      await git.clone({url, dir, ref: "develop"})
+    const owner = context.payload.repository.owner.login;
+    const repo = context.payload.repository.name;
+    const url = `https://x-access-token:${token}@github.com/${owner}/${repo}.git`;
+    const dir = `../repos/${owner}/${repo}`;
+    if (!fs.existsSync(dir)) {
+      await git.clone({ url, dir, ref: "develop" });
     } else {
-      await git.checkout({dir, ref: "develop"})
+      await git.checkout({ dir, ref: "remotes/origin/develop" });
+      await git.deleteBranch({ dir, ref: "develop" });
+      await git.checkout({ dir, ref: "develop" });
       //await git.checkout({dir, ref: "9b22733cacbde8c00a5136059a70630b214a12df"})
     }
 
     const info = prettier.getSupportInfo();
-    const extensions = info.languages.map(language => language.extensions).reduce((acc, val) => acc.concat(val), [])
-    
-    const encoding = "utf8"
-    const files = fs.readdirSync(dir, {encoding})
-    for(const file of files) {
-      const lstat = fs.lstatSync(file);
-      if(lstat.isFile()) {
-        if(extensions.filter(extensions => file.endsWith(extensions)).length > 0) {
-          const passed = prettier.check(fs.readFileSync(file, {encoding}), {filepath: file})
-          console.log(file, passed)
-        } else {
-          console.log(file, "not supported")
+    const extensions = info.languages
+      .map(language => language.extensions)
+      .reduce((acc, val) => acc.concat(val), []);
+
+    const encoding = "utf8";
+    function readDir(dir: string): string[] {
+      const files = fs.readdirSync(dir, { encoding });
+      for (const file of fs.readdirSync(dir, { encoding })) {
+        const lstat = fs.lstatSync(dir + "/" + file);
+        if (lstat.isDirectory()) {
+          files.push(
+            ...readDir(dir + "/" + file).map(entry => file + "/" + entry)
+          );
         }
-      } else if(lstat.isDirectory()) {
+      }
+      return files;
+    }
+
+    const files = readDir(dir);
+    let formattedSources = false;
+    for (const file of files) {
+      const lstat = fs.lstatSync(dir + "/" + file);
+      if (lstat.isFile()) {
+        if (
+          extensions.filter(extensions => file.endsWith(extensions)).length > 0
+        ) {
+          const source = fs.readFileSync(dir + "/" + file, { encoding });
+          const passed = prettier.check(source, { filepath: file });
+          if (!passed) {
+            const formattedSource = await prettier.format(source, {
+              filepath: file
+            });
+            fs.writeFileSync(dir + "/" + file, formattedSource);
+            await git.add({ filepath: file, dir });
+            formattedSources = true;
+          }
+          console.log(file, passed);
+        } else {
+          console.log(file, "not supported");
+        }
+      } else if (lstat.isDirectory()) {
         // TODO recursion
-        console.log(file, "directory")
+        //files = [...files, ...fs.readdirSync(file, {encoding})]
+        console.log(file, "directory");
       }
     }
-  })
+    if (formattedSources) {
+      console.log("committing changes.");
+      const author = {
+        name: "prettier-ci",
+        email: "no@ema.il"
+      };
+      const message = "formatted sources";
+      git.commit({ dir, author, message });
+    } else {
+      console.log("no changes. nice!");
+    }
+  });
 
   app.on("check_suite.requested", withConfig(check_suite.requested))
   app.on("check_suite.rerequested", withConfig(check_suite.requested))
