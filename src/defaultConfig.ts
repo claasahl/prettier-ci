@@ -5,7 +5,7 @@ export const DEFAULT_CONFIG: Config = {
     checks: {
         name: "Prettier-CI",
         output: {
-            title: "Prettier-CI",
+            title: "Summary",
             summary: pugSummary(),
             text: pugText()
         },

@@ -13,6 +13,7 @@ export class CompleteChecks extends BaseChecks {
   private dir: string;
   private installationId: string;
   private readonly encoding = "utf8";
+  private readonly ref: string;
   constructor(context: Context, config: Config) {
     super(context, config)
     git.plugins.set("fs", fs);
@@ -21,10 +22,11 @@ export class CompleteChecks extends BaseChecks {
     this.url = new URL(`https://github.com/${owner}/${repo}.git`).toString()
     this.dir = `../repos/${owner}/${repo}`
     this.installationId = context.payload.installation.id
+    this.ref = context.payload.check_run.head_sha
   }
 
   protected async files(): Promise<string[]> {
-    await this.cloneOrUpdateRepository()
+    await this.cloneOrUpdateRepository(this.ref)
     return this.readDir(this.dir).filter(file => !file.startsWith(".git/"))
   }
 
@@ -47,7 +49,7 @@ export class CompleteChecks extends BaseChecks {
         });
   }
   
-  async cloneOrUpdateRepository() {
+  async cloneOrUpdateRepository(ref: string) {
     const api = GitHubAPI()
     const jwt = await this.generateJWT()
     api.authenticate({ type: "app", token: jwt });
@@ -55,14 +57,11 @@ export class CompleteChecks extends BaseChecks {
     const {token} = response.data
   
     if (!fs.existsSync(this.dir)) {
-      await git.clone({ url: this.url, dir: this.dir, ref: "develop", username: "x-access-token", password: token });
+      await git.clone({ url: this.url, dir: this.dir, username: "x-access-token", password: token });
     } else {
-      await git.fetch({dir: this.dir, username: "x-access-token", password: token });
-      await git.checkout({ dir: this.dir, ref: "remotes/origin/develop" });
-      await git.deleteBranch({dir: this.dir, ref: "develop"})
-      await git.checkout({dir: this.dir, ref: "develop"})
-      //await git.checkout({dir, ref: "9b22733cacbde8c00a5136059a70630b214a12df"})
+      await git.fetch({dir: this.dir, username: "x-access-token", password: token});
     }
+    await git.checkout({dir: this.dir, ref})
   }
 
   readDir(dir: string): string[] {

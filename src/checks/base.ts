@@ -55,7 +55,8 @@ export abstract class BaseChecks {
     }
 
     protected async markAsCancelled(): Promise<void> {
-        await checks.update(this.context, this.config, () => ({ ...this.updateCheckRunProps, status: "completed", conclusion: "cancelled" }));
+        const completed_at = new Date().toISOString()
+        await checks.update(this.context, this.config, () => ({ ...this.updateCheckRunProps, status: "completed", conclusion: "cancelled", completed_at }));
     }
 
     async onCheckRun(): Promise<void> {
