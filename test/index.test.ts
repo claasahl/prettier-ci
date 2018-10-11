@@ -124,8 +124,10 @@ describe('tests for file-analysis (check_run) in a large repository', () => {
 
     // TODO app.receive already completes when the event has been received, but not when then event has been processed
     await new Promise(resolve => setTimeout(resolve, 2000))
-
-    const params: gh.ChecksUpdateParams = { owner: "claasahl", repo: "prettier-ci", check_run_id: "15222485", status: "completed", conclusion: "success", output: {summary: "Pretty. Keep up the **good work**.", title: DEFAULT_CONFIG.checks.output.title, text: ""}, actions: [], completed_at: new Date().toISOString()};
+    
+    const summary = "Keep up the **good work**. Your file is neatly formatted."
+    const text = "I thoroughly checked 1 file. All files are neatly formatted (passed: 1 file, skipped: no files). Congratulations!"
+    const params: gh.ChecksUpdateParams = { owner: "claasahl", repo: "prettier-ci", check_run_id: "15222485", status: "completed", conclusion: "success", output: {summary, title: DEFAULT_CONFIG.checks.output.title, text}, actions: [], completed_at: new Date().toISOString()};
     expect(github.checks.update).toHaveBeenLastCalledWith(params)
   })
 
@@ -138,9 +140,12 @@ describe('tests for file-analysis (check_run) in a large repository', () => {
     // TODO app.receive already completes when the event has been received, but not when then event has been processed
     await new Promise(resolve => setTimeout(resolve, 2000))
 
-    const text = `Here is a list of files which be *prettier*.
+    const text = `I thoroughly checked 2 files. Some files are not neatly formatted, but have no fear! I can fix this, if you tell me to do so.
+
+Here is a list of files which be *prettier* (2 files).
 * ./test/templates/unformatted.ts
-* ./test/templates/unformatted.json`
+* ./test/templates/unformatted.json
+You can instruct me to fix this by clicking on "Fix".`
     const params: gh.ChecksUpdateParams = { owner: "claasahl", repo: "prettier-ci", check_run_id: "15222485", status: "completed", conclusion: "failure", output: {summary: "Found 2 files which could be *prettier*", title: DEFAULT_CONFIG.checks.output.title, text}, actions: [{identifier: "fix", label: "Fix", description: "Make files *prettier*."}], completed_at: new Date().toISOString()};
     expect(github.checks.update).toHaveBeenLastCalledWith(params)
   })

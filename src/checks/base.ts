@@ -40,12 +40,11 @@ export abstract class BaseChecks {
     }
 
     protected async markAsCompleted(skipped: string[], passed: string[], failed: string[]): Promise<void> {
-        const results = [...[...passed, ...skipped].map(f => ({file: f, passed: true})), ...failed.map(f => ({file: f, passed: false}))]
         const completed_at = new Date().toISOString()
         const output = {
             title: this.config.checks.output.title,
-            summary: pug.render(this.config.checks.output.summary, {results}),
-            text: pug.render(this.config.checks.output.text, {results})
+            summary: pug.render(this.config.checks.output.summary, {skipped, passed, failed}),
+            text: pug.render(this.config.checks.output.text, {skipped, passed, failed})
         }
         const conclusion = failed.length > 0 ? "failure" : "success"
         let actions: gh.ChecksUpdateParamsActions[] = []
@@ -55,24 +54,33 @@ export abstract class BaseChecks {
         await checks.update(this.context, this.config, () => ({ ...this.updateCheckRunProps, status: "completed", conclusion, completed_at, output, actions }))
     }
 
+    protected async markAsCancelled(): Promise<void> {
+        await checks.update(this.context, this.config, () => ({ ...this.updateCheckRunProps, status: "completed", conclusion: "cancelled" }));
+    }
+
     async onCheckRun(): Promise<void> {
-        await this.markAsInProgress();
-        const files = await this.files()
-        const skipped: string[] = []
-        const passed: string[] = []
-        const failed: string[] = []
-        for (const file of files) {
-            if (await this.skip(file)) {
-                skipped.push(file)
-                continue
+        try {
+            await this.markAsInProgress();
+            const files = await this.files()
+            const skipped: string[] = []
+            const passed: string[] = []
+            const failed: string[] = []
+            for (const file of files) {
+                if (await this.skip(file)) {
+                    skipped.push(file)
+                    continue
+                }
+                const content = await this.content(file);
+                if (await this.check(file, content)) {
+                    passed.push(file)
+                } else {
+                    failed.push(file)
+                }
             }
-            const content = await this.content(file);
-            if (await this.check(file, content)) {
-                passed.push(file)
-            } else {
-                failed.push(file)
-            }
+            await this.markAsCompleted(skipped, passed, failed);
+        } catch(error) {
+            this.context.log(error)
+            await this.markAsCancelled();
         }
-        await this.markAsCompleted(skipped, passed, failed);
     }
 }
