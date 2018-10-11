@@ -1,5 +1,6 @@
 import * as gh from "@octokit/rest";
 import * as prettier from "prettier"
+import * as pug from "pug"
 import { Context } from 'probot'
 import { Config } from '../types'
 import { checks } from "../actions/github"
@@ -39,14 +40,19 @@ export abstract class BaseChecks {
     }
 
     protected async markAsCompleted(skipped: string[], passed: string[], failed: string[]): Promise<void> {
+        const results = [...[...passed, ...skipped].map(f => ({file: f, passed: true})), ...failed.map(f => ({file: f, passed: false}))]
         const completed_at = new Date().toISOString()
         const output = {
-            title: "",
-            summary: "",
-            text: JSON.stringify({skipped, passed, failed}, null, 2)
+            title: this.config.checks.output.title,
+            summary: pug.render(this.config.checks.output.summary, {results}),
+            text: pug.render(this.config.checks.output.text, {results})
         }
         const conclusion = failed.length > 0 ? "failure" : "success"
-        await checks.update(this.context, this.config, () => ({ ...this.updateCheckRunProps, status: "completed", conclusion, completed_at, output }))
+        let actions: gh.ChecksUpdateParamsActions[] = []
+        if (failed.length > 0) {
+            actions.push(this.config.checks.actions.fix)
+        }
+        await checks.update(this.context, this.config, () => ({ ...this.updateCheckRunProps, status: "completed", conclusion, completed_at, output, actions }))
     }
 
     async onCheckRun(): Promise<void> {

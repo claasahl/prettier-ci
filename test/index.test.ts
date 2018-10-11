@@ -65,10 +65,14 @@ describe('tests conditions for triggering a file-analysis', () => {
   })
 })
 
-describe('tests for file-analysis (check_run)', () => {
-  let app, github
+describe('tests for file-analysis (check_run) in a large repository', () => {
+  let app, github, event
 
   beforeEach(() => {
+    // make repository appear large
+    event = {...checkRunCreatedEvent}
+    event.payload.repository.size = 9999999
+
     app = new Application()
     // Initialize the app based on the code from index.js
     app.load(myProbotApp)
@@ -88,21 +92,21 @@ describe('tests for file-analysis (check_run)', () => {
   })
 
   test('mark check as "in_progress" when check_run is created', async () => {
-    await app.receive(checkRunCreatedEvent)
+    await app.receive(event)
 
     const params: gh.ChecksUpdateParams = { owner: "claasahl", repo: "prettier-ci", check_run_id: "15222485", status: "in_progress"};
     expect(github.checks.update).toHaveBeenCalledWith(params)
   })
 
   test('compares before/after commits for check_run', async () => {
-    await app.receive(checkRunCreatedEvent)
+    await app.receive(event)
 
     const params: gh.ReposCompareCommitsParams = { owner: "claasahl", repo: "prettier-ci", base: "923547128e3e9fe26c4192bb45fcf125dae92c4b", head: "52c67357a6b1858226c131d13d7d44e8303fd426"};
     expect(github.repos.compareCommits).toHaveBeenCalledWith(params)
   })
 
   test('retrieves contents for file-version for check_run', async () => {
-    await app.receive(checkRunCreatedEvent)
+    await app.receive(event)
 
     // TODO app.receive already completes when the event has been received, but not when then event has been processed
     await new Promise(resolve => setTimeout(resolve, 2000))
@@ -116,7 +120,7 @@ describe('tests for file-analysis (check_run)', () => {
 
   test('completes file-analysis with correct conclusion (success)', async () => {
     advanceTo(new Date(2018, 5, 27, 0, 0, 0));
-    await app.receive(checkRunCreatedEvent)
+    await app.receive(event)
 
     // TODO app.receive already completes when the event has been received, but not when then event has been processed
     await new Promise(resolve => setTimeout(resolve, 2000))
@@ -129,7 +133,7 @@ describe('tests for file-analysis (check_run)', () => {
     github.repos.compareCommits = jest.fn().mockImplementation(mockReposCompareCommits("./test/templates/unformatted.ts", "./test/templates/unformatted.json"))
     github.repos.getContent = jest.fn().mockImplementation(mockReposGetContentUnformatted)
     advanceTo(new Date(2018, 5, 27, 0, 0, 0));
-    await app.receive(checkRunCreatedEvent)
+    await app.receive(event)
 
     // TODO app.receive already completes when the event has been received, but not when then event has been processed
     await new Promise(resolve => setTimeout(resolve, 2000))

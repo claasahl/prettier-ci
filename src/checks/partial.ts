@@ -21,7 +21,7 @@ export class PartialChecks extends BaseChecks {
         }
         this.getContentProps = {
             owner, repo,
-            ref: context.payload.check_run.check_suite,
+            ref: context.payload.check_run.check_suite.head_sha,
             path: "TO BE REPLACED"
         }
     }
