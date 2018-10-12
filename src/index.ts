@@ -49,7 +49,7 @@ async function onCheckRun(context: Context, config: Config) {
   } else if(mode === Mode.complete) {
     checks = new CompleteChecks(context, config)
   } else {
-    throw new Error("unsupported mode: ")
+    throw new Error("unsupported mode: " + mode)
   }
   await checks.onCheckRun();
 }
