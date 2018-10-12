@@ -8,31 +8,6 @@ import btoa from "btoa";
 import atob from "atob";
 import * as pug from "pug"
 
-export async function created(context: Context, config: Config): Promise<void> {
-  const info = prettier.getSupportInfo();
-  const extensions = info.languages.map(language => language.extensions).reduce((acc, val) => acc.concat(val), [])
-
-  await markCheckAsInProgress(context, config);
-  const {files, ref} = await fetchModifiedFiles(context, config);
-  const filteredFiles = files.filter(file => extensions.filter(extensions => file.endsWith(extensions)).length > 0)
-  const results: {file: string, passed: boolean}[] = [];
-  for(const file of filteredFiles) {
-    const {content} = await fetchContent({context, config, file, sha: ref})
-    const {passed} = await checkContent({context, config, file, content})
-    results.push({file, passed})
-  }
-  const report = asReport(results, config)
-  await markCheckAsCompleted({context, config, report})
-}
-
-function created2ChecksUpdateParams(params: Partial<gh.ChecksUpdateParams>): Projection<gh.ChecksUpdateParams> {
-  return (context) => {
-    const owner = context.payload.repository.owner.login
-    const repo = context.payload.repository.name
-    const check_run_id = `${context.payload.check_run.id}`
-    return { ...params, owner, repo, check_run_id }
-  }
-}
 
 function created2ReposCompareCommitsParams(context: Context): gh.ReposCompareCommitsParams {
   const owner = context.payload.repository.owner.login
@@ -48,11 +23,6 @@ function created2ReposGetContent(params: Overwrite<Partial<gh.ReposGetContentPar
     const { head_branch } = context.payload.check_run.check_suite
     return { owner, repo, ref: head_branch, ...params }
   }
-}
-
-async function markCheckAsInProgress(context: Context, config: Config): Promise<Context> {
-  const result = await checks.update(context, config, created2ChecksUpdateParams({status: "in_progress"}));
-  return result.context
 }
 
 async function fetchModifiedFiles(context: Context, config: Config): Promise<{context: Context, files: string[], ref: string}> {
@@ -84,13 +54,6 @@ async function formatContent(data: {context: Context, file: string, content: str
   return {context: data.context, file: data.file, content: formatted}
 }
 
-async function markCheckAsCompleted(data: {context: Context, config: Config, report: Partial<gh.ChecksUpdateParams>}): Promise<Context> {
-  const completed_at = new Date().toISOString()
-  const result = await checks.update(data.context, data.config, created2ChecksUpdateParams({...data.report, status: "completed", completed_at}))
-  return result.context
-}
-
-
 export async function rerequested(context: Context, config: Config): Promise<void> {
    await checks.create(context, config, rerequested2ChecksCreateParams)
 }
@@ -101,25 +64,6 @@ function rerequested2ChecksCreateParams(context: Context, config: Config): gh.Ch
   const head_sha = context.payload.check_run.head_sha
   return { owner, repo, name: config.checks.name, head_sha }
 }
-
-interface FileCheck {
-  file: string,
-  passed: boolean
-}
-
-
-function asReport(results: FileCheck[], config: Config): Partial<gh.ChecksUpdateParams> {
-  const failedResults = results.filter(result => !result.passed)
-  const passed = failedResults.length === 0
-  const summary = pug.render(config.checks.output.summary, {results})
-  const text = pug.render(config.checks.output.text, {results})
-  let actions: gh.ChecksUpdateParamsActions[] = []
-  if (!passed) {
-    actions.push(config.checks.actions.fix)
-  }
-  return {output: { title: config.checks.output.title, summary, text }, conclusion: passed ? "success" : "failure", actions}
-}
-
 
 export async function requested_action(context: Context, config: Config): Promise<void> {
   const {identifier} = context.payload.requested_action;
