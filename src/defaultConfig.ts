@@ -98,11 +98,11 @@ function pugEncodingNotSupported(): string {
 }
 
 function pugBranch(): string {
-    return `| refs/heads/prettier/#{event.check_run.check_suite.head_branch}`;
+    return `| refs/heads/prettier/#{branch}`;
 }
 
 function pugTitle(): string {
-    return `| Prettified branch: '#{event.check_run.check_suite.head_branch}'`
+    return `| Prettified branch: '#{branch}'`
 }
 
 function pugBody(): string {

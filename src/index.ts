@@ -7,6 +7,8 @@ import { DEFAULT_CONFIG } from './defaultConfig';
 import { PartialChecks } from './checks/partial';
 import { CompleteChecks } from './checks/complete';
 import { BaseChecks } from './checks/base';
+import { PartialFixAction } from './actions/partial_fix';
+import { BaseFixAction } from './actions/base_fix';
 
 function withConfig(callback: (context: Context, config: Config) => Promise<void>): (context: Context) => Promise<void> {
   return async context => {
@@ -27,7 +29,7 @@ export = (app: Application) => {
   app.on("check_suite.rerequested", withConfig(check_suite.requested))
   app.on("check_run.rerequested", withConfig(check_run.rerequested))
   app.on("check_run.created", withConfig(onCheckRun))
-  app.on("check_run.requested_action", withConfig(check_run.requested_action))
+  app.on("check_run.requested_action", withConfig(onFixRequest))
   
   // For more information on building apps:
   // https://probot.github.io/docs/
@@ -52,4 +54,10 @@ async function onCheckRun(context: Context, config: Config) {
     throw new Error("unsupported mode: " + mode)
   }
   await checks.onCheckRun();
+}
+
+async function onFixRequest(context: Context, config: Config) {
+  let fixAction: BaseFixAction
+  fixAction = new PartialFixAction(context, config)
+  await fixAction.onRequestedAction(false)
 }
