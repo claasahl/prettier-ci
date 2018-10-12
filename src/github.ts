@@ -1,6 +1,6 @@
 import * as gh from "@octokit/rest";
 import { Context } from "probot";
-import { Projection, Config } from "../types";
+import { Projection, Config } from "./types";
 
 
 export namespace gitdata {

@@ -1,5 +1,5 @@
 import * as gh from "@octokit/rest";
-import { gitdata, checks, repos, pullRequests } from "../actions/github"
+import { gitdata, checks, repos, pullRequests } from "../github"
 import { Context } from 'probot'
 import * as prettier from "prettier"
 

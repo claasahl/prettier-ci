@@ -1,7 +1,7 @@
 import * as gh from "@octokit/rest";
 import * as pug from "pug"
 import { BaseChecks } from "./base"
-import { repos } from "../actions/github"
+import { repos } from "../github"
 import { Context } from "probot";
 import { Config } from "../types";
 import atob from "atob";

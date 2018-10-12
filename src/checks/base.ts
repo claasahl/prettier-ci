@@ -3,7 +3,7 @@ import * as prettier from "prettier"
 import * as pug from "pug"
 import { Context } from 'probot'
 import { Config } from '../types'
-import { checks } from "../actions/github"
+import { checks } from "../github"
 
 export abstract class BaseChecks {
     protected context: Context;

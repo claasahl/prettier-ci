@@ -1,5 +1,5 @@
 import * as gh from "@octokit/rest";
-import { checks} from "../actions/github"
+import { checks} from "../github"
 import { Context } from 'probot'
 import { Config } from "../types";
 
