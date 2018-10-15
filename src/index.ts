@@ -1,17 +1,9 @@
 import { Application } from "probot";
 import * as git from "isomorphic-git";
 import * as fs from "fs";
-// import rimraf from "rimraf";
-// import { promisify } from 'util';
 import shelljs from "shelljs";
 
 export = (app: Application) => {
-  // const rmDir = promisify(rimraf);
-  // const readDir = promisify(fs.readdir);
-  // const lstat = promisify(fs.lstat);
-  // const readFile = promisify(fs.readFile);
-  // const writeFile = promisify(fs.writeFile);
-  // const encoding = "utf8";
   git.plugins.set("fs", fs);
 
   // Your code here
@@ -63,7 +55,6 @@ export = (app: Application) => {
     await git.checkout({ dir, ref });
 
     // #2.3
-    // formatFiles(dir)
     const { stdout: files } = shelljs.exec(`cd ${dir} && prettier -l --write ./**`);
     const formattedFiles = files.trim().split(/\r?\n/);
     const failedCheck = formattedFiles.length > 0
@@ -81,27 +72,7 @@ export = (app: Application) => {
 
     // #2.5
     shelljs.rm("-rf", dir);
-    // await rmDir(dir, {disableGlob: true})
   });
-
-  // async function formatFile(file: string): Promise<boolean> {
-  //   const source = (await readFile(file, {encoding})).toString();
-  //   const formatted = prettier.format(source, {filepath: file});
-  //   await writeFile(file, formatted, {encoding})
-  //   return source == formatted
-  // }
-
-  // async function formatFiles(dir: string) {
-  //   const files = await readDir(dir, {encoding})
-  //   for(const file of files) {
-  //     const stat = await lstat(file)
-  //     if(stat.isFile()) {
-  //       await formatFile(file);
-  //     } else if(stat.isDirectory()) {
-  //       await formatFiles(file);
-  //     }
-  //   }
-  // }
 
   // For more information on building apps:
   // https://probot.github.io/docs/

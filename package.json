@@ -21,18 +21,14 @@
   },
   "dependencies": {
     "isomorphic-git": "^0.37.3",
-    "mkdirp": "^0.5.1",
     "prettier": "^1.14.3",
     "probot": "^7.0.0",
-    "rimraf": "^2.6.2",
     "shelljs": "^0.8.2"
   },
   "devDependencies": {
     "@types/jest": "^23.1.5",
-    "@types/mkdirp": "^0.5.2",
     "@types/node": "^10.5.2",
     "@types/prettier": "^1.13.2",
-    "@types/rimraf": "^2.0.2",
     "@types/shelljs": "^0.8.0",
     "jest": "^23.4.0",
     "nodemon": "^1.17.2",
