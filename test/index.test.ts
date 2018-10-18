@@ -1,8 +1,14 @@
+import { mocked } from 'ts-jest/utils';
 import { Application } from 'probot'
 // Requiring our app implementation
 import myProbotApp from '../src'
+import * as CheckSuite from "../src/events/check_suite";
 
 import checkSuiteRequested from './fixtures/events/check_suite.requested.json';
+import checkSuiteRerequested from './fixtures/events/check_suite.rerequested.json';
+
+jest.mock("../src/events/check_suite")
+const mockedCheckSuite = mocked(CheckSuite)
 
 describe('My Probot app', () => {
   let app: Application
@@ -19,18 +25,16 @@ describe('My Probot app', () => {
       }
     }
     // Passes the mocked out GitHub API into out app instance
-    app.auth = () => Promise.resolve(github)
+    app.auth = () => Promise.resolve(github);
   })
 
-  test('creates a comment when an issue is opened', async () => {
-    // Simulates delivery of an issues.opened webhook
+  test("forward 'check_suite.requested'", async () => {
     await app.receive({
       name: 'check_suite.requested',
       payload: checkSuiteRequested
     })
 
-    // This test passes if the code in your index.ts file calls `context.github.issues.createComment`
-    expect(github.checks.create).toHaveBeenCalled()
+    expect(mockedCheckSuite.requested).toHaveBeenCalledTimes(1)
   })
 })
 

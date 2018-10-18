@@ -1,6 +1,7 @@
 import { Application } from "probot";
 import * as git from "isomorphic-git";
 import * as fs from "fs";
+import * as CheckSuite from "./events/check_suite";
 import shelljs from "shelljs";
 
 export = (app: Application) => {
@@ -10,17 +11,7 @@ export = (app: Application) => {
   app.log("Yay, the app was loaded!");
 
   // #1
-  app.on("check_suite.requested", async context => {
-    const owner = context.payload.repository.owner.login;
-    const repo = context.payload.repository.name;
-    const sha = context.payload.check_suite.head_sha;
-    await context.github.checks.create({
-      name: "prettier-ci",
-      owner,
-      repo,
-      head_sha: sha
-    });
-  });
+  app.on("check_suite.requested", CheckSuite.requested);
 
   // #2
   app.on("check_run.created", async context => {
