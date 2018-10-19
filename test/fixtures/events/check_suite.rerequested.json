@@ -3,7 +3,7 @@
     "payload": {
         "action": "rerequested",
         "check_suite": {
-            "head_sha": "AAAAAAAAAAAAAAAAAAA"
+            "head_sha": "BBBBBBBBBBBBBBBBBBBB"
         },
         "repository": {
             "owner": {

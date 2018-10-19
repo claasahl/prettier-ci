@@ -15,11 +15,23 @@ describe("tests for 'check_suite.*'-events", async () => {
 
     test("'.requested' should create 'check_run'", async () => {
         await CheckSuite.requested(new Context(CheckSuiteRequested, github, log))
-        expect(github.checks.create).toHaveBeenCalled()
+        expect(github.checks.create).toHaveBeenCalledTimes(1)
+        expect(github.checks.create).toHaveBeenCalledWith({
+            name: "prettier-ci",
+            owner: "username",
+            repo: "repository",
+            head_sha: "AAAAAAAAAAAAAAAAAAA"
+        })
     })
 
     test("'.rerequested' should create 'check_run'", async () => {
         await CheckSuite.rerequested(new Context(CheckSuiteRerequested, github, log))
-        expect(github.checks.create).toHaveBeenCalled()
+        expect(github.checks.create).toHaveBeenCalledTimes(1)
+        expect(github.checks.create).toHaveBeenCalledWith({
+            name: "prettier-ci",
+            owner: "username",
+            repo: "repository",
+            head_sha: "BBBBBBBBBBBBBBBBBBBB"
+        })
     })
 })
