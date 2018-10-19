@@ -12,6 +12,7 @@ export = (app: Application) => {
 
   // #1
   app.on("check_suite.requested", CheckSuite.requested);
+  app.on("check_suite.rerequested", CheckSuite.rerequested);
 
   // #2
   app.on("check_run.created", async context => {

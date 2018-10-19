@@ -36,6 +36,15 @@ describe('My Probot app', () => {
 
     expect(mockedCheckSuite.requested).toHaveBeenCalledTimes(1)
   })
+
+  test("forward 'check_suite.rerequested'", async () => {
+    await app.receive({
+      name: 'check_suite.rerequested',
+      payload: checkSuiteRerequested
+    })
+
+    expect(mockedCheckSuite.rerequested).toHaveBeenCalledTimes(1)
+  })
 })
 
 // For more information about testing with Jest see:
