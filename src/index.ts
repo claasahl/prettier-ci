@@ -2,6 +2,7 @@ import { Application } from "probot";
 import * as git from "isomorphic-git";
 import * as fs from "fs";
 import * as CheckSuite from "./events/check_suite";
+import * as CheckRun from "./events/check_run";
 import shelljs from "shelljs";
 
 export = (app: Application) => {
@@ -13,6 +14,7 @@ export = (app: Application) => {
   // #1
   app.on("check_suite.requested", CheckSuite.requested);
   app.on("check_suite.rerequested", CheckSuite.rerequested);
+  app.on("check_run.rerequested", CheckRun.rerequested);
 
   // #2
   app.on("check_run.created", async context => {

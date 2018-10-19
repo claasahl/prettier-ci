@@ -2,13 +2,19 @@ import { mocked } from 'ts-jest/utils';
 import { Application } from 'probot'
 // Requiring our app implementation
 import myProbotApp from '../src'
+
 import * as CheckSuite from "../src/events/check_suite";
+jest.mock("../src/events/check_suite")
+const mockedCheckSuite = mocked(CheckSuite)
+
+import * as CheckRun from "../src/events/check_run";
+jest.mock("../src/events/check_run")
+const mockedCheckRun = mocked(CheckRun)
 
 import checkSuiteRequested from './fixtures/events/check_suite.requested.json';
 import checkSuiteRerequested from './fixtures/events/check_suite.rerequested.json';
+import checkRunRerequested from './fixtures/events/check_run.rerequested.json';
 
-jest.mock("../src/events/check_suite")
-const mockedCheckSuite = mocked(CheckSuite)
 
 describe('My Probot app', () => {
   let app: Application
@@ -44,6 +50,15 @@ describe('My Probot app', () => {
     })
 
     expect(mockedCheckSuite.rerequested).toHaveBeenCalledTimes(1)
+  })
+
+  test("forward 'check_run.rerequested'", async () => {
+    await app.receive({
+      name: 'check_run.rerequested',
+      payload: checkRunRerequested
+    })
+
+    expect(mockedCheckRun.rerequested).toHaveBeenCalledTimes(1)
   })
 })
 
