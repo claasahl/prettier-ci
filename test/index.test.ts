@@ -14,6 +14,7 @@ const mockedCheckRun = mocked(CheckRun)
 import checkSuiteRequested from './fixtures/events/check_suite.requested.json';
 import checkSuiteRerequested from './fixtures/events/check_suite.rerequested.json';
 import checkRunRerequested from './fixtures/events/check_run.rerequested.json';
+import checkRunCreated from './fixtures/events/check_run.created.json';
 
 
 describe('My Probot app', () => {
@@ -59,6 +60,15 @@ describe('My Probot app', () => {
     })
 
     expect(mockedCheckRun.rerequested).toHaveBeenCalledTimes(1)
+  })
+
+  test("forward 'check_run.created'", async () => {
+    await app.receive({
+      name: 'check_run.created',
+      payload: checkRunCreated
+    })
+
+    expect(mockedCheckRun.created).toHaveBeenCalledTimes(1)
   })
 })
 

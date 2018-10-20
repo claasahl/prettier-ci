@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "isomorphic-git": "^0.37.3",
+    "mockdate": "^2.0.2",
     "prettier": "^1.14.3",
     "probot": "^7.0.0",
     "shelljs": "^0.8.2"
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@types/jest": "^23.1.5",
     "@types/node": "^10.5.2",
+    "@types/mockdate": "^2.0.0",
     "@types/prettier": "^1.13.2",
     "@types/shelljs": "^0.8.0",
     "jest": "^23.4.0",
