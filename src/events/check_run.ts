@@ -1,14 +1,14 @@
 import { Context } from "probot";
 import * as git from "isomorphic-git";
 import * as shelljs from "shelljs";
-import { createParams } from "../checks_params";
+import * as params from "../checks_params";
 
 export async function rerequested(context: Context): Promise<void> {
     const owner = context.payload.repository.owner.login;
     const repo = context.payload.repository.name;
     const sha = context.payload.check_run.head_sha;
     await context.github.checks.create({
-        ...createParams(),
+        ...params.createParams(),
         owner,
         repo,
         head_sha: sha
@@ -21,10 +21,10 @@ export async function created(context: Context): Promise<void> {
     const owner = context.payload.repository.owner.login;
     const repo = context.payload.repository.name;
     await context.github.checks.update({
+      ...params.inProgressParams(),
       check_run_id,
       owner,
       repo,
-      status: "in_progress"
     });
 
     // #2.2
@@ -32,14 +32,11 @@ export async function created(context: Context): Promise<void> {
     const url = context.payload.repository.clone_url;
     const ref = context.payload.check_run.head_sha;
     if (shelljs.test("-e", dir)) {
-      const completed_at = new Date().toISOString();
       await context.github.checks.update({
+        ...params.cancelledParams(),
         check_run_id,
         owner,
-        repo,
-        status: "completed",
-        conclusion: "cancelled",
-        completed_at
+        repo
       });
       return;
     }
@@ -52,14 +49,11 @@ export async function created(context: Context): Promise<void> {
     const failedCheck = formattedFiles.length > 0
 
     // #2.4
-    const completed_at = new Date().toISOString();
     await context.github.checks.update({
+      ...(failedCheck ? params.failureParams() : params.successParams()),
       check_run_id,
       owner,
-      repo,
-      status: "completed",
-      conclusion: failedCheck ? "failure" : "success",
-      completed_at
+      repo
     });
 
     // #2.5
