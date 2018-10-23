@@ -1,10 +1,10 @@
 {
-    "env": {
-        "APP_ID": "@prettier-ci--app_id",
-        "WEBHOOK_SECRET": "@prettier-ci--webhook_secret",
-        "LOG_LEVEL": "info",
-        "NODE_ENV": "development",
-        "PRIVATE_KEY": "@prettier-ci--private_key"
-    },
-    "alias": "prettier-ci.now.sh"
+  "env": {
+    "APP_ID": "@prettier-ci--app_id",
+    "WEBHOOK_SECRET": "@prettier-ci--webhook_secret",
+    "LOG_LEVEL": "info",
+    "NODE_ENV": "development",
+    "PRIVATE_KEY": "@prettier-ci--private_key"
+  },
+  "alias": "prettier-ci.now.sh"
 }

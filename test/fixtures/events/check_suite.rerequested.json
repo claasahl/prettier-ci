@@ -1,15 +1,15 @@
 {
-    "event": "check_suite",
-    "payload": {
-        "action": "rerequested",
-        "check_suite": {
-            "head_sha": "BBBBBBBBBBBBBBBBBBBB"
-        },
-        "repository": {
-            "owner": {
-                "login": "username"
-            },
-            "name": "repository"
-        }
+  "event": "check_suite",
+  "payload": {
+    "action": "rerequested",
+    "check_suite": {
+      "head_sha": "BBBBBBBBBBBBBBBBBBBB"
+    },
+    "repository": {
+      "owner": {
+        "login": "username"
+      },
+      "name": "repository"
     }
+  }
 }
