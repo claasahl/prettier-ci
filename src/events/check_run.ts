@@ -44,15 +44,17 @@ export async function created(context: Context): Promise<void> {
   await git.checkout({ dir, ref });
 
   // #2.3
-  const { stdout: files } = shelljs.exec(
+  const result = shelljs.exec(
     `cd ${dir} && prettier -l --write ./**`
   );
-  const formattedFiles = files.trim().split(/\r?\n/);
-  const failedCheck = formattedFiles.length > 0;
+  const skipped = result.stderr.trim().split(/\r?\n/);
+  const passed = [] as string[];
+  const failed = result.stdout.trim().split(/\r?\n/);
+  const failedCheck = failed.length > 0;
 
   // #2.4
   await context.github.checks.update({
-    ...(failedCheck ? params.failureParams() : params.successParams()),
+    ...(failedCheck ? params.failureParams(skipped, passed, failed) : params.successParams(skipped, passed, failed)),
     check_run_id,
     owner,
     repo
