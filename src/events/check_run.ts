@@ -47,9 +47,9 @@ export async function created(context: Context): Promise<void> {
   const result = shelljs.exec(
     `cd ${dir} && prettier -l --write ./**`
   );
-  const skipped = result.stderr.trim().split(/\r?\n/);
+  const skipped = result.stderr.trim().split(/\r?\n/).map(file => file.trim()).filter(file => file.length > 0);
   const passed = [] as string[];
-  const failed = result.stdout.trim().split(/\r?\n/);
+  const failed = result.stdout.trim().split(/\r?\n/).map(file => file.trim()).filter(file => file.length > 0);
   const failedCheck = failed.length > 0;
 
   // #2.4
