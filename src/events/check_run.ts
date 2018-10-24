@@ -2,6 +2,7 @@ import { Context } from "probot";
 import * as git from "isomorphic-git";
 import * as shelljs from "shelljs";
 import * as params from "../checks_params";
+import memoryFs from "memory-fs";
 
 export async function rerequested(context: Context): Promise<void> {
   const owner = context.payload.repository.owner.login;
@@ -16,6 +17,8 @@ export async function rerequested(context: Context): Promise<void> {
 }
 
 export async function created(context: Context): Promise<void> {
+  const fs = new memoryFs()
+
   // #2.1
   const check_run_id = context.payload.check_run.id;
   const owner = context.payload.repository.owner.login;
@@ -40,8 +43,8 @@ export async function created(context: Context): Promise<void> {
     });
     return;
   }
-  await git.clone({ dir, url });
-  await git.checkout({ dir, ref });
+  await git.clone({ dir, url, fs });
+  await git.checkout({ dir, ref, fs });
 
   // #2.3
   const result = shelljs.exec(

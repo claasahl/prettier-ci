@@ -2,6 +2,7 @@ import { mocked } from "ts-jest/utils";
 import { Context } from "probot";
 import { LoggerWithTarget } from "probot/lib/wrap-logger";
 import * as mockdate from "mockdate";
+import memoryFs from "memory-fs";
 
 import * as CheckRun from "../../src/events/check_run";
 import CheckRunRerequested from "../fixtures/events/check_run.rerequested.json";
@@ -69,12 +70,14 @@ bla.js
     expect(mockedGit.clone).toHaveBeenCalledTimes(1);
     expect(mockedGit.clone).toBeCalledWith({
       dir: "./repos/username/repository",
-      url: "https://some.url/repo.git"
+      url: "https://some.url/repo.git",
+      fs: new memoryFs()
     });
     expect(mockedGit.checkout).toHaveBeenCalledTimes(1);
     expect(mockedGit.checkout).toHaveBeenCalledWith({
       dir: "./repos/username/repository",
-      ref: "DDDDDDDDDDDDDDD"
+      ref: "DDDDDDDDDDDDDDD",
+      fs: new memoryFs()
     });
     
     expect(mockedShelljs.test).toHaveBeenCalledTimes(1)

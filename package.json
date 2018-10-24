@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "isomorphic-git": "^0.37.3",
+    "memory-fs": "^0.4.1",
     "mockdate": "^2.0.2",
     "prettier": "^1.14.3",
     "probot": "^7.0.0",
@@ -28,9 +29,10 @@
     "shelljs": "^0.8.2"
   },
   "devDependencies": {
-    "@types/jest": "^23.1.5",
-    "@types/node": "^10.5.2",
+    "@types/jest": "^23.3.8",
+    "@types/memory-fs": "^0.3.2",
     "@types/mockdate": "^2.0.0",
+    "@types/node": "^10.12.1",
     "@types/prettier": "^1.13.2",
     "@types/pug": "^2.0.4",
     "@types/shelljs": "^0.8.0",
@@ -38,7 +40,7 @@
     "nodemon": "^1.17.2",
     "smee-client": "^1.0.2",
     "ts-jest": "^23.0.0",
-    "typescript": "^3.0.1"
+    "typescript": "^3.1.4"
   },
   "engines": {
     "node": ">= 8.3.0"

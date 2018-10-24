@@ -1,12 +1,8 @@
 import { Application } from "probot";
-import * as git from "isomorphic-git";
-import * as fs from "fs";
 import * as CheckSuite from "./events/check_suite";
 import * as CheckRun from "./events/check_run";
 
 export = (app: Application) => {
-  git.plugins.set("fs", fs);
-
   // Your code here
   app.log("Yay, the app was loaded!");
 
