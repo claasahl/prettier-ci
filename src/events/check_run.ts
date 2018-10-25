@@ -4,6 +4,10 @@ import * as params from "../checks_params";
 import * as prettier from "prettier";
 import memoryFs from "memory-fs";
 
+(memoryFs as any).prototype.lstatSync = memoryFs.prototype.statSync;
+(memoryFs as any).prototype.lstat = memoryFs.prototype.stat;
+(memoryFs as any).prototype.symlinkSync = () => {};
+(memoryFs as any).prototype.symlink = () => {};
 
 export async function rerequested(context: Context): Promise<void> {
   const owner = context.payload.repository.owner.login;
@@ -18,7 +22,7 @@ export async function rerequested(context: Context): Promise<void> {
 }
 
 export async function created(context: Context): Promise<void> {
-  const fs = new memoryFs()
+  const fs = new memoryFs();
 
   // #2.1
   const check_run_id = context.payload.check_run.id;
