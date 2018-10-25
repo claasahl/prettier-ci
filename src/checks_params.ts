@@ -122,5 +122,20 @@ if failed.length > 0
   |
   |
   | You can instruct me to fix this by clicking on "Fix" at the top of the page.
+
+| **Failed:**
+each file in failed
+  |
+  | * #{file}
+
+| **Skipped:**
+each file in skipped
+  |
+  | * #{file}
+
+| **Passed:**
+each file in passed
+  |
+  | * #{file}
 `
 }
