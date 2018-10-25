@@ -2,7 +2,6 @@ import { mocked } from "ts-jest/utils";
 import { Context } from "probot";
 import { LoggerWithTarget } from "probot/lib/wrap-logger";
 import * as mockdate from "mockdate";
-import memoryFs from "memory-fs";
 
 import * as CheckRun from "../../src/events/check_run";
 import CheckRunRerequested from "../fixtures/events/check_run.rerequested.json";
@@ -13,13 +12,17 @@ import * as git from "isomorphic-git";
 jest.mock("isomorphic-git");
 const mockedGit = mocked(git);
 
-import * as shelljs from "shelljs";
-jest.mock("shelljs", () => ({
-  test: jest.fn(),
-  exec: jest.fn(),
-  rm: jest.fn()
-}))
-const mockedShelljs = mocked(shelljs)
+import * as prettier from "prettier";
+jest.mock("prettier");
+const mockedPrettier = mocked(prettier);
+
+jest.mock("memory-fs", () => {
+  return jest.fn(() => ({
+    readdirSync: jest.fn().mockReturnValue(["bla.js", "whatever.bla"]),
+    statSync: jest.fn().mockReturnValue({isFile: () => true}),
+    readFileSync: jest.fn().mockReturnValue("")
+  }))
+});
 
 describe("tests for 'check_run.*'-events", async () => {
   const github: any = {
@@ -42,13 +45,8 @@ describe("tests for 'check_run.*'-events", async () => {
   });
 
   test("'.created' should create 'check_run'", async () => {
-    mockedShelljs.test.mockReturnValue(false)
-    mockedShelljs.exec.mockReturnValue({stderr: `
-whatever.bla
-`, stdout: `
-bla.js
-`})
-    
+    mockedPrettier.getFileInfo.mockImplementation(file => ({ignored: file != "bla.js"}))
+    mockedPrettier.check.mockReturnValue(false)
     const completed_at = "2010-05-28T15:29:41.839Z";
     mockdate.set(completed_at);
     await CheckRun.created(new Context(CheckRunCreated, github, log));
@@ -68,21 +66,17 @@ bla.js
     });
     
     expect(mockedGit.clone).toHaveBeenCalledTimes(1);
-    expect(mockedGit.clone).toBeCalledWith({
-      dir: "./repos/username/repository",
+    expect(mockedGit.clone).toHaveBeenCalledWith(expect.objectContaining({
+      dir: "/",
       url: "https://some.url/repo.git",
-      fs: new memoryFs()
-    });
+      fs: expect.anything()
+    }));
     expect(mockedGit.checkout).toHaveBeenCalledTimes(1);
-    expect(mockedGit.checkout).toHaveBeenCalledWith({
-      dir: "./repos/username/repository",
+    expect(mockedGit.checkout).toHaveBeenCalledWith(expect.objectContaining({
+      dir: "/",
       ref: "DDDDDDDDDDDDDDD",
-      fs: new memoryFs()
-    });
-    
-    expect(mockedShelljs.test).toHaveBeenCalledTimes(1)
-    expect(mockedShelljs.exec).toHaveBeenCalledTimes(1)
-    expect(mockedShelljs.rm).toHaveBeenCalledTimes(1)
+      fs: expect.anything()
+    }));
     mockdate.reset();
   });
 });
