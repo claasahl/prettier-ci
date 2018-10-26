@@ -2,12 +2,7 @@ import { Context } from "probot";
 import * as git from "isomorphic-git";
 import * as params from "../checks_params";
 import * as prettier from "prettier";
-import memoryFs from "memory-fs";
-
-(memoryFs as any).prototype.lstatSync = memoryFs.prototype.statSync;
-(memoryFs as any).prototype.lstat = memoryFs.prototype.stat;
-(memoryFs as any).prototype.symlinkSync = () => {};
-(memoryFs as any).prototype.symlink = () => {};
+import * as fs from "fs";
 
 export async function rerequested(context: Context): Promise<void> {
   const owner = context.payload.repository.owner.login;
@@ -22,8 +17,6 @@ export async function rerequested(context: Context): Promise<void> {
 }
 
 export async function created(context: Context): Promise<void> {
-  const fs = new memoryFs();
-
   // #2.1
   const check_run_id = context.payload.check_run.id;
   const owner = context.payload.repository.owner.login;
@@ -46,12 +39,12 @@ export async function created(context: Context): Promise<void> {
   const skipped: string[] = []
   const passed: string[] = []
   const failed: string[] = []
-  for(const file of readdirp(fs, dir)) {
+  for(const file of readdirp(dir)) {
     const info = await prettier.getFileInfo(file);
     if(info.ignored) {
       skipped.push(file);
     } else {
-      const content = fs.readFileSync(file)
+      const content = fs.readFileSync(file).toString()
       const formatted = prettier.check(content, {filepath: file});
       (formatted ? passed : failed).push(file);
     }
@@ -67,14 +60,14 @@ export async function created(context: Context): Promise<void> {
   });
 }
 
-function readdirp(fs: memoryFs, dir: string): string[] {
+function readdirp(dir: string): string[] {
   const files: string[] = []
   for(const file of fs.readdirSync(dir)) {
     const stat = fs.statSync(file);
     if(stat.isFile()) {
       files.push(file);
     } else if(stat.isDirectory()) {
-      files.push(...readdirp(fs, dir + "/" + file))
+      files.push(...readdirp(dir + "/" + file))
     }
   }
   return files;
