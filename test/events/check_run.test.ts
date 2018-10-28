@@ -16,13 +16,9 @@ import * as prettier from "prettier";
 jest.mock("prettier");
 const mockedPrettier = mocked(prettier);
 
-jest.mock("memory-fs", () => {
-  return jest.fn(() => ({
-    readdirSync: jest.fn().mockReturnValue(["bla.js", "whatever.bla"]),
-    statSync: jest.fn().mockReturnValue({isFile: () => true}),
-    readFileSync: jest.fn().mockReturnValue("")
-  }))
-});
+import * as utils from "../../src/util";
+jest.mock("../../src/util");
+const mockedUtils = mocked(utils);
 
 describe("tests for 'check_run.*'-events", async () => {
   const github: any = {
@@ -45,7 +41,9 @@ describe("tests for 'check_run.*'-events", async () => {
   });
 
   test("'.created' should create 'check_run'", async () => {
-    mockedPrettier.getFileInfo.mockImplementation(file => ({ignored: file != "bla.js"}))
+    mockedUtils.readdirp.mockReturnValue(["whatever.bla", "package.json"]);
+
+    mockedPrettier.getFileInfo.mockImplementation(file => ({ignored: false, inferredParser: file == "package.json" ? "json" :  null}))
     mockedPrettier.check.mockReturnValue(false)
     const completed_at = "2010-05-28T15:29:41.839Z";
     mockdate.set(completed_at);
@@ -59,7 +57,7 @@ describe("tests for 'check_run.*'-events", async () => {
       repo: "repository"
     });
     expect(github.checks.update).toHaveBeenCalledWith({
-      ...checks_params.failureParams(["whatever.bla"],[],["bla.js"]),
+      ...checks_params.failureParams(["whatever.bla"],[],["package.json"]),
       check_run_id: 42,
       owner: "username",
       repo: "repository",
@@ -67,13 +65,13 @@ describe("tests for 'check_run.*'-events", async () => {
     
     expect(mockedGit.clone).toHaveBeenCalledTimes(1);
     expect(mockedGit.clone).toHaveBeenCalledWith(expect.objectContaining({
-      dir: "/",
+      dir: "./repos/username-repository-42",
       url: "https://some.url/repo.git",
       fs: expect.anything()
     }));
     expect(mockedGit.checkout).toHaveBeenCalledTimes(1);
     expect(mockedGit.checkout).toHaveBeenCalledWith(expect.objectContaining({
-      dir: "/",
+      dir: "./repos/username-repository-42",
       ref: "DDDDDDDDDDDDDDD",
       fs: expect.anything()
     }));

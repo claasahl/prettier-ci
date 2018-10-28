@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "isomorphic-git": "^0.37.3",
-    "memory-fs": "^0.4.1",
     "mockdate": "^2.0.2",
     "prettier": "^1.14.3",
     "probot": "^7.0.0",
@@ -29,7 +28,6 @@
   },
   "devDependencies": {
     "@types/jest": "^23.3.8",
-    "@types/memory-fs": "^0.3.2",
     "@types/mockdate": "^2.0.0",
     "@types/node": "^10.12.1",
     "@types/prettier": "^1.13.2",

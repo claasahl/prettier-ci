@@ -3,6 +3,7 @@ import * as git from "isomorphic-git";
 import * as params from "../checks_params";
 import * as prettier from "prettier";
 import * as fs from "fs";
+import { readdirp } from "../util";
 
 export async function rerequested(context: Context): Promise<void> {
   const owner = context.payload.repository.owner.login;
@@ -29,7 +30,7 @@ export async function created(context: Context): Promise<void> {
   });
 
   // #2.2
-  const dir = '/';
+  const dir = `./repos/${owner}-${repo}-${check_run_id}`;
   const url = context.payload.repository.clone_url;
   const ref = context.payload.check_run.head_sha;
   await git.clone({ dir, url, fs });
@@ -40,13 +41,14 @@ export async function created(context: Context): Promise<void> {
   const passed: string[] = []
   const failed: string[] = []
   for(const file of readdirp(dir)) {
+    const shortFileName = file.replace(dir, "");
     const info = await prettier.getFileInfo(file);
-    if(info.ignored) {
-      skipped.push(file);
+    if(info.ignored || !info.inferredParser) {
+      skipped.push(shortFileName);
     } else {
       const content = fs.readFileSync(file).toString()
       const formatted = prettier.check(content, {filepath: file});
-      (formatted ? passed : failed).push(file);
+      (formatted ? passed : failed).push(shortFileName);
     }
   }
   const failedCheck = failed.length > 0;
@@ -58,17 +60,4 @@ export async function created(context: Context): Promise<void> {
     owner,
     repo
   });
-}
-
-function readdirp(dir: string): string[] {
-  const files: string[] = []
-  for(const file of fs.readdirSync(dir)) {
-    const stat = fs.statSync(file);
-    if(stat.isFile()) {
-      files.push(file);
-    } else if(stat.isDirectory()) {
-      files.push(...readdirp(dir + "/" + file))
-    }
-  }
-  return files;
 }
