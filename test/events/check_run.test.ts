@@ -43,12 +43,15 @@ describe("tests for 'check_run.*'-events", async () => {
   test("'.created' should create 'check_run'", async () => {
     mockedUtils.readdirp.mockReturnValue(["whatever.bla", "package.json"]);
 
-    mockedPrettier.getFileInfo.mockImplementation(file => ({ignored: false, inferredParser: file == "package.json" ? "json" :  null}))
-    mockedPrettier.check.mockReturnValue(false)
+    mockedPrettier.getFileInfo.mockImplementation(file => ({
+      ignored: false,
+      inferredParser: file == "package.json" ? "json" : null
+    }));
+    mockedPrettier.check.mockReturnValue(false);
     const completed_at = "2010-05-28T15:29:41.839Z";
     mockdate.set(completed_at);
     await CheckRun.created(new Context(CheckRunCreated, github, log));
-    
+
     expect(github.checks.update).toHaveBeenCalledTimes(2);
     expect(github.checks.update).toHaveBeenCalledWith({
       ...checks_params.inProgressParams(),
@@ -57,24 +60,28 @@ describe("tests for 'check_run.*'-events", async () => {
       repo: "repository"
     });
     expect(github.checks.update).toHaveBeenCalledWith({
-      ...checks_params.failureParams(["whatever.bla"],[],["package.json"]),
+      ...checks_params.failureParams(["whatever.bla"], [], ["package.json"]),
       check_run_id: 42,
       owner: "username",
-      repo: "repository",
+      repo: "repository"
     });
-    
+
     expect(mockedGit.clone).toHaveBeenCalledTimes(1);
-    expect(mockedGit.clone).toHaveBeenCalledWith(expect.objectContaining({
-      dir: "./repos/username-repository-42",
-      url: "https://some.url/repo.git",
-      fs: expect.anything()
-    }));
+    expect(mockedGit.clone).toHaveBeenCalledWith(
+      expect.objectContaining({
+        dir: "./repos/username-repository-42",
+        url: "https://some.url/repo.git",
+        fs: expect.anything()
+      })
+    );
     expect(mockedGit.checkout).toHaveBeenCalledTimes(1);
-    expect(mockedGit.checkout).toHaveBeenCalledWith(expect.objectContaining({
-      dir: "./repos/username-repository-42",
-      ref: "DDDDDDDDDDDDDDD",
-      fs: expect.anything()
-    }));
+    expect(mockedGit.checkout).toHaveBeenCalledWith(
+      expect.objectContaining({
+        dir: "./repos/username-repository-42",
+        ref: "DDDDDDDDDDDDDDD",
+        fs: expect.anything()
+      })
+    );
     mockdate.reset();
   });
 });

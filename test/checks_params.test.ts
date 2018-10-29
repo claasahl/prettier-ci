@@ -13,23 +13,33 @@ describe("tests for check_run parameters", async () => {
   test("parameters for 'checks.update' [success]", async () => {
     const completed_at = "2010-05-28T15:29:41.839Z";
     mockdate.set(completed_at);
-    const params = ChecksParams.successParams(["skipped.env", "also.skipped"], ["formatted.js"], []);
+    const params = ChecksParams.successParams(
+      ["skipped.env", "also.skipped"],
+      ["formatted.js"],
+      []
+    );
     mockdate.reset();
     expect(params).toEqual({
       status: "completed",
       conclusion: "success",
       completed_at,
       output: {
-        summary: "Keep up the **good work**. All 3 files were neatly formatted.",
-        text: "I thoroughly checked 3 files. All files are neatly formatted (passed: 1 file, skipped: 2 files). Congratulations!",
-        title: "Summary",
-      },
+        summary:
+          "Keep up the **good work**. All 3 files were neatly formatted.",
+        text:
+          "I thoroughly checked 3 files. All files are neatly formatted (passed: 1 file, skipped: 2 files). Congratulations!",
+        title: "Summary"
+      }
     });
   });
   test("parameters for 'checks.update' [failure]", async () => {
     const completed_at = "2010-05-28T15:29:41.839Z";
     mockdate.set(completed_at);
-    const params = ChecksParams.failureParams([], [], ["not_formatted.js", "totally_not_formatted.js"]);
+    const params = ChecksParams.failureParams(
+      [],
+      [],
+      ["not_formatted.js", "totally_not_formatted.js"]
+    );
     mockdate.reset();
     expect(params).toEqual({
       status: "completed",
@@ -44,8 +54,8 @@ Here is a list of files which be *prettier* (2 files).
 * totally_not_formatted.js
 
 You can instruct me to fix this by clicking on "Fix" at the top of the page.`,
-        title: "Summary",
-      },
+        title: "Summary"
+      }
     });
   });
   test("parameters for 'checks.update' [cancelled]", async () => {

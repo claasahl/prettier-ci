@@ -23,7 +23,11 @@ export function inProgressParams(): SimplifiedChecksUpdateParams {
   };
 }
 
-export function successParams(skipped: string[], passed: string[], failed: string[]): SimplifiedChecksUpdateParams {
+export function successParams(
+  skipped: string[],
+  passed: string[],
+  failed: string[]
+): SimplifiedChecksUpdateParams {
   const completed_at = new Date().toISOString();
   return {
     status: "completed",
@@ -31,13 +35,17 @@ export function successParams(skipped: string[], passed: string[], failed: strin
     completed_at,
     output: {
       title: "Summary",
-      summary: pug.render(pugSummary(), {skipped, passed, failed}),
-      text: pug.render(pugText(), {skipped, passed, failed})
+      summary: pug.render(pugSummary(), { skipped, passed, failed }),
+      text: pug.render(pugText(), { skipped, passed, failed })
     }
   };
 }
 
-export function failureParams(skipped: string[], passed: string[], failed: string[]): SimplifiedChecksUpdateParams {
+export function failureParams(
+  skipped: string[],
+  passed: string[],
+  failed: string[]
+): SimplifiedChecksUpdateParams {
   const completed_at = new Date().toISOString();
   return {
     status: "completed",
@@ -45,8 +53,8 @@ export function failureParams(skipped: string[], passed: string[], failed: strin
     completed_at,
     output: {
       title: "Summary",
-      summary: pug.render(pugSummary(), {skipped, passed, failed}),
-      text: pug.render(pugText(), {skipped, passed, failed})
+      summary: pug.render(pugSummary(), { skipped, passed, failed }),
+      text: pug.render(pugText(), { skipped, passed, failed })
     }
   };
 }
@@ -61,7 +69,7 @@ export function cancelledParams(): SimplifiedChecksUpdateParams {
 }
 
 function pugSummary(): string {
-    return `
+  return `
 -
   function files(no) {
     if(no <= 0) {
@@ -84,7 +92,7 @@ else
 }
 
 function pugText(): string {
-    return `
+  return `
 -
   function files(no) {
     if(no <= 0) {
@@ -137,5 +145,5 @@ each file in skipped
 each file in passed
   |
   | * #{file}
-`
+`;
 }

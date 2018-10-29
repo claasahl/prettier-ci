@@ -37,25 +37,27 @@ export async function created(context: Context): Promise<void> {
   await git.checkout({ dir, ref, fs });
 
   // #2.3
-  const skipped: string[] = []
-  const passed: string[] = []
-  const failed: string[] = []
-  for(const file of readdirp(dir)) {
+  const skipped: string[] = [];
+  const passed: string[] = [];
+  const failed: string[] = [];
+  for (const file of readdirp(dir)) {
     const shortFileName = file.replace(dir, "");
     const info = await prettier.getFileInfo(file);
-    if(info.ignored || !info.inferredParser) {
+    if (info.ignored || !info.inferredParser) {
       skipped.push(shortFileName);
     } else {
-      const content = fs.readFileSync(file).toString()
-      const formatted = prettier.check(content, {filepath: file});
+      const content = fs.readFileSync(file).toString();
+      const formatted = prettier.check(content, { filepath: file });
       (formatted ? passed : failed).push(shortFileName);
     }
   }
   const failedCheck = failed.length > 0;
-  
+
   // #2.4
   await context.github.checks.update({
-    ...(failedCheck ? params.failureParams(skipped, passed, failed) : params.successParams(skipped, passed, failed)),
+    ...(failedCheck
+      ? params.failureParams(skipped, passed, failed)
+      : params.successParams(skipped, passed, failed)),
     check_run_id,
     owner,
     repo
