@@ -30,7 +30,7 @@ export async function created(context: Context): Promise<void> {
   });
 
   // #2.2
-  const dir = `./repos/${owner}-${repo}-${check_run_id}`;
+  const dir = `./repos/${owner}-${repo}-${check_run_id}/`;
   const url = context.payload.repository.clone_url;
   const ref = context.payload.check_run.head_sha;
   await git.clone({ dir, url, fs });

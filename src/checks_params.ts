@@ -131,17 +131,23 @@ if failed.length > 0
   |
   | You can instruct me to fix this by clicking on "Fix" at the top of the page.
 
-| **Failed:**
+|
+|
+| **These files are not yet formatted (i.e. they 'failed'):**
 each file in failed
   |
   | * #{file}
 
-| **Skipped:**
+|
+|
+| **These files were ignored (i.e. they were 'skipped'):**
 each file in skipped
   |
   | * #{file}
 
-| **Passed:**
+|
+|
+| **These files are already formatted (i.e. they 'passed'):**
 each file in passed
   |
   | * #{file}
