@@ -27,7 +27,17 @@ describe("tests for check_run parameters", async () => {
         summary:
           "Keep up the **good work**. All 3 files were neatly formatted.",
         text:
-          "I thoroughly checked 3 files. All files are neatly formatted (passed: 1 file, skipped: 2 files). Congratulations!",
+          `I thoroughly checked 3 files. All files are neatly formatted (passed: 1 file, skipped: 2 files). Congratulations!
+
+**These files are not yet formatted (i.e. they 'failed'):**
+no files
+
+**These files were ignored (i.e. they were 'skipped'):**
+* skipped.env
+* also.skipped
+
+**These files are already formatted (i.e. they 'passed'):**
+* formatted.js`,
         title: "Summary"
       }
     });
@@ -53,7 +63,17 @@ Here is a list of files which be *prettier* (2 files).
 * not_formatted.js
 * totally_not_formatted.js
 
-You can instruct me to fix this by clicking on "Fix" at the top of the page.`,
+You can instruct me to fix this by clicking on "Fix" at the top of the page.
+
+**These files are not yet formatted (i.e. they 'failed'):**
+* not_formatted.js
+* totally_not_formatted.js
+
+**These files were ignored (i.e. they were 'skipped'):**
+no files
+
+**These files are already formatted (i.e. they 'passed'):**
+no files`,
         title: "Summary"
       }
     });

@@ -134,22 +134,34 @@ if failed.length > 0
 |
 |
 | **These files are not yet formatted (i.e. they 'failed'):**
-each file in failed
+if failed.length > 0
+  each file in failed
+    |
+    | * #{file}
+else
   |
-  | * #{file}
+  | #{files(failed.length)}
 
 |
 |
 | **These files were ignored (i.e. they were 'skipped'):**
-each file in skipped
+if skipped.length > 0
+  each file in skipped
+    |
+    | * #{file}
+else
   |
-  | * #{file}
+  | #{files(skipped.length)}
 
 |
 |
 | **These files are already formatted (i.e. they 'passed'):**
-each file in passed
+if passed.length > 0
+  each file in passed
+    |
+    | * #{file}
+else
   |
-  | * #{file}
+  | #{files(passed.length)}
 `;
 }
