@@ -69,7 +69,7 @@ describe("tests for 'check_run.*'-events", async () => {
     expect(mockedGit.clone).toHaveBeenCalledTimes(1);
     expect(mockedGit.clone).toHaveBeenCalledWith(
       expect.objectContaining({
-        dir: "./repos/username-repository-42",
+        dir: "./repos/username-repository-42/",
         url: "https://some.url/repo.git",
         fs: expect.anything()
       })
@@ -77,7 +77,7 @@ describe("tests for 'check_run.*'-events", async () => {
     expect(mockedGit.checkout).toHaveBeenCalledTimes(1);
     expect(mockedGit.checkout).toHaveBeenCalledWith(
       expect.objectContaining({
-        dir: "./repos/username-repository-42",
+        dir: "./repos/username-repository-42/",
         ref: "DDDDDDDDDDDDDDD",
         fs: expect.anything()
       })
