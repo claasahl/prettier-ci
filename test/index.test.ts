@@ -37,37 +37,49 @@ describe("My Probot app", () => {
   test("forward 'check_suite.requested'", async () => {
     await app.receive({
       name: "check_suite.requested",
-      payload: checkSuiteRequested
+      payload: checkSuiteRequested.payload
     });
 
     expect(mockedCheckSuite.requested).toHaveBeenCalledTimes(1);
+    expect(mockedCheckSuite.requested).toHaveBeenCalledWith(expect.objectContaining({
+        payload: checkSuiteRequested.payload
+    }))
   });
 
   test("forward 'check_suite.rerequested'", async () => {
     await app.receive({
       name: "check_suite.rerequested",
-      payload: checkSuiteRerequested
+      payload: checkSuiteRerequested.payload
     });
 
     expect(mockedCheckSuite.rerequested).toHaveBeenCalledTimes(1);
+    expect(mockedCheckSuite.rerequested).toHaveBeenCalledWith(expect.objectContaining({
+      payload: checkSuiteRerequested.payload
+  }))
   });
 
   test("forward 'check_run.rerequested'", async () => {
     await app.receive({
       name: "check_run.rerequested",
-      payload: checkRunRerequested
+      payload: checkRunRerequested.payload
     });
 
     expect(mockedCheckRun.rerequested).toHaveBeenCalledTimes(1);
+    expect(mockedCheckRun.rerequested).toHaveBeenCalledWith(expect.objectContaining({
+      payload: checkRunRerequested.payload
+  }))
   });
 
   test("forward 'check_run.created'", async () => {
     await app.receive({
       name: "check_run.created",
-      payload: checkRunCreated
+      payload: checkRunCreated.payload
     });
 
     expect(mockedCheckRun.created).toHaveBeenCalledTimes(1);
+    expect(mockedCheckRun.created).toHaveBeenCalledWith(expect.objectContaining({
+      payload: checkRunCreated.payload
+  }))
   });
 });
 
