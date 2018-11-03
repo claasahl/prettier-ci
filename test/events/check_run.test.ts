@@ -17,6 +17,7 @@ jest.mock("prettier");
 const mockedPrettier = mocked(prettier);
 
 import * as utils from "../../src/util";
+import { DEFAULT_CONFIG } from "../../src/config";
 jest.mock("../../src/util");
 const mockedUtils = mocked(utils);
 
@@ -30,10 +31,10 @@ describe("tests for 'check_run.*'-events", async () => {
   const log: LoggerWithTarget = new (jest.fn<LoggerWithTarget>())();
 
   test("'.rerequested' should create 'check_run'", async () => {
-    await CheckRun.rerequested(new Context(CheckRunRerequested, github, log));
+    await CheckRun.rerequested(new Context(CheckRunRerequested, github, log), DEFAULT_CONFIG);
     expect(github.checks.create).toHaveBeenCalledTimes(1);
     expect(github.checks.create).toHaveBeenCalledWith({
-      ...checks_params.createParams(),
+      ...checks_params.createParams(DEFAULT_CONFIG),
       owner: "username",
       repo: "repository",
       head_sha: "CCCCCCCCCCCCCCCCCCCCCCCCCC"
@@ -50,17 +51,17 @@ describe("tests for 'check_run.*'-events", async () => {
     mockedPrettier.check.mockReturnValue(false);
     const completed_at = "2010-05-28T15:29:41.839Z";
     mockdate.set(completed_at);
-    await CheckRun.created(new Context(CheckRunCreated, github, log));
+    await CheckRun.created(new Context(CheckRunCreated, github, log), DEFAULT_CONFIG);
 
     expect(github.checks.update).toHaveBeenCalledTimes(2);
     expect(github.checks.update).toHaveBeenCalledWith({
-      ...checks_params.inProgressParams(),
+      ...checks_params.inProgressParams(DEFAULT_CONFIG),
       check_run_id: 42,
       owner: "username",
       repo: "repository"
     });
     expect(github.checks.update).toHaveBeenCalledWith({
-      ...checks_params.failureParams(["whatever.bla"], [], ["package.json"]),
+      ...checks_params.failureParams(DEFAULT_CONFIG, ["whatever.bla"], [], ["package.json"]),
       check_run_id: 42,
       owner: "username",
       repo: "repository"

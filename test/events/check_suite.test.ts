@@ -5,6 +5,7 @@ import * as CheckSuite from "../../src/events/check_suite";
 import CheckSuiteRequested from "../fixtures/events/check_suite.requested.json";
 import CheckSuiteRerequested from "../fixtures/events/check_suite.rerequested.json";
 import { createParams } from "../../src/checks_params";
+import { DEFAULT_CONFIG } from "../../src/config";
 
 describe("tests for 'check_suite.*'-events", async () => {
   const github: any = {
@@ -15,10 +16,10 @@ describe("tests for 'check_suite.*'-events", async () => {
   const log: LoggerWithTarget = new (jest.fn<LoggerWithTarget>())();
 
   test("'.requested' should create 'check_run'", async () => {
-    await CheckSuite.requested(new Context(CheckSuiteRequested, github, log));
+    await CheckSuite.requested(new Context(CheckSuiteRequested, github, log), DEFAULT_CONFIG);
     expect(github.checks.create).toHaveBeenCalledTimes(1);
     expect(github.checks.create).toHaveBeenCalledWith({
-      ...createParams(),
+      ...createParams(DEFAULT_CONFIG),
       owner: "username",
       repo: "repository",
       head_sha: "AAAAAAAAAAAAAAAAAAA"
@@ -27,11 +28,11 @@ describe("tests for 'check_suite.*'-events", async () => {
 
   test("'.rerequested' should create 'check_run'", async () => {
     await CheckSuite.rerequested(
-      new Context(CheckSuiteRerequested, github, log)
+      new Context(CheckSuiteRerequested, github, log),DEFAULT_CONFIG
     );
     expect(github.checks.create).toHaveBeenCalledTimes(1);
     expect(github.checks.create).toHaveBeenCalledWith({
-      ...createParams(),
+      ...createParams(DEFAULT_CONFIG),
       owner: "username",
       repo: "repository",
       head_sha: "BBBBBBBBBBBBBBBBBBBB"

@@ -15,6 +15,7 @@ import checkSuiteRequested from "./fixtures/events/check_suite.requested.json";
 import checkSuiteRerequested from "./fixtures/events/check_suite.rerequested.json";
 import checkRunRerequested from "./fixtures/events/check_run.rerequested.json";
 import checkRunCreated from "./fixtures/events/check_run.created.json";
+import { DEFAULT_CONFIG } from "../src/config";
 
 describe("My Probot app", () => {
   let app: Application;
@@ -28,6 +29,9 @@ describe("My Probot app", () => {
     github = {
       checks: {
         create: jest.fn().mockResolvedValue(0)
+      },
+      repos: {
+        getContent: jest.fn().mockResolvedValue({data:{size: 0, content: ""}})
       }
     };
     // Passes the mocked out GitHub API into out app instance
@@ -43,7 +47,7 @@ describe("My Probot app", () => {
     expect(mockedCheckSuite.requested).toHaveBeenCalledTimes(1);
     expect(mockedCheckSuite.requested).toHaveBeenCalledWith(expect.objectContaining({
         payload: checkSuiteRequested.payload
-    }))
+    }), DEFAULT_CONFIG)
   });
 
   test("forward 'check_suite.rerequested'", async () => {
@@ -55,7 +59,7 @@ describe("My Probot app", () => {
     expect(mockedCheckSuite.rerequested).toHaveBeenCalledTimes(1);
     expect(mockedCheckSuite.rerequested).toHaveBeenCalledWith(expect.objectContaining({
       payload: checkSuiteRerequested.payload
-  }))
+  }), DEFAULT_CONFIG)
   });
 
   test("forward 'check_run.rerequested'", async () => {
@@ -67,7 +71,7 @@ describe("My Probot app", () => {
     expect(mockedCheckRun.rerequested).toHaveBeenCalledTimes(1);
     expect(mockedCheckRun.rerequested).toHaveBeenCalledWith(expect.objectContaining({
       payload: checkRunRerequested.payload
-  }))
+  }), DEFAULT_CONFIG)
   });
 
   test("forward 'check_run.created'", async () => {
@@ -79,7 +83,7 @@ describe("My Probot app", () => {
     expect(mockedCheckRun.created).toHaveBeenCalledTimes(1);
     expect(mockedCheckRun.created).toHaveBeenCalledWith(expect.objectContaining({
       payload: checkRunCreated.payload
-  }))
+  }), DEFAULT_CONFIG)
   });
 });
 

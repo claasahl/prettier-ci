@@ -1,19 +1,21 @@
 import * as ChecksParams from "../src/checks_params";
 import * as mockdate from "mockdate";
+import { DEFAULT_CONFIG } from "../src/config";
 
 describe("tests for check_run parameters", async () => {
   test("parameters for 'checks.create'", async () => {
-    const params = ChecksParams.createParams();
+    const params = ChecksParams.createParams(DEFAULT_CONFIG);
     expect(params).toEqual({ name: "prettier-ci" });
   });
   test("parameters for 'checks.update' [in_progress]", async () => {
-    const params = ChecksParams.inProgressParams();
+    const params = ChecksParams.inProgressParams(DEFAULT_CONFIG);
     expect(params).toEqual({ status: "in_progress" });
   });
   test("parameters for 'checks.update' [success]", async () => {
     const completed_at = "2010-05-28T15:29:41.839Z";
     mockdate.set(completed_at);
     const params = ChecksParams.successParams(
+      DEFAULT_CONFIG,
       ["skipped.env", "also.skipped"],
       ["formatted.js"],
       []
@@ -46,6 +48,7 @@ no files
     const completed_at = "2010-05-28T15:29:41.839Z";
     mockdate.set(completed_at);
     const params = ChecksParams.failureParams(
+      DEFAULT_CONFIG,
       [],
       [],
       ["not_formatted.js", "totally_not_formatted.js"]
@@ -81,7 +84,7 @@ no files`,
   test("parameters for 'checks.update' [cancelled]", async () => {
     const completed_at = "2010-05-28T15:29:41.839Z";
     mockdate.set(completed_at);
-    const params = ChecksParams.cancelledParams();
+    const params = ChecksParams.cancelledParams(DEFAULT_CONFIG);
     mockdate.reset();
     expect(params).toEqual({
       status: "completed",

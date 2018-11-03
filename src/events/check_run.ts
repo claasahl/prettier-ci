@@ -4,26 +4,27 @@ import * as params from "../checks_params";
 import * as prettier from "prettier";
 import * as fs from "fs";
 import { readdirp } from "../util";
+import { Config } from "../config";
 
-export async function rerequested(context: Context): Promise<void> {
+export async function rerequested(context: Context, config: Config): Promise<void> {
   const owner = context.payload.repository.owner.login;
   const repo = context.payload.repository.name;
   const sha = context.payload.check_run.head_sha;
   await context.github.checks.create({
-    ...params.createParams(),
+    ...params.createParams(config),
     owner,
     repo,
     head_sha: sha
   });
 }
 
-export async function created(context: Context): Promise<void> {
+export async function created(context: Context, config: Config): Promise<void> {
   // #2.1
   const check_run_id = context.payload.check_run.id;
   const owner = context.payload.repository.owner.login;
   const repo = context.payload.repository.name;
   await context.github.checks.update({
-    ...params.inProgressParams(),
+    ...params.inProgressParams(config),
     check_run_id,
     owner,
     repo
@@ -56,8 +57,8 @@ export async function created(context: Context): Promise<void> {
   // #2.4
   await context.github.checks.update({
     ...(failedCheck
-      ? params.failureParams(skipped, passed, failed)
-      : params.successParams(skipped, passed, failed)),
+      ? params.failureParams(config, skipped, passed, failed)
+      : params.successParams(config, skipped, passed, failed)),
     check_run_id,
     owner,
     repo
