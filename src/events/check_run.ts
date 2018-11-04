@@ -4,7 +4,7 @@ import * as params from "../checks_params";
 import * as prettier from "prettier";
 import * as fs from "fs";
 import { readdirp } from "../util";
-import { Config } from "../config";
+import { Config } from "../types";
 
 export async function rerequested(context: Context, config: Config): Promise<void> {
   const owner = context.payload.repository.owner.login;
@@ -36,7 +36,7 @@ export async function created(context: Context, config: Config): Promise<void> {
   const ref = context.payload.check_run.head_sha;
   await git.clone({ dir, url, fs });
   await git.checkout({ dir, ref, fs });
-
+  
   // #2.3
   const skipped: string[] = [];
   const passed: string[] = [];

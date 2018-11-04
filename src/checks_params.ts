@@ -1,16 +1,5 @@
-import { ChecksCreateParams, ChecksUpdateParams } from "@octokit/rest";
 import * as pug from "pug";
-import { Config } from "./config";
-
-type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
-export type SimplifiedChecksCreateParams = Omit<
-  ChecksCreateParams,
-  "owner" | "repo" | "head_sha"
-  >;
-export type SimplifiedChecksUpdateParams = Omit<
-  ChecksUpdateParams,
-  "owner" | "repo" | "check_run_id"
-  >;
+import { Config, SimplifiedChecksCreateParams, SimplifiedChecksUpdateParams } from "./types";
 
 export function createParams(config: Config): SimplifiedChecksCreateParams {
   return { ...config.check_run.create };

@@ -1,14 +1,4 @@
-import { SimplifiedChecksCreateParams, SimplifiedChecksUpdateParams } from "./checks_params";
-
-export interface Config {
-  check_run: {
-    create: SimplifiedChecksCreateParams,
-    inProgress: SimplifiedChecksUpdateParams,
-    success: SimplifiedChecksUpdateParams,
-    failure: SimplifiedChecksUpdateParams,
-    cancelled: SimplifiedChecksUpdateParams
-  }
-}
+import { Config } from "./types";
 
 export const DEFAULT_CONFIG: Config = {
   check_run: {
