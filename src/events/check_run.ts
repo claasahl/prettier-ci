@@ -3,8 +3,12 @@ import * as git from "isomorphic-git";
 import * as params from "../checks_params";
 import * as prettier from "prettier";
 import * as fs from "fs";
+import rimraf from "rimraf";
 import { readdirp } from "../util";
 import { Config } from "../types";
+import { promisify } from "util";
+
+const rmrf = promisify(rimraf);
 
 export async function rerequested(context: Context, config: Config): Promise<void> {
   const owner = context.payload.repository.owner.login;
@@ -53,6 +57,30 @@ export async function created(context: Context, config: Config): Promise<void> {
     }
   }
   const failedCheck = failed.length > 0;
+  await rmrf(dir)
+
+  
+  // opt-in auto-formatting
+  // if(config) {
+  //   const branch = context.payload.check_run.check_suite.head_branch;
+  //   await git.checkout({dir, fs, ref: branch})
+  //   for (const file of readdirp(dir)) {
+  //     const shortFileName = file.replace(dir, "");
+  //     const info = await prettier.getFileInfo(file);
+  //     if (info.ignored || !info.inferredParser) {
+  //       // nothing to do
+  //     } else {
+  //       const content = fs.readFileSync(file).toString();
+  //       const formatted = prettier.check(content, { filepath: file });
+  //       if(!formatted) {
+  //         const formattedContent = prettier.format(content, { filepath: file });
+  //         fs.writeFileSync(file, formattedContent);
+  //         await git.add({dir, fs, filepath: file})
+  //       }
+  //       (formatted ? passed : failed).push(shortFileName);
+  //     }
+  //   }
+  // }
 
   // #2.4
   await context.github.checks.update({
