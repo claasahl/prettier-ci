@@ -1,6 +1,6 @@
 import { Context } from "probot";
 import { createParams } from "../checks_params";
-import { Config } from "../config";
+import { Config } from "../types";
 
 export async function requested(context: Context, config: Config): Promise<void> {
   const owner = context.payload.repository.owner.login;

@@ -10,6 +10,11 @@ export type SimplifiedChecksUpdateParams = Omit<
     "owner" | "repo" | "check_run_id"
     >;
 
+export interface CheckResult {
+    skipped: string[],
+    passed: string[],
+    failed: string[],
+}
 export interface Config {
     check_run: {
         create: SimplifiedChecksCreateParams,

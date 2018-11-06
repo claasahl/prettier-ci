@@ -1,7 +1,8 @@
 import { Application, Context } from "probot";
 import * as CheckSuite from "./events/check_suite";
 import * as CheckRun from "./events/check_run";
-import { Config, DEFAULT_CONFIG } from "./config";
+import { DEFAULT_CONFIG } from "./config";
+import { Config } from "./types";
 
 export = (app: Application) => {
   // Your code here
