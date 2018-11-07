@@ -3,8 +3,7 @@ import { createParams } from "../checks_params";
 import { Config } from "../types";
 
 export async function requested(context: Context, config: Config): Promise<void> {
-  const owner = context.payload.repository.owner.login;
-  const repo = context.payload.repository.name;
+  const {owner, repo} = context.repo();
   const sha = context.payload.check_suite.head_sha;
   await context.github.checks.create({
     ...createParams(config),
@@ -15,8 +14,7 @@ export async function requested(context: Context, config: Config): Promise<void>
 }
 
 export async function rerequested(context: Context, config: Config): Promise<void> {
-  const owner = context.payload.repository.owner.login;
-  const repo = context.payload.repository.name;
+  const {owner, repo} = context.repo();
   const sha = context.payload.check_suite.head_sha;
   await context.github.checks.create({
     ...createParams(config),

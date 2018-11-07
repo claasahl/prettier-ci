@@ -5,8 +5,7 @@ import { check } from "../checks";
 
 
 export async function rerequested(context: Context, config: Config): Promise<void> {
-  const owner = context.payload.repository.owner.login;
-  const repo = context.payload.repository.name;
+  const {owner, repo} = context.repo();
   const sha = context.payload.check_run.head_sha;
   await context.github.checks.create({
     ...params.createParams(config),
@@ -17,14 +16,12 @@ export async function rerequested(context: Context, config: Config): Promise<voi
 }
 
 export async function created(context: Context, config: Config): Promise<void> {
+  const {owner, repo} = context.repo();
   const check_run_id = context.payload.check_run.id;
-  const owner = context.payload.repository.owner.login;
-  const repo = context.payload.repository.name;
+  const base = {owner, repo, check_run_id}
   await context.github.checks.update({
     ...params.inProgressParams(config),
-    check_run_id,
-    owner,
-    repo
+    ...base
   });
 
   try {
@@ -58,16 +55,12 @@ export async function created(context: Context, config: Config): Promise<void> {
       ...(failedCheck
         ? params.failureParams(config, skipped, passed, failed)
         : params.successParams(config, skipped, passed, failed)),
-      check_run_id,
-      owner,
-      repo
+        ...base
     });
   } catch (error) {
     await context.github.checks.update({
       ...params.cancelledParams(config),
-      check_run_id,
-      owner,
-      repo
+      ...base
     });
   }
 }
