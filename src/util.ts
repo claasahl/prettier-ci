@@ -1,4 +1,8 @@
 import * as fs from "fs";
+import rimraf from "rimraf";
+import { promisify } from "util";
+
+const rmrf = promisify(rimraf);
 
 export function readdirp(dir: string): string[] {
   const files: string[] = [];
@@ -11,4 +15,8 @@ export function readdirp(dir: string): string[] {
     }
   }
   return files;
+}
+
+export async function removedirp(dir: string) {
+  return rmrf(dir);
 }

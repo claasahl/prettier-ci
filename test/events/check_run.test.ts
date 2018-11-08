@@ -42,6 +42,7 @@ describe("tests for 'check_run.*'-events", async () => {
   });
 
   test("'.created' should run analysis", async () => {
+    mockedUtils.removedirp.mockResolvedValue({});
     mockedUtils.readdirp.mockReturnValue(["whatever.bla", "package.json"]);
 
     mockedPrettier.getFileInfo.mockImplementation(file => ({
@@ -83,10 +84,14 @@ describe("tests for 'check_run.*'-events", async () => {
         fs: expect.anything()
       })
     );
+
+    expect(mockedUtils.removedirp).toHaveBeenCalledTimes(1)
+    expect(mockedUtils.removedirp).toHaveBeenCalledWith("./repos/username-repository-42/")
     mockdate.reset();
   });
 
-  test("'.created' should cancel analysis when error occurs", async () => {
+  test("'.created' should cancel analysis (and clean-up) when error occurs", async () => {
+    mockedUtils.removedirp.mockResolvedValue({});
     mockedGit.clone.mockRejectedValue(undefined)
     const completed_at = "2010-05-28T15:29:41.839Z";
     mockdate.set(completed_at);
@@ -115,6 +120,9 @@ describe("tests for 'check_run.*'-events", async () => {
       })
     );
     expect(mockedGit.checkout).toHaveBeenCalledTimes(0);
+
+    expect(mockedUtils.removedirp).toHaveBeenCalledTimes(1)
+    expect(mockedUtils.removedirp).toHaveBeenCalledWith("./repos/username-repository-42/")
     mockdate.reset();
   });
 });
