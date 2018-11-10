@@ -31,7 +31,10 @@ describe("tests for 'check_run.*'-events", async () => {
   const log: LoggerWithTarget = new (jest.fn<LoggerWithTarget>())();
 
   test("'.rerequested' should create 'check_run'", async () => {
-    await CheckRun.rerequested(new Context(CheckRunRerequested, github, log), DEFAULT_CONFIG);
+    await CheckRun.rerequested(
+      new Context(CheckRunRerequested, github, log),
+      DEFAULT_CONFIG
+    );
     expect(github.checks.create).toHaveBeenCalledTimes(1);
     expect(github.checks.create).toHaveBeenCalledWith({
       ...checks_params.createParams(DEFAULT_CONFIG),
@@ -52,7 +55,10 @@ describe("tests for 'check_run.*'-events", async () => {
     mockedPrettier.check.mockReturnValue(false);
     const completed_at = "2010-05-28T15:29:41.839Z";
     mockdate.set(completed_at);
-    await CheckRun.created(new Context(CheckRunCreated, github, log), DEFAULT_CONFIG);
+    await CheckRun.created(
+      new Context(CheckRunCreated, github, log),
+      DEFAULT_CONFIG
+    );
 
     expect(github.checks.update).toHaveBeenCalledTimes(2);
     expect(github.checks.update).toHaveBeenCalledWith({
@@ -62,7 +68,12 @@ describe("tests for 'check_run.*'-events", async () => {
       repo: "repository"
     });
     expect(github.checks.update).toHaveBeenCalledWith({
-      ...checks_params.failureParams(DEFAULT_CONFIG, ["whatever.bla"], [], ["package.json"]),
+      ...checks_params.failureParams(
+        DEFAULT_CONFIG,
+        ["whatever.bla"],
+        [],
+        ["package.json"]
+      ),
       check_run_id: 42,
       owner: "username",
       repo: "repository"
@@ -85,17 +96,22 @@ describe("tests for 'check_run.*'-events", async () => {
       })
     );
 
-    expect(mockedUtils.removedirp).toHaveBeenCalledTimes(1)
-    expect(mockedUtils.removedirp).toHaveBeenCalledWith("./repos/username-repository-42/")
+    expect(mockedUtils.removedirp).toHaveBeenCalledTimes(1);
+    expect(mockedUtils.removedirp).toHaveBeenCalledWith(
+      "./repos/username-repository-42/"
+    );
     mockdate.reset();
   });
 
   test("'.created' should cancel analysis (and clean-up) when error occurs", async () => {
     mockedUtils.removedirp.mockResolvedValue({});
-    mockedGit.clone.mockRejectedValue(undefined)
+    mockedGit.clone.mockRejectedValue(undefined);
     const completed_at = "2010-05-28T15:29:41.839Z";
     mockdate.set(completed_at);
-    await CheckRun.created(new Context(CheckRunCreated, github, log), DEFAULT_CONFIG);
+    await CheckRun.created(
+      new Context(CheckRunCreated, github, log),
+      DEFAULT_CONFIG
+    );
 
     expect(github.checks.update).toHaveBeenCalledTimes(2);
     expect(github.checks.update).toHaveBeenCalledWith({
@@ -121,8 +137,10 @@ describe("tests for 'check_run.*'-events", async () => {
     );
     expect(mockedGit.checkout).toHaveBeenCalledTimes(0);
 
-    expect(mockedUtils.removedirp).toHaveBeenCalledTimes(1)
-    expect(mockedUtils.removedirp).toHaveBeenCalledWith("./repos/username-repository-42/")
+    expect(mockedUtils.removedirp).toHaveBeenCalledTimes(1);
+    expect(mockedUtils.removedirp).toHaveBeenCalledWith(
+      "./repos/username-repository-42/"
+    );
     mockdate.reset();
   });
 });

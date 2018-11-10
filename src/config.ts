@@ -26,10 +26,10 @@ export const DEFAULT_CONFIG: Config = {
     },
     cancelled: {
       status: "completed",
-      conclusion: "cancelled",
+      conclusion: "cancelled"
     }
   }
-}
+};
 
 function pugSummary(): string {
   return `

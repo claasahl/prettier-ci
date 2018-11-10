@@ -3,9 +3,11 @@ import * as params from "../checks_params";
 import { Config } from "../types";
 import { check } from "../checks";
 
-
-export async function rerequested(context: Context, config: Config): Promise<void> {
-  const {owner, repo} = context.repo();
+export async function rerequested(
+  context: Context,
+  config: Config
+): Promise<void> {
+  const { owner, repo } = context.repo();
   const sha = context.payload.check_run.head_sha;
   await context.github.checks.create({
     ...params.createParams(config),
@@ -16,16 +18,16 @@ export async function rerequested(context: Context, config: Config): Promise<voi
 }
 
 export async function created(context: Context, config: Config): Promise<void> {
-  const {owner, repo} = context.repo();
+  const { owner, repo } = context.repo();
   const check_run_id = context.payload.check_run.id;
-  const base = {owner, repo, check_run_id}
+  const base = { owner, repo, check_run_id };
   await context.github.checks.update({
     ...params.inProgressParams(config),
     ...base
   });
 
   try {
-    const { skipped, passed, failed } = await check(context)
+    const { skipped, passed, failed } = await check(context);
     const failedCheck = failed.length > 0;
 
     // opt-in auto-formatting
@@ -55,7 +57,7 @@ export async function created(context: Context, config: Config): Promise<void> {
       ...(failedCheck
         ? params.failureParams(config, skipped, passed, failed)
         : params.successParams(config, skipped, passed, failed)),
-        ...base
+      ...base
     });
   } catch (error) {
     await context.github.checks.update({

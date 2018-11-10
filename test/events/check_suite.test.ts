@@ -16,7 +16,10 @@ describe("tests for 'check_suite.*'-events", async () => {
   const log: LoggerWithTarget = new (jest.fn<LoggerWithTarget>())();
 
   test("'.requested' should create 'check_run'", async () => {
-    await CheckSuite.requested(new Context(CheckSuiteRequested, github, log), DEFAULT_CONFIG);
+    await CheckSuite.requested(
+      new Context(CheckSuiteRequested, github, log),
+      DEFAULT_CONFIG
+    );
     expect(github.checks.create).toHaveBeenCalledTimes(1);
     expect(github.checks.create).toHaveBeenCalledWith({
       ...createParams(DEFAULT_CONFIG),
@@ -28,7 +31,8 @@ describe("tests for 'check_suite.*'-events", async () => {
 
   test("'.rerequested' should create 'check_run'", async () => {
     await CheckSuite.rerequested(
-      new Context(CheckSuiteRerequested, github, log),DEFAULT_CONFIG
+      new Context(CheckSuiteRerequested, github, log),
+      DEFAULT_CONFIG
     );
     expect(github.checks.create).toHaveBeenCalledTimes(1);
     expect(github.checks.create).toHaveBeenCalledWith({

@@ -28,8 +28,7 @@ describe("tests for check_run parameters", async () => {
       output: {
         summary:
           "Keep up the **good work**. All 3 files were neatly formatted.",
-        text:
-          `I thoroughly checked 3 files. All files are neatly formatted (passed: 1 file, skipped: 2 files). Congratulations!
+        text: `I thoroughly checked 3 files. All files are neatly formatted (passed: 1 file, skipped: 2 files). Congratulations!
 
 **These files are not yet formatted (i.e. they 'failed'):**
 no files

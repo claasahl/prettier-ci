@@ -1,5 +1,9 @@
 import * as pug from "pug";
-import { Config, SimplifiedChecksCreateParams, SimplifiedChecksUpdateParams } from "./types";
+import {
+  Config,
+  SimplifiedChecksCreateParams,
+  SimplifiedChecksUpdateParams
+} from "./types";
 
 export function createParams(config: Config): SimplifiedChecksCreateParams {
   return { ...config.check_run.create };
@@ -16,10 +20,15 @@ export function successParams(
   failed: string[]
 ): SimplifiedChecksUpdateParams {
   const completed_at = new Date().toISOString();
-  return renderTemplates({
-    ...config.check_run.success,
-    completed_at
-  }, skipped, passed, failed);
+  return renderTemplates(
+    {
+      ...config.check_run.success,
+      completed_at
+    },
+    skipped,
+    passed,
+    failed
+  );
 }
 
 export function failureParams(
@@ -29,10 +38,15 @@ export function failureParams(
   failed: string[]
 ): SimplifiedChecksUpdateParams {
   const completed_at = new Date().toISOString();
-  return renderTemplates({
-    ...config.check_run.failure,
-    completed_at
-  }, skipped, passed, failed);
+  return renderTemplates(
+    {
+      ...config.check_run.failure,
+      completed_at
+    },
+    skipped,
+    passed,
+    failed
+  );
 }
 
 export function cancelledParams(config: Config): SimplifiedChecksUpdateParams {
@@ -43,12 +57,14 @@ export function cancelledParams(config: Config): SimplifiedChecksUpdateParams {
   };
 }
 
-function renderTemplates(update: SimplifiedChecksUpdateParams,
+function renderTemplates(
+  update: SimplifiedChecksUpdateParams,
   skipped: string[],
   passed: string[],
-  failed: string[]): SimplifiedChecksUpdateParams {
+  failed: string[]
+): SimplifiedChecksUpdateParams {
   const params = { ...update };
-  let output = undefined
+  let output = undefined;
   if (params && params.output) {
     output = { ...params.output };
     if (output.summary) {

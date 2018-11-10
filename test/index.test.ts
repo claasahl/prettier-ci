@@ -31,7 +31,9 @@ describe("My Probot app", () => {
         create: jest.fn().mockResolvedValue(0)
       },
       repos: {
-        getContent: jest.fn().mockResolvedValue({data:{size: 0, content: ""}})
+        getContent: jest
+          .fn()
+          .mockResolvedValue({ data: { size: 0, content: "" } })
       }
     };
     // Passes the mocked out GitHub API into out app instance
@@ -45,9 +47,12 @@ describe("My Probot app", () => {
     });
 
     expect(mockedCheckSuite.requested).toHaveBeenCalledTimes(1);
-    expect(mockedCheckSuite.requested).toHaveBeenCalledWith(expect.objectContaining({
+    expect(mockedCheckSuite.requested).toHaveBeenCalledWith(
+      expect.objectContaining({
         payload: checkSuiteRequested.payload
-    }), DEFAULT_CONFIG)
+      }),
+      DEFAULT_CONFIG
+    );
   });
 
   test("forward 'check_suite.rerequested'", async () => {
@@ -57,9 +62,12 @@ describe("My Probot app", () => {
     });
 
     expect(mockedCheckSuite.rerequested).toHaveBeenCalledTimes(1);
-    expect(mockedCheckSuite.rerequested).toHaveBeenCalledWith(expect.objectContaining({
-      payload: checkSuiteRerequested.payload
-  }), DEFAULT_CONFIG)
+    expect(mockedCheckSuite.rerequested).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: checkSuiteRerequested.payload
+      }),
+      DEFAULT_CONFIG
+    );
   });
 
   test("forward 'check_run.rerequested'", async () => {
@@ -69,9 +77,12 @@ describe("My Probot app", () => {
     });
 
     expect(mockedCheckRun.rerequested).toHaveBeenCalledTimes(1);
-    expect(mockedCheckRun.rerequested).toHaveBeenCalledWith(expect.objectContaining({
-      payload: checkRunRerequested.payload
-  }), DEFAULT_CONFIG)
+    expect(mockedCheckRun.rerequested).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: checkRunRerequested.payload
+      }),
+      DEFAULT_CONFIG
+    );
   });
 
   test("forward 'check_run.created'", async () => {
@@ -81,9 +92,12 @@ describe("My Probot app", () => {
     });
 
     expect(mockedCheckRun.created).toHaveBeenCalledTimes(1);
-    expect(mockedCheckRun.created).toHaveBeenCalledWith(expect.objectContaining({
-      payload: checkRunCreated.payload
-  }), DEFAULT_CONFIG)
+    expect(mockedCheckRun.created).toHaveBeenCalledWith(
+      expect.objectContaining({
+        payload: checkRunCreated.payload
+      }),
+      DEFAULT_CONFIG
+    );
   });
 });
 

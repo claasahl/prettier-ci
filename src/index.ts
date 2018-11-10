@@ -23,10 +23,15 @@ export = (app: Application) => {
   // https://probot.github.io/docs/development/
 };
 
-function withConfig(callback: (context: Context, config: Config) => Promise<void>): (context: Context) => Promise<void> {
+function withConfig(
+  callback: (context: Context, config: Config) => Promise<void>
+): (context: Context) => Promise<void> {
   return async context => {
     // TODO ensure that config only contains expected fields (security)
-    const config: Config = await context.config("prettier-ci.yml", DEFAULT_CONFIG);
-    callback(context, config)
-  }
+    const config: Config = await context.config(
+      "prettier-ci.yml",
+      DEFAULT_CONFIG
+    );
+    callback(context, config);
+  };
 }
