@@ -28,10 +28,10 @@ function withConfig(
 ): (context: Context) => Promise<void> {
   return async context => {
     // TODO ensure that config only contains expected fields (security)
-    const config: Config = await context.config(
+    const config: Config | null = await context.config(
       "prettier-ci.yml",
       DEFAULT_CONFIG
     );
-    callback(context, config);
+    callback(context, !!config ? config : DEFAULT_CONFIG);
   };
 }
