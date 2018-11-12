@@ -33,6 +33,9 @@ describe("My Probot app", () => {
       repos: {
         getContent: jest
           .fn()
+          .mockResolvedValue({ data: { size: 0, content: "" } }),
+        getContents: jest
+          .fn()
           .mockResolvedValue({ data: { size: 0, content: "" } })
       }
     };
